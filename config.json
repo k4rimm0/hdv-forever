@@ -1,0 +1,13 @@
+{
+  "region": "eu",
+  "ruleset": 2,
+  "ruleset_name": "Normal",
+  "house_ids": [],
+  "ah_cut": 0.05,
+  "hourly_points": 72,
+  "daily_points": 180,
+  "history_shards": 32,
+  "item_retry_days": 3,
+  "recipes_refresh_days": 7,
+  "kdf_iterations": 150000
+}

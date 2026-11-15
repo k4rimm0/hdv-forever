@@ -1,0 +1,6 @@
+{
+  "_note": "Recettes ajoutées à la main (nouvelles recettes de Forever absentes de l'API). Format : profession, objet fabriqué (id), quantité fabriquée, composants [[id, quantité], ...]. Exemple ci-dessous désactivé.",
+  "recipes": [
+    {"disabled": true, "profession": "Cooking", "name": {"en_US": "Example", "fr_FR": "Exemple"}, "out": 2684, "out_qty": 1, "reagents": [[2673, 1]]}
+  ]
+}
