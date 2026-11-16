@@ -82,7 +82,7 @@ const T = {
     tt_sell: 'Prix de vente :', tt_none: 'Pas encore de description (chargée au fil des mises à jour).', item_effect: 'Effet',
     ht_title: "Comment l'obtenir", ht_vendors: 'Vendu par', ht_neutral: 'Neutre', ht_limited: 'stock limité', ht_more_vendors: '+{n} autres vendeurs (les plus proches de chez toi peuvent ne pas être listés).',
     ht_vendor_generic: 'Vendu chez les PNJ marchands (fournitures, cuisine…), par exemple en ville.', ht_mobs: 'Monstres qui le lâchent', ht_mob: 'Monstre', ht_zone: 'Zone', ht_rate: 'Taux de drop',
-    ht_nodes: 'Ramassé sur', ht_map: 'Carte', ht_nomap: 'Carte en cours de téléchargement, réessaie après la prochaine mise à jour.',
+    ht_nodes: 'Ramassé sur', ht_map: 'Carte', terr_auto: 'Vrai terrain : automatique quand tu zoomes (clic pour changer)', terr_on: 'Vrai terrain : toujours affiché', terr_off: 'Vrai terrain : désactivé (carte dessinée)', ht_nomap: 'Carte en cours de téléchargement, réessaie après la prochaine mise à jour.',
     ht_map_help: 'Survole un point pour voir le nom, clique dessus pour le GPS (itinéraire depuis là où tu es). Clique sur la légende pour masquer ou afficher une source.',
     rt_extra_title: 'À ramasser aussi sur le chemin', rt_bonus: 'Bonus possible en chemin (matériau Scarce) :', rt_extra_n: '{n} point(s) près de la route', rt_each: "l'unité",
     rt_sold_day: 'ventes/jour', rt_extra_skill: 'ta compétence est trop basse pour celle-ci', rt_extra_none: 'Rien de connu à moins de quelques pas de cette route.',
@@ -194,7 +194,7 @@ const T = {
     tt_sell: 'Sell price:', tt_none: 'No description yet (loaded over the next updates).', item_effect: 'Effect',
     ht_title: 'How to get it', ht_vendors: 'Sold by', ht_neutral: 'Neutral', ht_limited: 'limited stock', ht_more_vendors: '+{n} more vendors (ones near you may not be listed).',
     ht_vendor_generic: 'Sold by merchant NPCs (trade supplies, cooking…), for example in cities.', ht_mobs: 'Mobs that drop it', ht_mob: 'Mob', ht_zone: 'Zone', ht_rate: 'Drop rate',
-    ht_nodes: 'Gathered from', ht_map: 'Map', ht_nomap: 'Map is downloading, try again after the next update.',
+    ht_nodes: 'Gathered from', ht_map: 'Map', terr_auto: 'Real terrain: automatic when zooming (click to change)', terr_on: 'Real terrain: always on', terr_off: 'Real terrain: off (drawn map)', ht_nomap: 'Map is downloading, try again after the next update.',
     ht_map_help: 'Hover a dot to see the name, click it for the GPS (route from where you are). Click the legend to hide or show a source.',
     rt_extra_title: 'Also pick up along the way', rt_bonus: 'Possible bonus on the way (Scarce material):', rt_extra_n: '{n} point(s) near the route', rt_each: 'each',
     rt_sold_day: 'sold/day', rt_extra_skill: 'your skill is too low for this one', rt_extra_none: 'Nothing known within a few steps of this route.',
@@ -1410,6 +1410,10 @@ function openRoute(id, mk) {
 // Les points gardent leur taille. Le zoom est conservé quand la même carte est redessinée (ex. point évité).
 const ZOOM_MEM = new Map();
 const HD_BASE = 'https://raw.githubusercontent.com/k4rimm0/hdv-forever/main/maps_hd/';
+const TERR_BASE = 'https://raw.githubusercontent.com/k4rimm0/hdv-forever/main/maps_terrain/';
+const TERR_ZONES = new Set(["alterac-mountains", "arathi-highlands", "ashenvale", "azshara", "badlands", "blasted-lands", "burning-steppes", "darkshore", "desolace", "dun-morogh", "durotar", "duskwood", "dustwallow-marsh", "eastern-plaguelands", "elwynn-forest", "felwood", "feralas", "hillsbrad-foothills", "loch-modan", "moonglade", "mulgore", "redridge-mountains", "searing-gorge", "silithus", "silverpine-forest", "stonetalon-mountains", "stranglethorn-vale", "swamp-of-sorrows", "tanaris", "teldrassil", "the-barrens", "the-hinterlands", "thousand-needles", "tirisfal-glades", "ungoro-crater", "western-plaguelands", "westfall", "wetlands", "winterspring"]);
+const terrMode = () => { try { return localStorage.getItem('hdv_terr') || 'auto'; } catch (e) { return 'auto'; } };
+const setTerrMode = v => { try { localStorage.setItem('hdv_terr', v); } catch (e) {} };
 function enhanceMap(w) {
   if (w.querySelector(':scope > .wz')) return;
   const img = w.querySelector(':scope > img'); if (!img) return;
@@ -1449,7 +1453,28 @@ function enhanceMap(w) {
     const hd = new Image(); hd.onload = () => { img.src = hd.src; w.classList.add('hd'); };
     hd.src = HD_BASE + m[1] + '.jpg';
   };
-  const apply0 = apply; apply = () => { apply0(); tryHd(); };
+  // Vrai terrain (minimap du jeu, comme OpenMap) : chargé au zoom, affiché en fondu à partir de x2.2.
+  // Bouton « relief » : auto / toujours / jamais (mémorisé).
+  const tz = m && TERR_ZONES.has(m[1].slice(2));
+  let terr = null;
+  if (tz) {
+    const tb = document.createElement('button'); tb.type = 'button'; tb.className = 'wz-terr'; ctl.appendChild(tb);
+    const lbl = () => { const md = terrMode(); tb.textContent = md === 'on' ? '⛰' : md === 'off' ? '🗺' : 'A'; tb.title = t('terr_' + md); };
+    lbl();
+    tb.addEventListener('click', e => { e.stopPropagation(); const md = terrMode(); setTerrMode(md === 'auto' ? 'on' : md === 'on' ? 'off' : 'auto'); lbl(); apply(); });
+  }
+  const terrUpd = () => {
+    if (!tz) return; const md = terrMode();
+    const want = md === 'on' || (md === 'auto' && st.z >= 2.2);
+    if ((want || (md === 'auto' && st.z >= 1.6)) && !terr) {
+      terr = document.createElement('img'); terr.className = 'terr'; terr.alt = ''; terr.draggable = false;
+      terr.onerror = () => { terr.remove(); };
+      terr.onload = () => terr.classList.add('ok');
+      terr.src = TERR_BASE + m[1] + '.jpg'; img.after(terr);
+    }
+    w.classList.toggle('terr-on', !!want);
+  };
+  const apply0 = apply; apply = () => { apply0(); tryHd(); terrUpd(); };
   apply();
 }
 new MutationObserver(() => document.querySelectorAll('.wmap').forEach(enhanceMap)).observe(document.body, { childList: true, subtree: true });
