@@ -1052,24 +1052,31 @@ function openGps(mapEntry, pin) {
   let ov = $('#gps'); if (!ov) { ov = document.createElement('div'); ov.id = 'gps'; document.body.appendChild(ov); }
   const way = `/way ${x} ${y}`;
   ov.innerHTML = `<div class="gps-box">
-    <div class="row spread"><h2>🧭 ${t('gps_title')}</h2><button class="act" id="gpsClose">✕</button></div>
-    <p><b>${esc(names[ni][0])}</b> · ${zoneName(zone)} <button class="way" id="gpsWay">${x}, ${y}</button> <span class="dim small">${t('gps_way_help')}</span></p>
-    ${REDRAWN.has(zone) ? `<p class="note">${t('gps_redrawn')}</p>` : ''}
-    <div class="row gps-form">
-      <label>${t('gps_from')} <input id="gpsFrom" list="gpsPlaces" value="${esc(p.from || 'Orgrimmar')}" placeholder="Orgrimmar, Brill, Les Tarides…"></label>
+    <div class="gps-head">
+      <div class="gps-dest">🧭 <b>${esc(names[ni][0])}</b> · ${zoneName(zone)} <button class="way" id="gpsWay" title="${t('gps_way_help')}">/way ${x} ${y} 📋</button></div>
+      <label>${t('gps_from')} <input id="gpsFrom" list="gpsPlaces" value="${esc(p.from || 'Orgrimmar')}" placeholder="Orgrimmar, Brill…"></label>
       <label>${t('gps_speed')} <select id="gpsBy">${[['foot', t('gps_foot')], ['m60', t('gps_m60')], ['m100', t('gps_m100')]].map(([v, l]) => `<option value="${v}" ${p.by === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
-      <label><input type="checkbox" id="gpsFp" ${p.fp !== false ? 'checked' : ''}> ${t('gps_fp')}</label>
-      <button class="act" id="gpsGo">${t('gps_go')}</button>
+      <label class="chk"><input type="checkbox" id="gpsFp" ${p.fp !== false ? 'checked' : ''}> ${t('gps_fp')}</label>
+      <button class="act big" id="gpsGo">${t('gps_go')}</button>
+      <button class="act big" id="gpsClose" title="Échap">✕</button>
     </div>
     <datalist id="gpsPlaces">${GPS_PLACES.map(n => `<option value="${esc(n)}">`).join('')}</datalist>
-    <div id="gpsOut"></div>
-    <h3>${t('gps_last', { z: zoneName(zone) })}</h3>
-    <div class="wmap gps-map"><img src="maps/z_${zoneSlug(zone)}.jpg" alt="" onerror="this.parentNode.classList.add('nomap')">
-      <span class="pin target" style="left:${x}%;top:${y}%"></span><div class="nomapmsg">${t('ht_nomap')}</div></div>
-    <p>${t('gps_last_help', { way })}</p>
+    <div class="gps-body">
+      <div class="gps-route" id="gpsOut"></div>
+      <div class="gps-side">
+        <h3>${t('gps_last', { z: zoneName(zone) })}</h3>
+        ${REDRAWN.has(zone) ? `<p class="note">${t('gps_redrawn')}</p>` : ''}
+        <div class="wmap gps-map"><img src="maps/z_${zoneSlug(zone)}.jpg" alt="" onerror="this.parentNode.classList.add('nomap')">
+          <span class="pin target" style="left:${x}%;top:${y}%"></span><div class="nomapmsg">${t('ht_nomap')}</div></div>
+        <p>${t('gps_last_help', { way })}</p>
+        <p class="note">${t('gps_src')} <a id="gpsOpen" href="#" target="_blank" rel="noopener">${t('gps_open')}</a></p>
+      </div>
+    </div>
   </div>`;
   ov.style.display = 'flex';
-  const close = () => { ov.style.display = 'none'; ov.innerHTML = ''; };
+  const close = () => { ov.style.display = 'none'; ov.innerHTML = ''; document.body.style.overflow = ''; document.removeEventListener('keydown', esc_); };
+  const esc_ = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', esc_); document.body.style.overflow = 'hidden';
   $('#gpsClose').onclick = close; ov.onclick = e => { if (e.target === ov) close(); };
   $('#gpsWay').onclick = () => (navigator.clipboard ? navigator.clipboard.writeText(way) : Promise.reject()).then(() => toast(t('copied') + ' ' + way), () => toast(way));
   const go = () => {
@@ -1077,12 +1084,12 @@ function openGps(mapEntry, pin) {
     store('hf_gps', JSON.stringify({ from, by, fp }));
     const q = new URLSearchParams({ from, to: zone, f: 'horde', by }); if (fp) q.set('fp', '1');
     const url = `https://wow-travelcraft.com/${S.lang === 'fr' ? 'fr/' : ''}#${q}`;
-    $('#gpsOut').innerHTML = `<iframe class="gps-frame" src="${url}" title="Travelcraft" loading="lazy"></iframe>
-      <p class="note">${t('gps_src')} <a href="${url}" target="_blank" rel="noopener">${t('gps_open')}</a></p>`;
+    $('#gpsOut').innerHTML = `<iframe class="gps-frame" src="${url}" title="Travelcraft"></iframe>`;
+    $('#gpsOpen').href = url;
   };
   $('#gpsGo').onclick = go;
   $('#gpsFrom').onkeydown = e => { if (e.key === 'Enter') go(); };
-  if (p.from) go();
+  go();
 }
 
 // ------------------------------------------------------------------ cadre
