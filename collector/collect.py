@@ -682,9 +682,16 @@ class Collector:
         elif craft is None:
             from mockapi import CRAFT
             craft = CRAFT
+        import copy
+        from farm import validate
+        pub_farm = copy.deepcopy(self._farm_items)
+        pub_rec = copy.deepcopy(craft["r"])
+        problems = validate(pub_farm, pub_rec, self.v.out, log) if not os.environ.get("MOCK_API") else []
+        self.v.write("d/farm", pub_farm)
+        self.v.write("d/checks", {"t": self.t, "problems": problems[:200], "n": len(problems)})
         self.v.write("state/craft", craft)
         self.v.write("d/craft", {"o": {k: v.get("c", []) for k, v in craft["o"].items()},
-                                 "r": {k: {k2: v2 for k2, v2 in v.items() if k2 != "t"} for k, v in craft["r"].items()}})
+                                 "r": {k: {k2: v2 for k2, v2 in v.items() if k2 != "t"} for k, v in pub_rec.items()}})
         self.v.write("d/vendor", vendor.get("items", []))
         self.v.write("d/meta", {
             "t": self.t, "region": self.cfg["region"], "ruleset": self.cfg["ruleset"],

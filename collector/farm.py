@@ -29,6 +29,32 @@ MINING_SKILL = {
 }
 
 
+# Cartes de zone : fichiers officiels de WoW Forever (version « c60 ») tels que publiés par warcraft.wiki.gg.
+# On n'utilise PAS les numéros de carte de metabot : certains pointent vers la mauvaise zone
+# (ex. 1434 « Stranglethorn Vale » montre une autre carte). La zone vient du texte de la légende.
+WIKI_MAPS = {
+    "Alterac Mountains": "Alterac", "Arathi Highlands": "Arathi", "Badlands": "Badlands", "Blasted Lands": "BlastedLands",
+    "Burning Steppes": "BurningSteppes", "Deadwind Pass": "DeadwindPass", "Duskwood": "Duskwood", "Dun Morogh": "DunMorogh",
+    "Eastern Plaguelands": "EasternPlaguelands", "Elwynn Forest": "Elwynn", "Hillsbrad Foothills": "Hillsbrad",
+    "The Hinterlands": "Hinterlands", "Ironforge": "Ironforge", "Loch Modan": "LochModan", "Redridge Mountains": "Redridge",
+    "Searing Gorge": "SearingGorge", "Silverpine Forest": "Silverpine", "Stranglethorn Vale": "Stranglethorn",
+    "Stormwind City": "StormwindCity", "Swamp of Sorrows": "SwampofSorrows", "Tirisfal Glades": "Tirisfal",
+    "Undercity": "Undercity", "Western Plaguelands": "WesternPlaguelands", "Westfall": "Westfall", "Wetlands": "Wetlands",
+    "Ashenvale": "Ashenvale", "Azshara": "Azshara", "The Barrens": "Barrens", "Darkshore": "Darkshore", "Darnassus": "Darnassus",
+    "Desolace": "Desolace", "Durotar": "Durotar", "Dustwallow Marsh": "DustwallowMarsh", "Felwood": "Felwood", "Feralas": "Feralas",
+    "Moonglade": "Moonglade", "Mulgore": "Mulgore", "Orgrimmar": "Orgrimmar", "Silithus": "Silithus",
+    "Stonetalon Mountains": "StonetalonMountain", "Tanaris": "Tanaris", "Teldrassil": "Teldrassil", "Thousand Needles": "ThousandNeedles",
+    "Thunder Bluff": "ThunderBluff", "Un'Goro Crater": "UnGoroCrater", "Winterspring": "Winterspring",
+}
+# Zones dont la carte a été redessinée dans Forever : les coordonnées de Classic peuvent être décalées.
+FOREVER_REDRAWN = {"Alterac Mountains", "Eastern Plaguelands", "Redridge Mountains", "Stormwind City", "Tirisfal Glades",
+                   "Desolace", "Mulgore"}
+
+
+def zone_slug(zone):
+    return re.sub(r"[^a-z0-9]+", "-", zone.lower().replace("'", "")).strip("-")
+
+
 def skinning_skill(level):
     """Compétence de dépeçage requise pour une bête de ce niveau (formule de Classic)."""
     if level is None:
@@ -217,24 +243,29 @@ def collect(items, requests_mod, log, delay=0.5, extra_ids=None):
 
 
 def fetch_maps(farm_items, out_dir, requests_mod, log):
-    """Télécharge une fois les fonds de carte (1002x668) utilisés par les points."""
+    """Télécharge une fois chaque carte de zone utilisée (warcraft.wiki.gg, version Forever c60)."""
     import os
-    ids = {m[0] for f in farm_items.values() for m in f.get("p", [])}
+    zones = {m[1] for f in farm_items.values() for m in f.get("p", [])}
     os.makedirs(os.path.join(out_dir, "maps"), exist_ok=True)
-    got = 0
-    for mid in sorted(ids):
-        path = os.path.join(out_dir, "maps", f"{mid}.webp")
+    got, unknown = 0, sorted(z for z in zones if z not in WIKI_MAPS)
+    for z in sorted(zones):
+        if z not in WIKI_MAPS:
+            continue
+        path = os.path.join(out_dir, "maps", f"z_{zone_slug(z)}.jpg")
         if os.path.exists(path):
             continue
         try:
-            r = requests_mod.get(f"https://metabot.gg/web/wow-forever/maps/{mid}.webp", headers={"User-Agent": UA}, timeout=30)
-            if r.status_code == 200 and len(r.content) > 1000:
+            r = requests_mod.get(f"https://warcraft.wiki.gg/images/WorldMap-{WIKI_MAPS[z]}_c60.jpg",
+                                 headers={"User-Agent": UA}, timeout=30)
+            if r.status_code == 200 and r.content[:3] == b"\xff\xd8\xff":
                 open(path, "wb").write(r.content)
                 got += 1
+            else:
+                log("carte", z, "statut", r.status_code)
         except Exception as e:
-            log("carte", mid, type(e).__name__)
+            log("carte", z, type(e).__name__)
         time.sleep(0.3)
-    log("cartes : ", len(ids), "utilisées,", got, "téléchargées")
+    log("cartes :", len(zones), "zones,", got, "téléchargées", ("· sans carte : " + ", ".join(unknown)) if unknown else "")
 
 
 def parse_crafted(html):
@@ -317,3 +348,42 @@ def collect_craft(prev, recipes, items, requests_mod, log, now, budget=350, dela
         time.sleep(delay)
     log(f"métiers : {done} pages lues, {fails} échecs, {max(0, len(todo) - budget)} restantes")
     return {"o": outs, "r": recs}
+
+
+def validate(farm_items, craft_recipes, out_dir, log):
+    """Relecture automatique avant publication : on retire ce qui ne passe pas les contrôles.
+    Renvoie la liste des problèmes (affichée dans Réglages)."""
+    import os
+    problems = []
+    def check(where, f):
+        keep = []
+        for m in f.get("p", []):
+            zone = m[1]
+            path = os.path.join(out_dir, "maps", f"z_{zone_slug(zone)}.jpg")
+            if zone not in WIKI_MAPS:
+                problems.append(f"{where} : zone « {zone} » sans carte officielle, carte retirée")
+                continue
+            if not os.path.exists(path):
+                problems.append(f"{where} : carte de {zone} pas encore téléchargée, carte retirée")
+                continue
+            bad = [p for p in m[3] if not (0 <= p[0] <= 100 and 0 <= p[1] <= 100)]
+            if bad:
+                problems.append(f"{where} : {len(bad)} point(s) hors de la carte de {zone}, retirés")
+                m[3] = [p for p in m[3] if p not in bad]
+            if not m[3]:
+                continue
+            keep.append(m)
+        if "p" in f:
+            f["p"] = keep
+        for v in f.get("v", []):
+            if v[4] is not None and not (0 <= v[4] <= 100 and 0 <= v[5] <= 100):
+                problems.append(f"{where} : coordonnées de {v[0]} incohérentes, retirées")
+                v[4] = v[5] = None
+    for k, f in farm_items.items():
+        check(f"objet {k}", f)
+    for k, f in craft_recipes.items():
+        check(f"recette {k}", f)
+    log(f"relecture : {len(problems)} problème(s) corrigé(s) avant publication")
+    for p in problems[:15]:
+        log("  -", p)
+    return problems

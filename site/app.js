@@ -67,7 +67,12 @@ const T = {
     ht_title: "Comment l'obtenir", ht_vendors: 'Vendu par', ht_neutral: 'Neutre', ht_limited: 'stock limité', ht_more_vendors: '+{n} autres vendeurs (les plus proches de chez toi peuvent ne pas être listés).',
     ht_vendor_generic: 'Vendu chez les PNJ marchands (fournitures, cuisine…), par exemple en ville.', ht_mobs: 'Monstres qui le lâchent', ht_mob: 'Monstre', ht_zone: 'Zone', ht_rate: 'Taux de drop',
     ht_nodes: 'Ramassé sur', ht_map: 'Carte', ht_nomap: 'Carte en cours de téléchargement, réessaie après la prochaine mise à jour.',
-    ht_map_help: 'Survole un point pour voir le nom, clique pour copier la commande /way. Clique sur la légende pour masquer ou afficher une source.',
+    ht_map_help: 'Survole un point pour voir le nom, clique dessus pour le GPS (itinéraire depuis là où tu es). Clique sur la légende pour masquer ou afficher une source.',
+    gps_title: 'GPS : y aller', gps_click: 'clique pour le GPS', gps_way_help: '← clique pour copier /way (addon TomTom)', gps_from: 'Je suis à', gps_speed: 'Je me déplace', gps_foot: 'à pied', gps_m60: 'monture (60 %)', gps_m100: 'monture rapide (100 %)',
+    gps_fp: "j'ai les points de vol", gps_go: "Calculer l'itinéraire", gps_last: 'Dernière étape dans {z}', gps_open: 'Ouvrir en grand ↗',
+    gps_last_help: "Une fois dans la zone, le point jaune clignotant est ta destination. Avec l'addon TomTom, tape <b>{way}</b> pour avoir une flèche.",
+    gps_src: 'Itinéraire calculé par Travelcraft (planificateur fait pour WoW Forever : vols mesurés dans Forever, zeppelins, bateaux, routes réelles).',
+    gps_redrawn: "Attention : Blizzard a redessiné cette carte pour Forever, les points (repris de Classic) peuvent être un peu décalés.",
     kind_d: 'monstre', kind_o: 'objet', kind_v: 'PNJ', copy_way: 'Copier /way', copied: 'Copié :',
     best_sub: 'Toutes les ressources dont on connaît la source : PNJ, monstres, herbes, minerais, dépeçage, pêche. Clique sur une ligne pour la carte.',
     bk_all: 'Tout', bk_mob: 'Monstres', bk_vendor: 'PNJ', bk_herb: 'Herboristerie', bk_mining: 'Minage', bk_skin: 'Dépeçage', bk_fish: 'Pêche', bk_node: 'Coffres / objets', bk_other: 'Autre',
@@ -140,7 +145,12 @@ const T = {
     ht_title: 'How to get it', ht_vendors: 'Sold by', ht_neutral: 'Neutral', ht_limited: 'limited stock', ht_more_vendors: '+{n} more vendors (ones near you may not be listed).',
     ht_vendor_generic: 'Sold by merchant NPCs (trade supplies, cooking…), for example in cities.', ht_mobs: 'Mobs that drop it', ht_mob: 'Mob', ht_zone: 'Zone', ht_rate: 'Drop rate',
     ht_nodes: 'Gathered from', ht_map: 'Map', ht_nomap: 'Map is downloading, try again after the next update.',
-    ht_map_help: 'Hover a dot to see the name, click to copy the /way command. Click the legend to hide or show a source.',
+    ht_map_help: 'Hover a dot to see the name, click it for the GPS (route from where you are). Click the legend to hide or show a source.',
+    gps_title: 'GPS: get there', gps_click: 'click for GPS', gps_way_help: '← click to copy /way (TomTom addon)', gps_from: 'I am at', gps_speed: 'Travel by', gps_foot: 'on foot', gps_m60: 'mount (60%)', gps_m100: 'fast mount (100%)',
+    gps_fp: 'I have the flight paths', gps_go: 'Get route', gps_last: 'Last leg in {z}', gps_open: 'Open full size ↗',
+    gps_last_help: 'Once in the zone, the blinking yellow dot is your destination. With the TomTom addon, type <b>{way}</b> for an arrow.',
+    gps_src: 'Route by Travelcraft (planner built for WoW Forever: flights timed in Forever, zeppelins, boats, real roads).',
+    gps_redrawn: 'Note: Blizzard redrew this map for Forever, the dots (from Classic) may be slightly off.',
     kind_d: 'mob', kind_o: 'object', kind_v: 'NPC', copy_way: 'Copy /way', copied: 'Copied:',
     best_sub: 'Every resource with a known source: NPCs, mobs, herbs, ores, skinning, fishing. Click a row for the map.',
     bk_all: 'All', bk_mob: 'Mobs', bk_vendor: 'NPCs', bk_herb: 'Herbalism', bk_mining: 'Mining', bk_skin: 'Skinning', bk_fish: 'Fishing', bk_node: 'Chests / objects', bk_other: 'Other',
@@ -940,13 +950,15 @@ function drawWhereMap(f, boxId) {
   const render = () => {
     const [mid, zone, names, pins] = f.p[cur];
     box.innerHTML = `${f.p.length > 1 ? `<div class="row" style="margin-bottom:8px">${f.p.map((m, i) => `<button class="chip ${i === cur ? 'on' : ''}" data-z="${i}">${zoneName(m[1])} <span class="dim">${m[3].length}</span></button>`).join('')}</div>` : `<p class="muted">${zoneName(zone)}</p>`}
-      <div class="wmap"><img src="maps/${mid}.webp" alt="${esc(zoneName(zone))}" onerror="this.parentNode.classList.add('nomap')">
-      ${pins.map(p => hidden.has(p[2]) ? '' : `<span class="pin${names[p[2]][1] === 'v' ? ' big' : ''}" style="left:${p[0]}%;top:${p[1]}%;background:${PIN_COLORS[p[2] % PIN_COLORS.length]}" data-way="/way ${p[0]} ${p[1]}" title="${esc(names[p[2]][0])} (${p[0]}, ${p[1]})"></span>`).join('')}
+      ${REDRAWN.has(zone) ? `<p class="note">${t('gps_redrawn')}</p>` : ''}
+      <div class="wmap"><img src="maps/z_${zoneSlug(zone)}.jpg" alt="${esc(zoneName(zone))}" onerror="this.parentNode.classList.add('nomap')">
+      ${pins.map((p, pi) => hidden.has(p[2]) ? '' : `<span class="pin${names[p[2]][1] === 'v' ? ' big' : ''}" style="left:${p[0]}%;top:${p[1]}%;background:${PIN_COLORS[p[2] % PIN_COLORS.length]}" data-gps="${pi}" title="${esc(names[p[2]][0])} (${p[0]}, ${p[1]}) · ${t('gps_click')}"></span>`).join('')}
       <div class="nomapmsg">${t('ht_nomap')}</div></div>
       <div class="row legend">${names.map((n, i) => `<button class="chip ${hidden.has(i) ? '' : 'on'}" data-l="${i}"><span class="dot" style="background:${PIN_COLORS[i % PIN_COLORS.length]}"></span>${esc(n[0])} <span class="dim">${t('kind_' + n[1]) || ''}</span></button>`).join('')}</div>
       <p class="note">${t('ht_map_help')}</p>`;
     box.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { cur = +b.dataset.z; hidden.clear(); render(); });
     box.querySelectorAll('[data-l]').forEach(b => b.onclick = () => { const i = +b.dataset.l; hidden.has(i) ? hidden.delete(i) : hidden.add(i); render(); });
+    box.querySelectorAll('[data-gps]').forEach(el => el.onclick = e => { e.preventDefault(); e.stopPropagation(); openGps(f.p[cur], pins[+el.dataset.gps]); });
     bindWay(box);
   };
   render();
@@ -1018,6 +1030,59 @@ function setupTooltips() {
     box.innerHTML = ttHtml(id); box.style.display = 'block'; place(e);
   });
   document.addEventListener('mousemove', e => { if (cur) place(e); });
+}
+
+// ------------------------------------------------------------------ GPS (itinéraire)
+// Le calcul du trajet est confié à Travelcraft (planificateur WoW Forever : vols mesurés dans Forever,
+// zeppelins, bateaux, routes tracées à la main). On lui passe le départ et la zone d'arrivée,
+// puis on guide le dernier bout dans la zone avec la carte et la commande /way.
+const GPS_PLACES = ["Orgrimmar", "Tours de zeppelin d'Orgrimmar", "Undercity", "Tours de zeppelin d'Undercity", "Thunder Bluff", "Camp de base de Grom'gol", "Brill", "Le Sépulcre", "Moulin-de-Tarren", "Trépas-d'Orgrim", "Kargath", "Pierrêche", "Village de Revantusk", "La Croisée", "Camp Taurajo", "Tranchecolline", "Village de Sen'jin", "Cabestan", "Baie-du-Butin", "Poste de Bois-Brisé", "Pic des Serres-Rocheuses", "Village de Proie-de-l'Ombre", "Poste de Librevent", "Camp Mojache", "Village de Fougerelle", "Gadgetzan", "Poste de Sang-Venin", "Valormok", "Avant-poste de Zoram'gar", "Village de Sabot-de-Sang", "Refuge de Marshal", "Fort Cénarien", "Long-Guet", "Chapelle de l'Espoir de Lumière", "Durotar", "Les Tarides", "Mulgore", "Clairières de Tirisfal", "Forêt des Pins argentés", "Contreforts d'Hillsbrad", "Montagnes d'Alterac", "Hautes-terres d'Arathi", "Vallée de Strangleronce", "Mille pointes", "Les Serres-Rocheuses", "Ashenvale", "Désolace", "Marécage d'Âprefange", "Terres ingrates", "Marais des Chagrins", "Feralas", "Tanaris", "Les Hinterlands", "Azshara", "Terres foudroyées", "Cratère d'Un'Goro", "Gangrebois", "Gorge des Vents brûlants", "Steppes ardentes", "Maleterres de l'ouest", "Maleterres de l'est", "Berceau-de-l'Hiver", "Silithus", "Les Paluns", "Bois de la Pénombre", "Les Carmines", "Marche de l'Ouest", "Forêt d'Elwynn", "Loch Modan", "Dun Morogh", "Sombrivage", "Riverglades", "Mont Hyjal", "Défilé de Deuillevent"];
+const zoneSlug = z => String(z || '').toLowerCase().replace(/'/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const REDRAWN = new Set(['Alterac Mountains', 'Eastern Plaguelands', 'Redridge Mountains', 'Stormwind City', 'Tirisfal Glades', 'Desolace', 'Mulgore']);
+function gpsPrefs() { try { return JSON.parse(store('hf_gps') || '{}'); } catch (e) { return {}; } }
+function dirWord(dx, dy) {
+  const a = (Math.atan2(-dy, dx) * 180 / Math.PI + 360) % 360;
+  const fr = ['à l’est', 'au nord-est', 'au nord', 'au nord-ouest', 'à l’ouest', 'au sud-ouest', 'au sud', 'au sud-est'];
+  const en = ['east', 'north-east', 'north', 'north-west', 'west', 'south-west', 'south', 'south-east'];
+  return (S.lang === 'fr' ? fr : en)[Math.round(a / 45) % 8];
+}
+function openGps(mapEntry, pin) {
+  const [, zone, names] = mapEntry; const [x, y, ni] = pin;
+  const p = gpsPrefs();
+  let ov = $('#gps'); if (!ov) { ov = document.createElement('div'); ov.id = 'gps'; document.body.appendChild(ov); }
+  const way = `/way ${x} ${y}`;
+  ov.innerHTML = `<div class="gps-box">
+    <div class="row spread"><h2>🧭 ${t('gps_title')}</h2><button class="act" id="gpsClose">✕</button></div>
+    <p><b>${esc(names[ni][0])}</b> · ${zoneName(zone)} <button class="way" id="gpsWay">${x}, ${y}</button> <span class="dim small">${t('gps_way_help')}</span></p>
+    ${REDRAWN.has(zone) ? `<p class="note">${t('gps_redrawn')}</p>` : ''}
+    <div class="row gps-form">
+      <label>${t('gps_from')} <input id="gpsFrom" list="gpsPlaces" value="${esc(p.from || 'Orgrimmar')}" placeholder="Orgrimmar, Brill, Les Tarides…"></label>
+      <label>${t('gps_speed')} <select id="gpsBy">${[['foot', t('gps_foot')], ['m60', t('gps_m60')], ['m100', t('gps_m100')]].map(([v, l]) => `<option value="${v}" ${p.by === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+      <label><input type="checkbox" id="gpsFp" ${p.fp !== false ? 'checked' : ''}> ${t('gps_fp')}</label>
+      <button class="act" id="gpsGo">${t('gps_go')}</button>
+    </div>
+    <datalist id="gpsPlaces">${GPS_PLACES.map(n => `<option value="${esc(n)}">`).join('')}</datalist>
+    <div id="gpsOut"></div>
+    <h3>${t('gps_last', { z: zoneName(zone) })}</h3>
+    <div class="wmap gps-map"><img src="maps/z_${zoneSlug(zone)}.jpg" alt="" onerror="this.parentNode.classList.add('nomap')">
+      <span class="pin target" style="left:${x}%;top:${y}%"></span><div class="nomapmsg">${t('ht_nomap')}</div></div>
+    <p>${t('gps_last_help', { way })}</p>
+  </div>`;
+  ov.style.display = 'flex';
+  const close = () => { ov.style.display = 'none'; ov.innerHTML = ''; };
+  $('#gpsClose').onclick = close; ov.onclick = e => { if (e.target === ov) close(); };
+  $('#gpsWay').onclick = () => (navigator.clipboard ? navigator.clipboard.writeText(way) : Promise.reject()).then(() => toast(t('copied') + ' ' + way), () => toast(way));
+  const go = () => {
+    const from = $('#gpsFrom').value.trim() || 'Orgrimmar', by = $('#gpsBy').value, fp = $('#gpsFp').checked;
+    store('hf_gps', JSON.stringify({ from, by, fp }));
+    const q = new URLSearchParams({ from, to: zone, f: 'horde', by }); if (fp) q.set('fp', '1');
+    const url = `https://wow-travelcraft.com/${S.lang === 'fr' ? 'fr/' : ''}#${q}`;
+    $('#gpsOut').innerHTML = `<iframe class="gps-frame" src="${url}" title="Travelcraft" loading="lazy"></iframe>
+      <p class="note">${t('gps_src')} <a href="${url}" target="_blank" rel="noopener">${t('gps_open')}</a></p>`;
+  };
+  $('#gpsGo').onclick = go;
+  $('#gpsFrom').onkeydown = e => { if (e.key === 'Enter') go(); };
+  if (p.from) go();
 }
 
 // ------------------------------------------------------------------ cadre

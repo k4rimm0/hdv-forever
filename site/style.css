@@ -129,3 +129,12 @@ button.act{background:#3a2a15;border:1px solid var(--gold);color:var(--gold2);bo
 #itt .tt-name{font-weight:700;font-size:14px;margin-bottom:2px}#itt .tt-sell{color:#fff;margin-top:4px}
 .ttpanel div{line-height:1.5}
 .kpi .money .s,.kpi .money .g,.kpi .money .c{font-size:inherit;color:inherit}
+
+#gps{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:flex-start;justify-content:center;z-index:150;overflow:auto;padding:24px 10px}
+.gps-box{background:#1b140d;border:1px solid #c8a24a;border-radius:10px;padding:16px 18px;max-width:900px;width:100%}
+.gps-form{gap:12px;margin:8px 0;align-items:flex-end}.gps-form input,.gps-form select{background:#120e0a;border:1px solid #5a4526;color:#eee;border-radius:6px;padding:6px 8px;font:inherit}
+.gps-form #gpsFrom{min-width:230px}
+.gps-frame{width:100%;height:620px;border:1px solid #3a2e1c;border-radius:8px;background:#0b0907;margin-top:8px}
+.gps-map{max-width:600px}
+.pin.target{width:18px;height:18px;margin:-9px 0 0 -9px;background:#ffd23f;border:2px solid #000;animation:blink 1s infinite}
+@keyframes blink{50%{box-shadow:0 0 0 8px rgba(255,210,63,.35)}}
