@@ -61,7 +61,7 @@ const T = {
     pr_chance: 'Chance de point', pr_ppp: 'Coût par point', pr_pt: 'point', pr_day: 'jour', pr_at: 'à',
     pr_adv_title: 'Conseils pour toi', pr_adv_lvl: 'Pour monter le moins cher', pr_adv_gold: "Pour faire de l'or", pr_adv_nogold: 'Rien de rentable à ton niveau pour le moment.', pr_adv_next: 'Ce qui se débloque bientôt',
     pr_adv_noskill: 'Entre ton niveau en {p} juste au-dessus pour avoir des conseils adaptés.',
-    pr_note: "Niveaux et sources des recettes : metabot.gg (données du jeu et de Classic). Les métiers se remplissent petit à petit, environ 350 pages par heure.",
+    pr_note: "Niveaux et sources des recettes : metabot.gg (données du jeu et de Classic). Revu toutes les deux semaines. Données de Classic : Forever a pu en changer quelques-unes.", pr_free: 'gratuit (rentable)', _x: "",
     pr_craft_title: 'Fabrication', pr_trainer_long: "S'apprend chez l'entraîneur du métier (en ville).", pr_ah_long: "Prix de la recette à l'HDV :", pr_ah_none: "Recette pas en vente à l'HDV en ce moment.",
     ht_title: "Comment l'obtenir", ht_vendors: 'Vendu par', ht_neutral: 'Neutre', ht_limited: 'stock limité', ht_more_vendors: '+{n} autres vendeurs (les plus proches de chez toi peuvent ne pas être listés).',
     ht_vendor_generic: 'Vendu chez les PNJ marchands (fournitures, cuisine…), par exemple en ville.', ht_mobs: 'Monstres qui le lâchent', ht_mob: 'Monstre', ht_zone: 'Zone', ht_rate: 'Taux de drop',
@@ -133,7 +133,7 @@ const T = {
     pr_chance: 'Skill-up chance', pr_ppp: 'Cost per point', pr_pt: 'point', pr_day: 'day', pr_at: 'at',
     pr_adv_title: 'Advice for you', pr_adv_lvl: 'Cheapest to level', pr_adv_gold: 'To make gold', pr_adv_nogold: 'Nothing profitable at your skill yet.', pr_adv_next: 'Unlocking soon',
     pr_adv_noskill: 'Enter your {p} skill above for tailored advice.',
-    pr_note: 'Skill levels and recipe sources: metabot.gg (game and Classic data). Professions fill in gradually, about 350 pages per hour.',
+    pr_note: 'Skill levels and recipe sources: metabot.gg (game and Classic data). Refreshed every two weeks. Classic data: Forever may have changed a few.', pr_free: 'free (profitable)', _x: '',
     pr_craft_title: 'Crafting', pr_trainer_long: 'Learned from the profession trainer (in cities).', pr_ah_long: 'Recipe price on the AH:', pr_ah_none: 'Recipe not on the AH right now.',
     ht_title: 'How to get it', ht_vendors: 'Sold by', ht_neutral: 'Neutral', ht_limited: 'limited stock', ht_more_vendors: '+{n} more vendors (ones near you may not be listed).',
     ht_vendor_generic: 'Sold by merchant NPCs (trade supplies, cooking…), for example in cities.', ht_mobs: 'Mobs that drop it', ht_mob: 'Mob', ht_zone: 'Zone', ht_rate: 'Drop rate',
@@ -717,7 +717,7 @@ async function viewCraft() {
       { k: 'ppd', label: t('col_ppd'), f: x => x.ppd == null ? '–' : `<b>${money(x.ppd, { short: true })}</b>`, v: x => x.ppd });
     else cols.push(
       { k: 'ch', label: t('pr_chance'), f: x => Math.round(x.ch * 100) + ' %', v: x => x.ch },
-      { k: 'ppp', label: t('pr_ppp'), f: x => x.ppp == null ? '–' : `<b>${money(Math.max(0, x.ppp))}</b>`, v: x => x.ppp == null ? null : Math.max(0, x.ppp) });
+      { k: 'ppp', label: t('pr_ppp'), f: x => x.ppp == null ? '–' : (x.ppp <= 0 ? `<span class="up">${t('pr_free')}</span>` : `<b>${money(x.ppp)}</b>`), v: x => x.ppp == null ? null : Math.max(0, x.ppp) });
     table($('#list'), cols, rows, { sort: mode === 'gold' ? 'ppd' : 'ppp', desc: mode === 'gold', limit: 300 });
   }
   function advice(rows, myN) {
@@ -730,7 +730,7 @@ async function viewCraft() {
       .filter(x => x.ci && x.ci.sk && x.ci.sk[0] > myN && x.ci.sk[0] <= myN + 25).sort((a, b) => a.ci.sk[0] - b.ci.sk[0]).slice(0, 4);
     const li = x => `<li><a href="#/item/${x.rc.o}">${esc(itemName(x.rc.o))}</a>`;
     box.innerHTML = `<h2>${t('pr_adv_title')}</h2><div class="grid g3">
-      <div><h3>${t('pr_adv_lvl')}</h3><ul class="vlist">${lvl.map(x => `${li(x)} · ${money(Math.max(0, x.ppp))}/${t('pr_pt')} <span class="sk ${skillColor(x.ci.sk, myN)}">●</span></li>`).join('') || `<li class="dim">${t('none')}</li>`}</ul></div>
+      <div><h3>${t('pr_adv_lvl')}</h3><ul class="vlist">${lvl.map(x => `${li(x)} · ${x.ppp <= 0 ? `<span class="up">${t('pr_free')}</span>` : money(x.ppp) + '/' + t('pr_pt')} <span class="sk ${skillColor(x.ci.sk, myN)}">●</span></li>`).join('') || `<li class="dim">${t('none')}</li>`}</ul></div>
       <div><h3>${t('pr_adv_gold')}</h3><ul class="vlist">${gold.map(x => `${li(x)} · <b>${money(x.ppd, { short: true })}</b>/${t('pr_day')}</li>`).join('') || `<li class="dim">${t('pr_adv_nogold')}</li>`}</ul></div>
       <div><h3>${t('pr_adv_next')}</h3><ul class="vlist">${next.map(x => `${li(x)} · ${t('pr_at')} ${x.ci.sk[0]}${x.ci.rs ? ` · <span class="tag warn">${t('pr_recipe')}</span>` : ''}</li>`).join('') || `<li class="dim">${t('none')}</li>`}</ul></div>
     </div>`;
