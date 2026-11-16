@@ -73,7 +73,7 @@ const T = {
     pr_my: 'Mon niveau en', pr_mode_gold: "Gagner de l'or", pr_mode_lvl: 'Monter le métier', pr_onlycan: 'Seulement ce que je peux faire', pr_norec: 'Sans recette à acheter (entraîneur)',
     pr_help_gold: "Bénéfice/jour = bénéfice par objet × ventes estimées par jour : c'est ce qui dit si ça vaut le coup. Chaque composant est compté au moins cher entre l'HDV et le PNJ.",
     pr_help_lvl: "Coût par point = coût des composants (moins la moitié de la revente) ÷ chance de gagner un point. Orange = 100 %, jaune puis vert = de moins en moins, gris = 0.",
-    pr_skill: 'Niveau', cd_open: 'Voir le prix de chaque composant', cd_mat: 'Composant', cd_qty: 'Quantité', cd_unit: "Prix à l'unité", cd_src: 'Où l\'acheter', cd_total: 'Total', cd_vendor: 'PNJ', cd_ah: 'HDV', cd_none: 'aucun prix connu', cd_sum: 'Coût pour une fabrication', cd_makes: 'donne {n} objets', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_tiers_tip: 'Tu peux l\'apprendre à {a}. De {a} à {b} (orange) : chaque fabrication donne 1 point à coup sûr. De {b} à {c} (jaune) : souvent un point. De {c} à {d} (vert) : rarement. À partir de {d} (gris) : plus aucun point.', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
+    pr_skill: 'Niveau', rah_loading: 'Recherche dans tes 3 HDV…', rah_noid: "Impossible de vérifier l'HDV : la recette n'est pas encore dans notre liste d'objets.", rah_found: 'En vente en ce moment :', rah_none_all: "Pas en vente en ce moment, ni à l'HDV Horde, ni à l'Alliance, ni au neutre (Blackwater).", rah_last: 'Dernier prix vu :', rah_ally: 'il faut un perso Alliance', rah_neutral: 'accessible aux deux factions (Baie-du-Butin, Gadgetzan, Everlook)', rah_alert: "🔔 M'avertir quand elle est en vente", rah_alert_on: '🔕 Alerte activée (cliquer pour retirer)', rah_notif: '{n} est en vente à l\'HDV !', rah_badge_on: 'en vente !', rah_badge_wait: 'pas encore en vente', rah_nosrc: "Aucune source connue dans nos données (souvent une recette qui tombe au hasard sur les monstres d'une tranche de niveau, ou une récompense de quête). Fiche complète :", cd_open: 'Voir le prix de chaque composant', cd_mat: 'Composant', cd_qty: 'Quantité', cd_unit: "Prix à l'unité", cd_src: 'Où l\'acheter', cd_total: 'Total', cd_vendor: 'PNJ', cd_ah: 'HDV', cd_none: 'aucun prix connu', cd_sum: 'Coût pour une fabrication', cd_makes: 'donne {n} objets', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_tiers_tip: 'Tu peux l\'apprendre à {a}. De {a} à {b} (orange) : chaque fabrication donne 1 point à coup sûr. De {b} à {c} (jaune) : souvent un point. De {c} à {d} (vert) : rarement. À partir de {d} (gris) : plus aucun point.', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
     pr_chance: 'Chance de point', pr_ppp: 'Coût par point', pr_pt: 'point', pr_day: 'jour', pr_at: 'à',
     pr_adv_title: 'Conseils pour toi', pr_adv_lvl: 'Pour monter le moins cher', pr_adv_gold: "Pour faire de l'or", pr_adv_nogold: 'Rien de rentable à ton niveau pour le moment.', pr_adv_next: 'Ce qui se débloque bientôt',
     pr_adv_noskill: 'Entre ton niveau en {p} juste au-dessus pour avoir des conseils adaptés.',
@@ -185,7 +185,7 @@ const T = {
     pr_my: 'My skill in', pr_mode_gold: 'Make gold', pr_mode_lvl: 'Level it', pr_onlycan: 'Only what I can make', pr_norec: 'No recipe to buy (trainer)',
     pr_help_gold: 'Profit/day = profit per item × estimated sales per day. Each reagent is counted at the cheaper of AH and vendor.',
     pr_help_lvl: 'Cost per point = reagent cost (minus half the resale) ÷ chance of a skill-up. Orange = 100%, yellow then green = less and less, grey = 0.',
-    pr_skill: 'Skill', cd_open: 'Show the price of each material', cd_mat: 'Material', cd_qty: 'Qty', cd_unit: 'Unit price', cd_src: 'Where to buy', cd_total: 'Total', cd_vendor: 'Vendor', cd_ah: 'AH', cd_none: 'no known price', cd_sum: 'Cost for one craft', cd_makes: 'makes {n} items', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_tiers_tip: 'Learnable at {a}. From {a} to {b} (orange): every craft gives a skill point. From {b} to {c} (yellow): usually a point. From {c} to {d} (green): rarely. From {d} (grey): no more points.', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
+    pr_skill: 'Skill', rah_loading: 'Checking your 3 auction houses…', rah_noid: "Can't check the AH: this recipe isn't in our item list yet.", rah_found: 'On sale right now:', rah_none_all: 'Not on sale right now, neither on the Horde, Alliance nor neutral (Blackwater) AH.', rah_last: 'Last price seen:', rah_ally: 'needs an Alliance character', rah_neutral: 'open to both factions (Booty Bay, Gadgetzan, Everlook)', rah_alert: '🔔 Notify me when it is on sale', rah_alert_on: '🔕 Alert on (click to remove)', rah_notif: '{n} is on the AH!', rah_badge_on: 'on sale!', rah_badge_wait: 'not on sale yet', rah_nosrc: 'No known source in our data (often a random world drop from mobs of a level range, or a quest reward). Full page:', cd_open: 'Show the price of each material', cd_mat: 'Material', cd_qty: 'Qty', cd_unit: 'Unit price', cd_src: 'Where to buy', cd_total: 'Total', cd_vendor: 'Vendor', cd_ah: 'AH', cd_none: 'no known price', cd_sum: 'Cost for one craft', cd_makes: 'makes {n} items', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_tiers_tip: 'Learnable at {a}. From {a} to {b} (orange): every craft gives a skill point. From {b} to {c} (yellow): usually a point. From {c} to {d} (green): rarely. From {d} (grey): no more points.', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
     pr_chance: 'Skill-up chance', pr_ppp: 'Cost per point', pr_pt: 'point', pr_day: 'day', pr_at: 'at',
     pr_adv_title: 'Advice for you', pr_adv_lvl: 'Cheapest to level', pr_adv_gold: 'To make gold', pr_adv_nogold: 'Nothing profitable at your skill yet.', pr_adv_next: 'Unlocking soon',
     pr_adv_noskill: 'Enter your {p} skill above for tailored advice.',
@@ -267,7 +267,7 @@ async function deriveKey(password) {
 async function load(name) {
   if (S.cache.has(name)) return S.cache.get(name);
   const p = (async () => {
-    const r = await fetch('d/' + name + '.bin?v=' + (S.meta ? S.meta.t : Date.now()));
+    const r = await fetch('d/' + name + '.bin?v=' + (S.meta && name !== 'meta' ? S.meta.t : Date.now()));
     if (!r.ok) return null;
     const buf = new Uint8Array(await r.arrayBuffer());
     const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(0, 12) }, S.key, buf.slice(12));
@@ -631,7 +631,7 @@ async function viewItem(id) {
     if (el && l.length) el.innerHTML = `<div class="panel ttpanel"><h2>${t('item_effect')}</h2>${l.map(([x, c]) => `<div style="color:${TTCOL[c] || '#fff'}">${esc(x)}</div>`).join('')}</div>`; });
   drawWhereMap(S.farm && S.farm[id], 'wmap');
   S.recipes.filter(rc => rc.o === id).forEach(rc => drawWhereMap(recipeInfo(craftInfo(id, rc.p)), 'rmap_' + rc.id));
-  bindWay(app());
+  bindWay(app()); fillRecipeAH(app());
   if ($('#routeBtn')) $('#routeBtn').onclick = async () => openRoute(id, await market(viewHouseId()));
   $('#watchBtn').onclick = () => {
     if (S.watch.some(w => w.id === id)) S.watch = S.watch.filter(w => w.id !== id); else S.watch.push({ id, buy: null, sell: null });
@@ -799,7 +799,13 @@ async function viewCraft(page) {
   function drawList() {
     const my = profSkills()[prof]; const myN = my === '' || my == null ? null : Number(my);
     if (mode === 'guide') {
-      $('#advice').style.display = 'none';
+      $('#advice').style.display = '';
+      advice(S.recipes.filter(rc => rc.p === prof).map(rc => {
+        const out = m.items[rc.o]; const c = craftCost(rc, m.items, vs); const ci = craftInfo(rc.o, prof);
+        const sell = out && out[MKT] ? out[MKT] * rc.oq * (1 - cut) : null; const profit = sell != null && !c.missing ? sell - c.cost : null;
+        const ch = ci && myN != null ? skillChance(ci.sk, myN) : null;
+        return { rc, ci, ch, ppd: profit != null && out && out[PD] ? profit / rc.oq * out[PD] : null, ppp: ch ? (c.missing ? null : (c.cost - (sell || 0) * 0.5) / ch) : null };
+      }), myN);
       $('#list').innerHTML = guideHtml(prof, Math.max(1, myN || 1), m, vs, { noRecipe, resale: store('hf_gresale') === '1' })
         + `<label class="chk" style="margin-top:8px"><input type="checkbox" id="gresale" ${store('hf_gresale') === '1' ? 'checked' : ''}> ${t('gd_resale')}</label>`;
       $('#gresale').onchange = e => { store('hf_gresale', e.target.checked ? '1' : '0'); drawList(); };
@@ -870,6 +876,54 @@ async function viewCraft(page) {
   $('#norec').onchange = e => { noRecipe = e.target.checked; store('hf_norec', noRecipe ? '1' : '0'); drawList(); };
   draw();
 }
+function srcLinks(nm) {
+  const q = encodeURIComponent(nm);
+  return `<a href="https://www.wowhead.com/forever/search?q=${q}" target="_blank" rel="noopener">Wowhead ↗</a> · <a href="https://metabot.gg/en/wow-forever/search?q=${q}" target="_blank" rel="noopener">Metabot ↗</a>`;
+}
+// Cherche une recette (ou n'importe quel objet) dans les 3 HDV du joueur : Horde, Alliance, neutre.
+async function availAll(rid) {
+  const mh = myHouses(); const out = [];
+  for (const f of ['horde', 'neutral', 'alliance']) {
+    const hid = mh[f]; if (!hid) continue; const m = await market(hid).catch(() => null);
+    const r = m && m.items[rid]; out.push({ f, hid, qty: r ? r[QTY] || 0 : 0, min: r ? r[MIN] : null, mkt: r ? r[MKT] : null });
+  }
+  return out;
+}
+async function fillRecipeAH(root) {
+  for (const box of root.querySelectorAll('.rcah')) {
+    const rid = Number(box.dataset.rid) || null;
+    if (!rid) { box.innerHTML = `<p class="dim">${t('rah_noid')}</p>`; continue; }
+    const av = await availAll(rid); const on = av.filter(a => a.qty > 0);
+    const FN = { horde: t('hs_horde'), alliance: t('hs_alliance'), neutral: t('hs_neutral') };
+    const w = S.watch.find(x => x.id === rid && x.avail);
+    let h = on.length
+      ? `<p>${t('rah_found')}</p><ul class="vlist">${on.map(a => `<li><b>${FN[a.f]}</b> : ${money(a.min)} <span class="dim">(${a.qty} ${t('col_qty').toLowerCase()})</span>${a.f === 'alliance' ? ` <span class="dim">· ${t('rah_ally')}</span>` : a.f === 'neutral' ? ` <span class="dim">· ${t('rah_neutral')}</span>` : ''}</li>`).join('')}</ul>`
+      : `<p>${t('rah_none_all')}</p>${av.some(a => a.mkt) ? `<p class="dim">${t('rah_last')} ${money(Math.min(...av.filter(a => a.mkt).map(a => a.mkt)))}</p>` : ''}`;
+    h += `<button class="act small" data-avw="${rid}">${w ? t('rah_alert_on') : t('rah_alert')}</button>`;
+    box.innerHTML = h;
+    box.querySelector('[data-avw]').onclick = async () => {
+      const i = S.watch.findIndex(x => x.id === rid && x.avail);
+      if (i >= 0) S.watch.splice(i, 1); else {
+        S.watch.push({ id: rid, buy: null, sell: null, avail: true, seen: on.length > 0 });
+        try { if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission(); } catch (e) {}
+      }
+      store('hf_watch', JSON.stringify(S.watch)); renderNav(); fillRecipeAH(root);
+    };
+  }
+}
+// Alertes « disponible » : vérifiées à chaque chargement et toutes les 10 min, notification du navigateur si autorisée.
+async function checkAvailAlerts() {
+  const ws = S.watch.filter(w => w.avail); if (!ws.length || !S.meta) return [];
+  const hits = [];
+  for (const w of ws) {
+    const on = (await availAll(w.id)).filter(a => a.qty > 0);
+    if (on.length) { hits.push(w.id); if (!w.seen) { w.seen = true;
+      try { if ('Notification' in window && Notification.permission === 'granted') new Notification('HDV Forever', { body: t('rah_notif', { n: itemName(w.id) }), icon: icon(w.id) }); } catch (e) {} } }
+    else w.seen = false;
+  }
+  store('hf_watch', JSON.stringify(S.watch));
+  return hits;
+}
 function craftPanelHtml(id) {
   const rcs = S.recipes.filter(rc => rc.o === id);
   if (!rcs.length) return '';
@@ -882,10 +936,11 @@ function craftPanelHtml(id) {
     if (ci && ci.tr) html += `<p>${t('pr_trainer_long')}</p>`;
     else if (ci && ci.nt) html += `<p>${esc(ci.nt)}</p>`;
     else if (r) {
-      const ah = r.id && S._lastMarket && S._lastMarket.items[r.id] ? S._lastMarket.items[r.id][MKT] : null;
-      html += `<h3>${t('pr_recipe')} : ${r.id ? `<a href="#/item/${r.id}">${esc(r.nm || ci.rn)}</a>` : esc(r.nm || ci.rn)}</h3>
-        ${ah ? `<p>${t('pr_ah_long')} <b>${money(ah)}</b></p>` : `<p class="dim">${t('pr_ah_none')}</p>`}
-        ${whereBlocks(r, 'rmap_' + rc.id)}`;
+      const nm = r.nm || ci.rn || ''; const rid = r.id || itemByEn(nm);
+      const wb = whereBlocks(r, 'rmap_' + rc.id);
+      html += `<h3>${t('pr_recipe')} : ${rid ? `<a href="#/item/${rid}">${esc(rid ? itemName(rid) : nm)}</a>` : esc(nm)}</h3>
+        <div class="rcah" data-rid="${rid || ''}" data-nm="${esc(nm)}"><p class="dim">${t('rah_loading')}</p></div>
+        ${wb || `<div class="note">${t('rah_nosrc')} ${srcLinks(nm)}</div>`}`;
     }
     return html;
   }).join('<hr>') + `<p class="note">${t('pr_note')}</p>`;
@@ -959,14 +1014,15 @@ async function viewGaps() {
 async function alertsCount() {
   if (!S.watch.length || !S.meta) return 0;
   const m = await market(viewHouseId()); if (!m) return 0;
-  return S.watch.filter(w => { const r = m.items[w.id]; if (!r) return false; return (w.buy && r[MIN] && r[MIN] <= w.buy) || (w.sell && r[MKT] && r[MKT] >= w.sell); }).length;
+  const av = await checkAvailAlerts();
+  return S.watch.filter(w => { if (w.avail) return av.includes(w.id); const r = m.items[w.id]; if (!r) return false; return (w.buy && r[MIN] && r[MIN] <= w.buy) || (w.sell && r[MKT] && r[MKT] >= w.sell); }).length;
 }
 async function viewWatch() {
   const m = await market(viewHouseId()) || { items: {} };
   app().innerHTML = `<div class="hero"><h1>${t('watch_title')}</h1><p>${t('watch_sub')}</p></div><div class="panel" id="list"></div>`;
   if (!S.watch.length) { $('#list').innerHTML = `<p class="muted">${t('watch_empty')}</p>`; return; }
   $('#list').innerHTML = `<div class="tablewrap"><table><thead><tr><th class="l">${t('col_item')}</th><th>${t('col_min')}</th><th>${t('col_mkt')}</th><th>${t('col_pd')}</th><th>${t('watch_buy')}</th><th>${t('watch_sell')}</th><th>${t('watch_alert')}</th><th></th></tr></thead><tbody>${S.watch.map((w, i) => {
-    const r = m.items[w.id] || []; const a = (w.buy && r[MIN] && r[MIN] <= w.buy) ? `<span class="badge good">${t('watch_buy')}</span>` : (w.sell && r[MKT] && r[MKT] >= w.sell) ? `<span class="badge warn">${t('watch_sell')}</span>` : '';
+    const r = m.items[w.id] || []; const a = w.avail ? (w.seen ? `<span class="badge good">${t('rah_badge_on')}</span>` : `<span class="dim small">${t('rah_badge_wait')}</span>`) : (w.buy && r[MIN] && r[MIN] <= w.buy) ? `<span class="badge good">${t('watch_buy')}</span>` : (w.sell && r[MKT] && r[MKT] >= w.sell) ? `<span class="badge warn">${t('watch_sell')}</span>` : '';
     return `<tr><td>${itemCell(w.id)}</td><td>${money(r[MIN])}</td><td>${money(r[MKT])}</td><td>${num(r[PD])}</td>
       <td><input type="number" data-i="${i}" data-f="buy" value="${w.buy || ''}" placeholder="pc"></td><td><input type="number" data-i="${i}" data-f="sell" value="${w.sell || ''}" placeholder="pc"></td>
       <td>${a}</td><td><button class="chip small" data-rm="${i}">${t('remove')}</button></td></tr>`;
@@ -1702,6 +1758,15 @@ function renderChrome() {
   $('#foot').textContent = (S.lang === 'fr' ? 'Données : API Blizzard (WoW Forever), relevées toutes les heures. Site personnel.' : 'Data: Blizzard API (WoW Forever), read hourly. Personal site.');
   if (S.meta) { renderNav(); renderHousebar(); }
 }
+// Toutes les 10 min : si les prix ont été mis à jour, on recharge les marchés et on revérifie les alertes (notification).
+setInterval(async () => {
+  if (!S.key || !S.meta) return;
+  try {
+    S.cache.delete('meta'); const nm = await load('meta');
+    if (nm && nm.t !== S.meta.t) { for (const k of [...S.cache.keys()]) if (k.startsWith('m_') || k.startsWith('h_')) S.cache.delete(k); S.meta = nm; renderNav(); renderHousebar(); }
+    else if (nm) S.cache.set('meta', Promise.resolve(nm));
+  } catch (e) {}
+}, 600000);
 async function route() {
   if (!S.meta) return;
   const h = decodeURIComponent(location.hash.slice(1) || '/');
