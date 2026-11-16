@@ -183,3 +183,7 @@ tr.cdrow>td{background:#15100a;padding:6px 10px 10px}
 table.cdt{width:auto;min-width:60%;margin-left:auto;font-size:13px}
 table.cdt th,table.cdt td{padding:4px 10px}
 table.cdt tr.cdsum td{border-top:1px solid #5a4626}
+
+svg.dif{vertical-align:-2px;margin-right:2px}
+.skw{white-space:nowrap}.skw .small{margin-left:3px}.dnow svg.dif{width:13px;height:15px;vertical-align:-3px;margin-right:4px}
+.gdi{display:flex;align-items:center;gap:6px}.gdi svg.dif{width:13px;height:15px;flex:none}

@@ -731,6 +731,16 @@ function craftInfo(outId, prof) {
   if (!c || !c.length) return null;
   return c.find(e => e.pf === PF_SLUG(prof)) || c[0];
 }
+// Icône de difficulté comme dans la fenêtre de métier du jeu : 3 chevrons orange, 2 jaunes, 1 vert, aucun en gris.
+const DIFF_N = { orange: 3, yellow: 2, green: 1, grey: 0, red: 0 };
+const DIFF_COL = { orange: '#ff8040', yellow: '#ffff00', green: '#40bf40', grey: '#9a9a9a', red: '#ff4d4d' };
+function diffIcon(c, title) {
+  const n = DIFF_N[c]; if (n == null) return '';
+  const tt = title ? ` title="${esc(title)}"` : '';
+  if (!n) return `<svg class="dif" viewBox="0 0 12 14" width="12" height="14"${tt}><circle cx="6" cy="8" r="2.6" fill="${DIFF_COL[c]}" stroke="#000" stroke-width="1"/></svg>`;
+  let p = ''; for (let i = n - 1; i >= 0; i--) { const y = 0.6 + i * 4 + (3 - n) * 2; p += `<path d="M6 ${y}L11.6 ${y + 5.4}L11.6 ${y + 7.6}L6 ${y + 3.6}L0.4 ${y + 7.6}L0.4 ${y + 5.4}Z" fill="${DIFF_COL[c]}" stroke="#000" stroke-width=".6" stroke-linejoin="round"/>`; }
+  return `<svg class="dif" viewBox="0 0 12 14" width="12" height="14"${tt}>${p}</svg>`;
+}
 function skillColor(sk, my) {
   if (!sk || my == null || my === '') return '';
   if (my < sk[0]) return 'red';
@@ -812,7 +822,7 @@ async function viewCraft(page) {
     advice(rows, myN);
     const cols = [
       { k: 'n', label: t('col_item'), f: x => itemCell(x.rc.o) + (x.rc.oq > 1 ? ` <span class="dim">×${x.rc.oq}</span>` : ''), v: x => itemName(x.rc.o), cls: 'l' },
-      { k: 'sk', label: t('pr_skill'), f: x => x.ci && x.ci.sk ? `<span class="sk ${skillColor(x.ci.sk, myN)}" title="${t('pr_tiers_tip', { a: x.ci.sk[0], b: x.ci.sk[1], c: x.ci.sk[2], d: x.ci.sk[3] })}">${x.ci.sk[0]}</span> <span class="small" title="${t('pr_tiers_tip', { a: x.ci.sk[0], b: x.ci.sk[1], c: x.ci.sk[2], d: x.ci.sk[3] })}"><span class="sk yellow">${x.ci.sk[1]}</span>/<span class="sk green">${x.ci.sk[2]}</span>/<span class="sk grey">${x.ci.sk[3]}</span></span>` : '<span class="dim">?</span>', v: x => x.ci && x.ci.sk ? x.ci.sk[0] : null },
+      { k: 'sk', label: t('pr_skill'), f: x => x.ci && x.ci.sk ? `<span class="skw" title="${t('pr_tiers_tip', { a: x.ci.sk[0], b: x.ci.sk[1], c: x.ci.sk[2], d: x.ci.sk[3] })}"><span class="dnow">${diffIcon(myN != null && skillColor(x.ci.sk, myN) ? skillColor(x.ci.sk, myN) : 'orange')}</span><span class="sk ${skillColor(x.ci.sk, myN)}">${x.ci.sk[0]}</span> <span class="small">${diffIcon('yellow')}<span class="sk yellow">${x.ci.sk[1]}</span> ${diffIcon('green')}<span class="sk green">${x.ci.sk[2]}</span> ${diffIcon('grey')}<span class="sk grey">${x.ci.sk[3]}</span></span></span>` : '<span class="dim">?</span>', v: x => x.ci && x.ci.sk ? x.ci.sk[0] : null },
       { k: 'rec', label: t('pr_learn'), f: x => `<div class="where">${recipeCell(x.ci, m.items)}</div>`, v: x => x.ci && x.ci.tr ? 0 : 1, cls: 'l' },
       { k: 'cost', label: t('col_cost'), f: x => `<button type="button" class="cbx" title="${t('cd_open')}" data-cd="${esc(JSON.stringify([x.rc.oq, x.c.det]))}">▸</button> ${x.c.missing ? `<span class="badge bad">${t('incomplete')}</span>` : money(x.c.cost)}`, v: x => x.c.missing ? null : x.c.cost },
     ];
@@ -850,7 +860,7 @@ async function viewCraft(page) {
       .filter(x => x.ci && x.ci.sk && x.ci.sk[0] > myN && x.ci.sk[0] <= myN + 25).sort((a, b) => a.ci.sk[0] - b.ci.sk[0]).slice(0, 4);
     const li = x => `<li><a href="#/item/${x.rc.o}">${esc(itemName(x.rc.o))}</a>`;
     box.innerHTML = `<h2>${t('pr_adv_title')}</h2><div class="grid g3">
-      <div><h3>${t('pr_adv_lvl')}</h3><ul class="vlist">${lvl.map(x => `${li(x)} · ${x.ppp <= 0 ? `<span class="up">${t('pr_free')}</span>` : money(x.ppp) + '/' + t('pr_pt')} <span class="sk ${skillColor(x.ci.sk, myN)}">●</span></li>`).join('') || `<li class="dim">${t('none')}</li>`}</ul></div>
+      <div><h3>${t('pr_adv_lvl')}</h3><ul class="vlist">${lvl.map(x => `${li(x)} · ${x.ppp <= 0 ? `<span class="up">${t('pr_free')}</span>` : money(x.ppp) + '/' + t('pr_pt')} ${diffIcon(skillColor(x.ci.sk, myN))}</li>`).join('') || `<li class="dim">${t('none')}</li>`}</ul></div>
       <div><h3>${t('pr_adv_gold')}</h3><ul class="vlist">${gold.map(x => `${li(x)} · <b>${money(x.ppd, { short: true })}</b>/${t('pr_day')}</li>`).join('') || `<li class="dim">${t('pr_adv_nogold')}</li>`}</ul></div>
       <div><h3>${t('pr_adv_next')}</h3><ul class="vlist">${next.map(x => `${li(x)} · ${t('pr_at')} ${x.ci.sk[0]}${x.ci.rs ? ` · <span class="tag warn">${t('pr_recipe')}</span>` : ''}</li>`).join('') || `<li class="dim">${t('none')}</li>`}</ul></div>
     </div>`;
@@ -1652,7 +1662,7 @@ function guideHtml(prof, from, mk, vs, opts) {
     const r = st.x.r; const v = r && r.v ? r.v.filter(x => x[1] !== 'a')[0] : null;
     const learn = st.x.ci.tr ? `<span class="tag">${t('pr_trainer')}</span>`
       : `<span class="tag warn">${t('pr_recipe')}</span> ${st.x.learnTxt === 'ah' ? `${t('pr_ah')} ${money(st.x.learn)}` : v ? `<a href="#" class="vgps" data-vg="${esc(JSON.stringify([v[3], v[4], v[5], v[0]]))}"><b>${esc(v[0])}</b> 🧭</a> · ${zoneName(v[3])} · ${money(st.x.learn)}` : ''}`;
-    return `<tr><td><b>${st.from}–${st.to}</b></td><td>${itemCell(st.x.rc.o, false)}</td><td class="r"><b>${st.n}</b></td>
+    const dc = st.x.ci && st.x.ci.sk ? skillColor(st.x.ci.sk, st.from) : ''; return `<tr><td><b>${st.from}–${st.to}</b></td><td><span class="gdi">${dc ? diffIcon(dc) : ''}${itemCell(st.x.rc.o, false)}</span></td><td class="r"><b>${st.n}</b></td>
       <td class="l small">${st.x.rc.r.map(([rid, q]) => `${q * st.n}× <a href="#/item/${rid}">${esc(itemName(rid))}</a>`).join('<br>')}</td>
       <td class="r">${money(st.cost)}</td><td class="l small">${learn}${rank}</td></tr>`;
   }).join('');
