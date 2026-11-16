@@ -235,3 +235,85 @@ def fetch_maps(farm_items, out_dir, requests_mod, log):
             log("carte", mid, type(e).__name__)
         time.sleep(0.3)
     log("cartes : ", len(ids), "utilisées,", got, "téléchargées")
+
+
+def parse_crafted(html):
+    """Blocs « Crafted by » : métier, paliers de compétence, d'où vient la recette."""
+    mm = re.search(r"<h2[^>]*>Where to get", html)
+    if not mm:
+        return []
+    end = html.find("<section", mm.start() + 20)
+    sec = html[mm.start():end if end > 0 else len(html)]
+    out = []
+    for blk in re.split(r'<div class="[^"]*_recipe">', sec)[1:]:
+        blk = blk.split('<div id="where-', 1)[0]
+        prof = re.search(r'/professions/([\w-]+)"', blk)
+        skill = re.search(r"<span>Skill (\d+)</span>", blk)
+        bar = re.search(r'aria-label="Learn at (\d+); yellow from (\d+), green from (\d+), grey at (\d+)"', blk)
+        note = re.search(r'_note">(.*?)</p>', blk, flags=re.S)
+        rec = re.search(r'Recipe from:.*?href="/en/wow-forever/items/([\w-]+)">(.*?)</a>', blk, flags=re.S)
+        tiers = [int(x) for x in bar.groups()] if bar else ([int(skill.group(1))] * 4 if skill else None)
+        e = {"pf": prof.group(1) if prof else "", "sk": tiers}
+        if rec:
+            e["rs"], e["rn"] = rec.group(1), _text(rec.group(2))
+        elif "trainer" in blk:
+            e["tr"] = 1
+        elif note:
+            e["nt"] = _text(note.group(1))[:120]
+        out.append(e)
+    return out
+
+
+def collect_craft(prev, recipes, items, requests_mod, log, now, budget=350, delay=0.5):
+    """Mise à jour progressive : au plus `budget` pages par passage, chaque page revue tous les 14 jours."""
+    prev = prev or {}
+    outs, recs = dict(prev.get("o", {})), dict(prev.get("r", {}))
+    by_name = {}
+    for k, m in items.items():
+        if not k.startswith("_"):
+            en = (m.get("n") or {}).get("en")
+            if en:
+                by_name.setdefault(en, int(k))
+    todo = []
+    for rc in recipes:
+        k = str(rc.get("o"))
+        m = items.get(k)
+        if not m or k in {t[1] for t in todo}:
+            continue
+        if now - outs.get(k, {}).get("t", 0) > 14 * 86400:
+            todo.append(("o", k, (m.get("n") or {}).get("en") or ""))
+    need = {e.get("rs"): e.get("rn") for o in outs.values() for e in o.get("c", []) if e.get("rs")}
+    for slug_, name in need.items():
+        if now - recs.get(slug_, {}).get("t", 0) > 14 * 86400:
+            todo.append(("r", slug_, name))
+    todo.sort(key=lambda x: (x[0] != "r", (outs if x[0] == "o" else recs).get(x[1], {}).get("t", 0)))
+    s = requests_mod.Session()
+    s.headers["User-Agent"] = UA
+    done = fails = 0
+    for kind, key, name in todo[:budget]:
+        url_slug = key if kind == "r" else slug(name)
+        try:
+            r = s.get(f"https://metabot.gg/en/wow-forever/items/{url_slug}", timeout=30)
+            if r.status_code == 200:
+                if kind == "o":
+                    outs[key] = {"t": now, "c": parse_crafted(r.text)}
+                else:
+                    w = parse_where(r.text)
+                    desc, tables = parse_page(r.text)
+                    w.update({k2: v for k2, v in summarize(name, desc, tables).items() if k2 == "m" and v})
+                    w["t"], w["nm"], w["id"] = now, name, by_name.get(name)
+                    recs[key] = w
+                done += 1
+            else:
+                fails += 1
+                if kind == "o":
+                    outs[key] = {"t": now - 10 * 86400, "c": []}  # réessai dans 4 jours
+                if r.status_code in (403, 429) and fails > 5:
+                    log("metabot refuse (", r.status_code, "), arrêt")
+                    break
+        except Exception as e:
+            fails += 1
+            log("craft", name, type(e).__name__)
+        time.sleep(delay)
+    log(f"métiers : {done} pages lues, {fails} échecs, {max(0, len(todo) - budget)} restantes")
+    return {"o": outs, "r": recs}

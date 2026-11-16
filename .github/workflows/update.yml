@@ -43,6 +43,7 @@ jobs:
           BLIZZARD_CLIENT_SECRET: ${{ secrets.BLIZZARD_CLIENT_SECRET }}
           SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
           HOUSE_IDS: ${{ vars.HOUSE_IDS }}
+          CRAFT_BUDGET: "1000"
         run: |
           mkdir -p public
           rm -rf public/.git

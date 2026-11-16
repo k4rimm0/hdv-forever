@@ -141,3 +141,19 @@ FARM = {
              "p": [[1435, "Swamp of Sorrows", [["Banalash", "v"]], [[44.8, 56.6, 0]]], [1434, "Stranglethorn Vale", [["Kelsey Yance", "v"]], [[28.2, 74.3, 0]]]]},
     "3685": {"m": [["Highland Razormaw", 27, 28, "Wetlands", 72.0, ""]], "n": []},
 }
+
+CRAFT = {
+    "o": {
+        "2684": {"t": 0, "c": [{"pf": "cooking", "sk": [50, 90, 110, 130], "tr": 1}]},
+        "3665": {"t": 0, "c": [{"pf": "cooking", "sk": [130, 170, 190, 210], "rs": "recipe-curiously-tasty-omelet", "rn": "Recipe: Curiously Tasty Omelet"}]},
+        "2581": {"t": 0, "c": [{"pf": "first-aid", "sk": [40, 50, 75, 100], "tr": 1}]},
+        "118": {"t": 0, "c": [{"pf": "alchemy", "sk": [1, 55, 75, 95], "tr": 1}]},
+        "4238": {"t": 0, "c": [{"pf": "tailoring", "sk": [45, 70, 95, 120], "tr": 1}]},
+    },
+    "r": {
+        "recipe-curiously-tasty-omelet": {"t": 0, "nm": "Recipe: Curiously Tasty Omelet", "id": None,
+            "b": "Buy Recipe: Curiously Tasty Omelet from Kendor Kabonka in Stormwind City for 4s.",
+            "v": [["Kendor Kabonka", "a", "Cooking Supplies", "Stormwind City", 76.0, 37.0, 400, 0], ["Ulthir", "h", "Cooking Supplies", "Undercity", 62.0, 42.0, 400, 0]], "vn": 2,
+            "p": [[1435, "Swamp of Sorrows", [["Ulthir", "v"]], [[62.0, 42.0, 0]]]]},
+    },
+}

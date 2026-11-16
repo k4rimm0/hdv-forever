@@ -563,10 +563,7 @@ class Collector:
         farm = farm or {"t": 0, "items": {}}
         self.v.write("state/farm", farm)
         self.v.write("d/farm", farm["items"])
-        if not os.environ.get("MOCK_API"):
-            import requests
-            from farm import fetch_maps
-            fetch_maps(farm["items"], self.v.out, requests, log)
+        self._farm_items = farm["items"]
 
         recipes = self.update_recipes(self.v.read("state/recipes", None))
         self.v.write("state/recipes", recipes)
@@ -581,6 +578,19 @@ class Collector:
         site_items = {k: v for k, v in items.items() if not k.startswith("_")}
         self.v.write("d/items", site_items)
         self.v.write("d/recipes", rlist)
+        craft = self.v.read("state/craft", None)
+        if not os.environ.get("MOCK_API"):
+            import requests
+            from farm import collect_craft, fetch_maps
+            craft = collect_craft(craft, rlist, items, requests, log, self.t,
+                                  budget=int(os.environ.get("CRAFT_BUDGET", "350")))
+            fetch_maps({**self._farm_items, **craft["r"]}, self.v.out, requests, log)
+        elif craft is None:
+            from mockapi import CRAFT
+            craft = CRAFT
+        self.v.write("state/craft", craft)
+        self.v.write("d/craft", {"o": {k: v.get("c", []) for k, v in craft["o"].items()},
+                                 "r": {k: {k2: v2 for k2, v2 in v.items() if k2 != "t"} for k, v in craft["r"].items()}})
         self.v.write("d/vendor", vendor.get("items", []))
         self.v.write("d/meta", {
             "t": self.t, "region": self.cfg["region"], "ruleset": self.cfg["ruleset"],

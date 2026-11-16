@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------ textes FR / EN
 const T = {
   fr: {
-    nav_market: 'Marché', nav_best: 'Bestiaire', nav_farm: 'Farm par niveau', nav_craft: 'Craft rentable', nav_vendor: 'PNJ → HDV',
+    nav_market: 'Marché', nav_best: 'Bestiaire', nav_farm: 'Farm par niveau', nav_craft: 'Métiers', nav_vendor: 'PNJ → HDV',
     nav_gaps: 'Écarts entre HDV', nav_watch: 'Suivi', nav_settings: 'Réglages',
     search_ph: 'Chercher un objet (FR ou EN)…', lock_text: 'Entre le mot de passe de ton site.', remember: 'Se souvenir de moi sur cet appareil',
     unlock: 'Ouvrir', bad_pw: 'Mot de passe incorrect, ou données pas encore générées.', loading: 'Chargement…',
@@ -53,6 +53,16 @@ const T = {
     cat_ALL: 'Tout le marché', cat_TRADE: 'Artisanat', cat_CONS: 'Consommables', cat_GEAR: 'Équipement', cat_RECIPE: 'Recettes',
     cat_CLOTH: 'Tissu', cat_LEATHER: 'Cuir', cat_ORE: 'Minerai et barres', cat_MEAT: 'Viande et poisson', cat_HERB: 'Herbes',
     cat_ELEM: 'Élémentaire', cat_ENCH: 'Enchantement', cat_POT: 'Potions', cat_ELIX: 'Élixirs', cat_SCROLL: 'Parchemins', cat_FOOD: 'Nourriture', cat_BAND: 'Bandages',
+    pr_title: 'Métiers', pr_sub: "Par métier : ce qui rapporte le plus, ce qui monte le métier au moins cher, où apprendre chaque recette. Taxe de l'HDV ({cut} %) déduite.",
+    pr_my: 'Mon niveau en', pr_mode_gold: "Gagner de l'or", pr_mode_lvl: 'Monter le métier', pr_onlycan: 'Seulement ce que je peux faire', pr_norec: 'Sans recette à acheter (entraîneur)',
+    pr_help_gold: "Bénéfice/jour = bénéfice par objet × ventes estimées par jour : c'est ce qui dit si ça vaut le coup. Chaque composant est compté au moins cher entre l'HDV et le PNJ.",
+    pr_help_lvl: "Coût par point = coût des composants (moins la moitié de la revente) ÷ chance de gagner un point. Orange = 100 %, jaune puis vert = de moins en moins, gris = 0.",
+    pr_skill: 'Niveau', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
+    pr_chance: 'Chance de point', pr_ppp: 'Coût par point', pr_pt: 'point', pr_day: 'jour', pr_at: 'à',
+    pr_adv_title: 'Conseils pour toi', pr_adv_lvl: 'Pour monter le moins cher', pr_adv_gold: "Pour faire de l'or", pr_adv_nogold: 'Rien de rentable à ton niveau pour le moment.', pr_adv_next: 'Ce qui se débloque bientôt',
+    pr_adv_noskill: 'Entre ton niveau en {p} juste au-dessus pour avoir des conseils adaptés.',
+    pr_note: "Niveaux et sources des recettes : metabot.gg (données du jeu et de Classic). Les métiers se remplissent petit à petit, environ 350 pages par heure.",
+    pr_craft_title: 'Fabrication', pr_trainer_long: "S'apprend chez l'entraîneur du métier (en ville).", pr_ah_long: "Prix de la recette à l'HDV :", pr_ah_none: "Recette pas en vente à l'HDV en ce moment.",
     ht_title: "Comment l'obtenir", ht_vendors: 'Vendu par', ht_neutral: 'Neutre', ht_limited: 'stock limité', ht_more_vendors: '+{n} autres vendeurs (les plus proches de chez toi peuvent ne pas être listés).',
     ht_vendor_generic: 'Vendu chez les PNJ marchands (fournitures, cuisine…), par exemple en ville.', ht_mobs: 'Monstres qui le lâchent', ht_mob: 'Monstre', ht_zone: 'Zone', ht_rate: 'Taux de drop',
     ht_nodes: 'Ramassé sur', ht_map: 'Carte', ht_nomap: 'Carte en cours de téléchargement, réessaie après la prochaine mise à jour.',
@@ -67,7 +77,7 @@ const T = {
     sales_note: 'Ventes estimées : une annonce qui disparaît alors qu’il lui restait du temps est comptée comme vendue. C’est une estimation (une annonce annulée disparaît aussi).',
   },
   en: {
-    nav_market: 'Market', nav_best: 'Bestiary', nav_farm: 'Farm by level', nav_craft: 'Profitable crafts', nav_vendor: 'Vendor → AH',
+    nav_market: 'Market', nav_best: 'Bestiary', nav_farm: 'Farm by level', nav_craft: 'Professions', nav_vendor: 'Vendor → AH',
     nav_gaps: 'House gaps', nav_watch: 'Watchlist', nav_settings: 'Settings',
     search_ph: 'Search an item (EN or FR)…', lock_text: 'Enter your site password.', remember: 'Remember me on this device',
     unlock: 'Open', bad_pw: 'Wrong password, or data not generated yet.', loading: 'Loading…',
@@ -115,6 +125,16 @@ const T = {
     cat_ALL: 'Whole market', cat_TRADE: 'Trade goods', cat_CONS: 'Consumables', cat_GEAR: 'Gear', cat_RECIPE: 'Recipes',
     cat_CLOTH: 'Cloth', cat_LEATHER: 'Leather', cat_ORE: 'Ore & bars', cat_MEAT: 'Meat & fish', cat_HERB: 'Herbs',
     cat_ELEM: 'Elemental', cat_ENCH: 'Enchanting', cat_POT: 'Potions', cat_ELIX: 'Elixirs', cat_SCROLL: 'Scrolls', cat_FOOD: 'Food & drink', cat_BAND: 'Bandages',
+    pr_title: 'Professions', pr_sub: 'Per profession: what earns the most, what levels it cheapest, where to learn each recipe. AH cut ({cut}%) included.',
+    pr_my: 'My skill in', pr_mode_gold: 'Make gold', pr_mode_lvl: 'Level it', pr_onlycan: 'Only what I can make', pr_norec: 'No recipe to buy (trainer)',
+    pr_help_gold: 'Profit/day = profit per item × estimated sales per day. Each reagent is counted at the cheaper of AH and vendor.',
+    pr_help_lvl: 'Cost per point = reagent cost (minus half the resale) ÷ chance of a skill-up. Orange = 100%, yellow then green = less and less, grey = 0.',
+    pr_skill: 'Skill', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
+    pr_chance: 'Skill-up chance', pr_ppp: 'Cost per point', pr_pt: 'point', pr_day: 'day', pr_at: 'at',
+    pr_adv_title: 'Advice for you', pr_adv_lvl: 'Cheapest to level', pr_adv_gold: 'To make gold', pr_adv_nogold: 'Nothing profitable at your skill yet.', pr_adv_next: 'Unlocking soon',
+    pr_adv_noskill: 'Enter your {p} skill above for tailored advice.',
+    pr_note: 'Skill levels and recipe sources: metabot.gg (game and Classic data). Professions fill in gradually, about 350 pages per hour.',
+    pr_craft_title: 'Crafting', pr_trainer_long: 'Learned from the profession trainer (in cities).', pr_ah_long: 'Recipe price on the AH:', pr_ah_none: 'Recipe not on the AH right now.',
     ht_title: 'How to get it', ht_vendors: 'Sold by', ht_neutral: 'Neutral', ht_limited: 'limited stock', ht_more_vendors: '+{n} more vendors (ones near you may not be listed).',
     ht_vendor_generic: 'Sold by merchant NPCs (trade supplies, cooking…), for example in cities.', ht_mobs: 'Mobs that drop it', ht_mob: 'Mob', ht_zone: 'Zone', ht_rate: 'Drop rate',
     ht_nodes: 'Gathered from', ht_map: 'Map', ht_nomap: 'Map is downloading, try again after the next update.',
@@ -358,7 +378,9 @@ const ZONE_FR = {
   'Swamp of Sorrows': 'Marais des Chagrins', 'Blasted Lands': 'Terres foudroyées', 'Deadwind Pass': 'Défilé de Deuillevent', 'The Barrens': 'Les Tarides',
   'Darkshore': 'Sombrivage', 'Ashenvale': 'Orneval', 'Stonetalon Mountains': 'Les Serres-Rocheuses', 'Desolace': 'Désolace',
   'Thousand Needles': 'Mille pointes', 'Dustwallow Marsh': "Marécage d'Âprefange", 'Feralas': 'Féralas', "Un'Goro Crater": "Cratère d'Un'Goro",
-  'Felwood': 'Gangrebois', 'Winterspring': "Berceau-de-l'Hiver", 'Moonglade': 'Reflet-de-Lune', 'Stormwind City': 'Hurlevent',
+  'Felwood': 'Gangrebois', 'Winterspring': "Berceau-de-l'Hiver", 'Moonglade': 'Reflet-de-Lune', 'Stormwind City': 'Hurlevent', 'Undercity': 'Fossoyeuse', 'Thunder Bluff': 'Les Pitons-du-Tonnerre', 'Ironforge': 'Forgefer', 'Darnassus': 'Darnassus',
+  'Durotar': 'Durotar', 'Mulgore': 'Mulgore', 'Teldrassil': 'Teldrassil', 'Dun Morogh': 'Dun Morogh', 'Loch Modan': 'Loch Modan', 'Azshara': 'Azshara',
+  'Tanaris': 'Tanaris', 'Silithus': 'Silithus', 'Orgrimmar': 'Orgrimmar', 'Booty Bay': 'Baie-du-Butin', 'Ratchet': 'Cabestan', 'Gadgetzan': 'Gadgetzan',
 };
 const zoneName = z => esc(S.lang === 'fr' ? (ZONE_FR[z] || z) : z);
 const pctTxt = v => v == null ? '' : (v >= 10 ? Math.round(v) : v.toLocaleString(S.lang, { maximumFractionDigits: 1 })) + ' %';
@@ -492,7 +514,7 @@ async function viewItem(id) {
   const hid = viewHouseId();
   const shard = id % (S.meta.shards || 32);
   const [m, hist] = await Promise.all([market(hid), load(`h_${hid}_${shard}`)]);
-  const r = (m && m.items[id]) || [];
+  const r = (m && m.items[id]) || []; S._lastMarket = m;
   const h = (hist && hist[id]) || { h: [], d: [] };
   const vs = vendorSet(); const vb = vendorBuyPrice(id, vs);
   const watching = S.watch.some(w => w.id === id);
@@ -509,10 +531,13 @@ async function viewItem(id) {
       <div class="kpi"><div class="l">${t('item_vendor_sell')}</div><div class="v">${money(meta.sp || null)}</div><div class="s">${vb ? t('item_vendor_buy') + ' ' + money(vb) : ''}</div></div>
     </div>
     <div class="panel"><div class="row spread"><h2>${t('item_chart')}</h2><div id="per"></div></div><div class="chart" id="ch"></div><div id="lg"></div></div>
+    ${craftPanelHtml(id) ? `<div class="panel"><h2>${t('pr_craft_title')}</h2>${craftPanelHtml(id)}</div>` : ''}
     ${howToHtml(id) ? `<div class="panel"><h2>${t('ht_title')}</h2>${howToHtml(id)}</div>` : ''}
     <div class="panel"><h2>${t('item_houses')}</h2><div id="hs"></div></div>
     <div class="grid g2"><div class="panel"><h2>${t('item_made_by')}</h2><div id="mk"></div></div><div class="panel"><h2>${t('item_used_in')}</h2><div id="us"></div></div></div>`;
-  drawWhereMap(id); bindWay(app());
+  drawWhereMap(S.farm && S.farm[id], 'wmap');
+  S.recipes.filter(rc => rc.o === id).forEach(rc => drawWhereMap(recipeInfo(craftInfo(id, rc.p)), 'rmap_' + rc.id));
+  bindWay(app());
   $('#watchBtn').onclick = () => {
     if (S.watch.some(w => w.id === id)) S.watch = S.watch.filter(w => w.id !== id); else S.watch.push({ id, buy: null, sell: null });
     store('hf_watch', JSON.stringify(S.watch)); viewItem(id); renderNav();
@@ -594,39 +619,139 @@ function craftCost(rc, items, vs) {
   }
   return { cost, missing, parts };
 }
+// ------------------------------------------------------------------ métiers
+const PF_SLUG = p => String(p || '').toLowerCase().replace(/\s+/g, '-');
+function craftInfo(outId, prof) {
+  const c = S.craft && S.craft.o && S.craft.o[outId];
+  if (!c || !c.length) return null;
+  return c.find(e => e.pf === PF_SLUG(prof)) || c[0];
+}
+function skillColor(sk, my) {
+  if (!sk || my == null || my === '') return '';
+  if (my < sk[0]) return 'red';
+  if (my < sk[1]) return 'orange';
+  if (my < sk[2]) return 'yellow';
+  if (my < sk[3]) return 'green';
+  return 'grey';
+}
+function skillChance(sk, my) {
+  if (!sk || my == null || my === '' || my < sk[0]) return 0;
+  if (my < sk[1]) return 1;
+  if (my >= sk[3]) return 0;
+  return Math.max(0, Math.min(1, (sk[3] - my) / (sk[3] - sk[1])));
+}
+function recipeInfo(ci) { return ci && ci.rs && S.craft && S.craft.r ? S.craft.r[ci.rs] || { nm: ci.rn } : null; }
+function recipeCell(ci, items) {
+  if (!ci) return '<span class="dim">?</span>';
+  if (ci.tr) return `<span class="tag">${t('pr_trainer')}</span>`;
+  if (ci.nt) return `<span class="dim">${esc(ci.nt)}</span>`;
+  const r = recipeInfo(ci); if (!r) return '<span class="dim">?</span>';
+  const ah = r.id && items[r.id] && items[r.id][MKT];
+  const v = r.v && r.v.length ? [...r.v].sort((a, b) => (a[1] === 'h' ? -1 : a[1] === '' ? 0 : 1) - (b[1] === 'h' ? -1 : b[1] === '' ? 0 : 1))[0] : null;
+  const src = v ? `${esc(v[0])} · ${zoneName(v[3])}${v[6] ? ' · ' + money(v[6]) : ''}` : r.m && r.m.length ? `${t('pr_drop')} : ${esc(r.m[0][0])} (${pctTxt(r.m[0][4])})` : r.p && r.p.length ? zoneName(r.p[0][1]) : '';
+  return `<span class="tag warn">${t('pr_recipe')}</span> ${src ? `<span class="dim">${src}</span>` : ''}${ah ? `<br>${t('pr_ah')} <b>${money(ah)}</b>` : ''}`;
+}
+function profSkills() { try { return JSON.parse(store('hf_pskill') || '{}'); } catch (e) { return {}; } }
 async function viewCraft() {
   const m = await market(viewHouseId());
   if (!m) { app().innerHTML = `<div class="panel">${t('no_data')}</div>`; return; }
   const cut = S.meta.ah_cut || 0.05, vs = vendorSet();
-  let prof = store('hf_prof') || 'all', minPd = Number(store('hf_minpd') || 0), onlyProfit = store('hf_onlyp') !== '0';
   const profs = [...new Set(S.recipes.map(r => r.p))].sort();
-  app().innerHTML = `<div class="hero"><h1>${t('craft_title')}</h1><p>${t('craft_sub', { cut: Math.round(cut * 100) })}</p></div>
-    <div class="panel"><div class="row" id="profs"></div><div class="row" style="margin-top:8px"><label>${t('min_sales')} <input type="number" id="minpd" min="0" value="${minPd}"></label>
-    <label><input type="checkbox" id="onlyp" ${onlyProfit ? 'checked' : ''}> ${t('only_profit')}</label></div><p class="help">${t('craft_help')}</p></div>
-    <div class="panel"><div id="list"></div><p class="note">${t('sales_note')}</p></div>`;
+  let prof = store('hf_prof'); if (!profs.includes(prof)) prof = profs.includes('Cooking') ? 'Cooking' : profs[0];
+  let mode = store('hf_pmode') || 'gold', minPd = Number(store('hf_minpd') || 0), onlyCan = store('hf_onlycan') === '1', noRecipe = store('hf_norec') === '1';
+  app().innerHTML = `<div class="hero"><h1>${t('pr_title')}</h1><p>${t('pr_sub', { cut: Math.round(cut * 100) })}</p></div>
+    <div class="panel"><div class="row" id="profs"></div>
+    <div class="row" style="margin-top:10px"><label>${t('pr_my')} <b id="pname"></b> <input type="number" id="psk" min="0" max="300"></label>
+      <span class="seg"><button class="chip" data-m="gold">${t('pr_mode_gold')}</button><button class="chip" data-m="lvl">${t('pr_mode_lvl')}</button></span></div>
+    <div class="row" style="margin-top:8px"><label><input type="checkbox" id="onlycan"> ${t('pr_onlycan')}</label><label><input type="checkbox" id="norec"> ${t('pr_norec')}</label>
+      <label id="minpdl">${t('min_sales')} <input type="number" id="minpd" min="0" value="${minPd}"></label></div>
+    <p class="help" id="phelp"></p></div>
+    <div class="panel" id="advice"></div>
+    <div class="panel"><div id="list"></div><p class="note">${t('sales_note')}</p><p class="note">${t('pr_note')}</p></div>`;
+  $('#onlycan').checked = onlyCan; $('#norec').checked = noRecipe;
   function draw() {
-    $('#profs').innerHTML = ['all', ...profs].map(p => `<button class="chip small ${p === prof ? 'on' : ''}" data-p="${esc(p)}">${p === 'all' ? t('all_profs') : esc(profName(p))}</button>`).join('');
-    $('#profs').querySelectorAll('button').forEach(b => b.onclick = () => { prof = b.dataset.p; store('hf_prof', prof); draw(); });
-    const rows = S.recipes.filter(rc => prof === 'all' || rc.p === prof).map(rc => {
-      const out = m.items[rc.o]; const c = craftCost(rc, m.items, vs);
+    $('#profs').innerHTML = profs.map(p => `<button class="chip ${p === prof ? 'on' : ''}" data-p="${esc(p)}">${esc(profName(p))}</button>`).join('');
+    $('#profs').querySelectorAll('[data-p]').forEach(b => b.onclick = () => { prof = b.dataset.p; store('hf_prof', prof); draw(); });
+    document.querySelectorAll('[data-m]').forEach(b => { b.classList.toggle('on', b.dataset.m === mode); b.onclick = () => { mode = b.dataset.m; store('hf_pmode', mode); draw(); }; });
+    $('#pname').textContent = profName(prof);
+    const sks = profSkills(); const my = sks[prof] ?? '';
+    $('#psk').value = my;
+    $('#psk').oninput = e => { const s = profSkills(); s[prof] = e.target.value === '' ? '' : Number(e.target.value); store('hf_pskill', JSON.stringify(s)); drawList(); };
+    $('#minpdl').style.display = mode === 'gold' ? '' : 'none';
+    $('#phelp').textContent = mode === 'gold' ? t('pr_help_gold') : t('pr_help_lvl');
+    drawList();
+  }
+  function drawList() {
+    const my = profSkills()[prof]; const myN = my === '' || my == null ? null : Number(my);
+    let rows = S.recipes.filter(rc => rc.p === prof).map(rc => {
+      const out = m.items[rc.o]; const c = craftCost(rc, m.items, vs); const ci = craftInfo(rc.o, prof);
       const sell = out && out[MKT] ? out[MKT] * rc.oq * (1 - cut) : null;
       const profit = sell != null && !c.missing ? sell - c.cost : null;
-      return { rc, out, c, sell, profit, pd: out ? out[PD] : null, ppd: profit != null && out && out[PD] ? profit / rc.oq * out[PD] : null };
-    }).filter(x => x.out && (x.pd || 0) >= minPd && (!onlyProfit || (x.profit || 0) > 0));
-    table($('#list'), [
+      const ch = ci && myN != null ? skillChance(ci.sk, myN) : null;
+      return { rc, out, c, ci, sell, profit, pd: out ? out[PD] : null, ch,
+        ppd: profit != null && out && out[PD] ? profit / rc.oq * out[PD] : null,
+        ppp: ch ? (c.missing ? null : (c.cost - (sell || 0) * 0.5) / ch) : null };
+    });
+    if (onlyCan && myN != null) rows = rows.filter(x => x.ci && x.ci.sk && x.ci.sk[0] <= myN);
+    if (noRecipe) rows = rows.filter(x => x.ci && x.ci.tr);
+    if (mode === 'gold') rows = rows.filter(x => x.out && (x.pd || 0) >= minPd);
+    else rows = rows.filter(x => x.ch > 0);
+    advice(rows, myN);
+    const cols = [
       { k: 'n', label: t('col_item'), f: x => itemCell(x.rc.o) + (x.rc.oq > 1 ? ` <span class="dim">×${x.rc.oq}</span>` : ''), v: x => itemName(x.rc.o), cls: 'l' },
-      { m: false, k: 'p', label: t('col_prof'), f: x => esc(profName(x.rc.p)), v: x => x.rc.p, cls: 'l' },
+      { k: 'sk', label: t('pr_skill'), f: x => x.ci && x.ci.sk ? `<span class="sk ${skillColor(x.ci.sk, myN)}" title="${t('pr_tiers', { a: x.ci.sk[0], b: x.ci.sk[1], c: x.ci.sk[2], d: x.ci.sk[3] })}">${x.ci.sk[0]}</span> <span class="dim small">${x.ci.sk[1]}/${x.ci.sk[2]}/${x.ci.sk[3]}</span>` : '<span class="dim">?</span>', v: x => x.ci && x.ci.sk ? x.ci.sk[0] : null },
+      { k: 'rec', label: t('pr_learn'), f: x => `<div class="where">${recipeCell(x.ci, m.items)}</div>`, v: x => x.ci && x.ci.tr ? 0 : 1, cls: 'l' },
       { k: 'cost', label: t('col_cost'), f: x => `<span title="${esc(x.c.parts.join('\n'))}">${x.c.missing ? `<span class="badge bad">${t('incomplete')}</span>` : money(x.c.cost)}</span>`, v: x => x.c.missing ? null : x.c.cost },
+    ];
+    if (mode === 'gold') cols.push(
       { k: 'sell', label: t('col_sell'), f: x => money(x.sell), v: x => x.sell },
       { k: 'profit', label: t('col_profit'), f: x => x.profit == null ? '–' : `<span class="${x.profit > 0 ? 'up' : 'down'}">${money(x.profit / x.rc.oq)}</span>`, v: x => x.profit },
-      { m: false, k: 'margin', label: t('col_margin'), f: x => x.profit == null || !x.c.cost ? '–' : pctf(Math.round(x.profit / x.c.cost * 1000) / 10), v: x => x.profit == null || !x.c.cost ? null : x.profit / x.c.cost },
       { k: 'pd', label: t('col_pd'), f: x => num(x.pd), v: x => x.pd },
-      { k: 'ppd', label: t('col_ppd'), f: x => x.ppd == null ? '–' : `<b>${money(x.ppd, { short: true })}</b>`, v: x => x.ppd },
-    ], rows, { sort: 'ppd', limit: 200 });
+      { k: 'ppd', label: t('col_ppd'), f: x => x.ppd == null ? '–' : `<b>${money(x.ppd, { short: true })}</b>`, v: x => x.ppd });
+    else cols.push(
+      { k: 'ch', label: t('pr_chance'), f: x => Math.round(x.ch * 100) + ' %', v: x => x.ch },
+      { k: 'ppp', label: t('pr_ppp'), f: x => x.ppp == null ? '–' : `<b>${money(Math.max(0, x.ppp))}</b>`, v: x => x.ppp == null ? null : Math.max(0, x.ppp) });
+    table($('#list'), cols, rows, { sort: mode === 'gold' ? 'ppd' : 'ppp', desc: mode === 'gold', limit: 300 });
   }
-  $('#minpd').oninput = e => { minPd = Number(e.target.value) || 0; store('hf_minpd', minPd); draw(); };
-  $('#onlyp').onchange = e => { onlyProfit = e.target.checked; store('hf_onlyp', onlyProfit ? '1' : '0'); draw(); };
+  function advice(rows, myN) {
+    const box = $('#advice');
+    if (myN == null) { box.innerHTML = `<p class="muted">${t('pr_adv_noskill', { p: esc(profName(prof)) })}</p>`; return; }
+    const can = rows.filter(x => x.ci && x.ci.sk && x.ci.sk[0] <= myN);
+    const lvl = can.filter(x => x.ch > 0 && x.ppp != null).sort((a, b) => a.ppp - b.ppp).slice(0, 3);
+    const gold = can.filter(x => x.ppd > 0).sort((a, b) => b.ppd - a.ppd).slice(0, 3);
+    const next = S.recipes.filter(rc => rc.p === prof).map(rc => ({ rc, ci: craftInfo(rc.o, prof) }))
+      .filter(x => x.ci && x.ci.sk && x.ci.sk[0] > myN && x.ci.sk[0] <= myN + 25).sort((a, b) => a.ci.sk[0] - b.ci.sk[0]).slice(0, 4);
+    const li = x => `<li><a href="#/item/${x.rc.o}">${esc(itemName(x.rc.o))}</a>`;
+    box.innerHTML = `<h2>${t('pr_adv_title')}</h2><div class="grid g3">
+      <div><h3>${t('pr_adv_lvl')}</h3><ul class="vlist">${lvl.map(x => `${li(x)} · ${money(Math.max(0, x.ppp))}/${t('pr_pt')} <span class="sk ${skillColor(x.ci.sk, myN)}">●</span></li>`).join('') || `<li class="dim">${t('none')}</li>`}</ul></div>
+      <div><h3>${t('pr_adv_gold')}</h3><ul class="vlist">${gold.map(x => `${li(x)} · <b>${money(x.ppd, { short: true })}</b>/${t('pr_day')}</li>`).join('') || `<li class="dim">${t('pr_adv_nogold')}</li>`}</ul></div>
+      <div><h3>${t('pr_adv_next')}</h3><ul class="vlist">${next.map(x => `${li(x)} · ${t('pr_at')} ${x.ci.sk[0]}${x.ci.rs ? ` · <span class="tag warn">${t('pr_recipe')}</span>` : ''}</li>`).join('') || `<li class="dim">${t('none')}</li>`}</ul></div>
+    </div>`;
+  }
+  $('#minpd').oninput = e => { minPd = Number(e.target.value) || 0; store('hf_minpd', minPd); drawList(); };
+  $('#onlycan').onchange = e => { onlyCan = e.target.checked; store('hf_onlycan', onlyCan ? '1' : '0'); drawList(); };
+  $('#norec').onchange = e => { noRecipe = e.target.checked; store('hf_norec', noRecipe ? '1' : '0'); drawList(); };
   draw();
+}
+function craftPanelHtml(id) {
+  const rcs = S.recipes.filter(rc => rc.o === id);
+  if (!rcs.length) return '';
+  const my = profSkills();
+  return rcs.map(rc => {
+    const ci = craftInfo(id, rc.p); const r = recipeInfo(ci);
+    const myN = my[rc.p] === '' || my[rc.p] == null ? null : Number(my[rc.p]);
+    let html = `<p><b>${esc(profName(rc.p))}</b>${ci && ci.sk ? ` · ${t('pr_skill')} <span class="sk ${skillColor(ci.sk, myN)}">${ci.sk[0]}</span> <span class="dim">(${t('pr_tiers', { a: ci.sk[0], b: ci.sk[1], c: ci.sk[2], d: ci.sk[3] })})</span>` : ''}</p>
+      <p>${rc.r.map(([rid, q]) => `${q}× <a href="#/item/${rid}">${esc(itemName(rid))}</a>`).join(' + ')}</p>`;
+    if (ci && ci.tr) html += `<p>${t('pr_trainer_long')}</p>`;
+    else if (ci && ci.nt) html += `<p>${esc(ci.nt)}</p>`;
+    else if (r) {
+      const ah = r.id && S._lastMarket && S._lastMarket.items[r.id] ? S._lastMarket.items[r.id][MKT] : null;
+      html += `<h3>${t('pr_recipe')} : ${r.id ? `<a href="#/item/${r.id}">${esc(r.nm || ci.rn)}</a>` : esc(r.nm || ci.rn)}</h3>
+        ${ah ? `<p>${t('pr_ah_long')} <b>${money(ah)}</b></p>` : `<p class="dim">${t('pr_ah_none')}</p>`}
+        ${whereBlocks(r, 'rmap_' + rc.id)}`;
+    }
+    return html;
+  }).join('<hr>') + `<p class="note">${t('pr_note')}</p>`;
 }
 
 async function viewVendor() {
@@ -764,7 +889,18 @@ function howToHtml(id) {
   const blocks = [];
   const fi = farmInfo(id);
   if (fi && (f.k || f.s || f.f)) blocks.push(`<div class="where" style="margin-bottom:10px">${fi.html.split('<br>')[0]}${f.f && (f.k || f.s) ? '<br>' + fi.html.split('<br>')[1] : ''}</div>`);
-  if (f && f.v && f.v.length) {
+  blocks.push(whereBlocks(f, 'wmap'));
+  if (vendorSet().has(id) && (!f || !f.v || !f.v.length)) blocks.push(`<p>${t('ht_vendor_generic')}</p>`);
+  if (!blocks.join('')) {
+    if (f && f.new) return `<p class="muted">${t('farm_new')}</p>`;
+    return '';
+  }
+  return blocks.join('') + `<p class="note">${t('farm_src_note')}</p>`;
+}
+function whereBlocks(f, boxId) {
+  const blocks = [];
+  if (!f) return '';
+  if (f.v && f.v.length) {
     const order = { h: 0, '': 1, a: 2 };
     const vs = [...f.v].sort((a, b) => order[a[1]] - order[b[1]]);
     blocks.push(`<h3>${t('ht_vendors')} <span class="dim">(${f.vn || vs.length})</span></h3><ul class="vlist">${vs.map(v => `<li>
@@ -772,26 +908,20 @@ function howToHtml(id) {
       ${v[2] ? `<span class="dim">&lt;${esc(v[2])}&gt;</span>` : ''}<br>
       ${zoneName(v[3])} ${wayBtn(v[4], v[5])} · ${money(v[6])}${v[7] ? ` · <span class="dim">${t('ht_limited')}</span>` : ''}</li>`).join('')}</ul>
       ${(f.vn || 0) > vs.length ? `<p class="note">${t('ht_more_vendors').replace('{n}', f.vn - vs.length)}</p>` : ''}`);
-  } else if (vendorSet().has(id)) {
-    blocks.push(`<p>${t('ht_vendor_generic')}</p>`);
   }
-  if (f && f.m && f.m.length) {
+  if (f.m && f.m.length) {
     blocks.push(`<h3>${t('ht_mobs')}</h3><div class="tablewrap"><table class="t"><thead><tr><th>${t('ht_mob')}</th><th>${t('lvl_s')}</th><th>${t('ht_zone')}</th><th class="r">${t('ht_rate')}</th></tr></thead><tbody>
       ${f.m.map(m => `<tr><td>${esc(m[0])}</td><td>${m[1] ?? ''}${m[2] && m[2] !== m[1] ? '–' + m[2] : ''}</td><td>${zoneName(m[3])}</td><td class="r"><b>${pctTxt(m[4])}</b>${m[5] ? ' <span class="dim">×' + m[5] + '</span>' : ''}</td></tr>`).join('')}
       </tbody></table></div>`);
   }
-  if (f && f.n && f.n.length && !f.k) {
+  if (f.n && f.n.length && !f.k) {
     blocks.push(`<h3>${t('ht_nodes')}</h3><ul class="vlist">${f.n.map(n => `<li>${esc(n[0])} · ${n[1].map(zoneName).join(', ')}${n[2] ? ' +' + n[2] : ''} · <b>${pctTxt(n[3])}</b></li>`).join('')}</ul>`);
   }
-  if (f && f.p && f.p.length) blocks.push(`<h3>${t('ht_map')}</h3><div id="wmap"></div>`);
-  if (!blocks.length) {
-    if (f && f.new) return `<p class="muted">${t('farm_new')}</p>`;
-    return '';
-  }
-  return blocks.join('') + `<p class="note">${t('farm_src_note')}</p>`;
+  if (f.p && f.p.length) blocks.push(`<h3>${t('ht_map')}</h3><div class="wbox" id="${boxId}"></div>`);
+  return blocks.join('');
 }
-function drawWhereMap(id) {
-  const f = S.farm && S.farm[id]; const box = $('#wmap');
+function drawWhereMap(f, boxId) {
+  const box = document.getElementById(boxId);
   if (!f || !f.p || !box) return;
   let cur = 0; const hidden = new Set();
   const render = () => {
@@ -897,7 +1027,7 @@ function setupSearch() {
   };
 }
 async function start() {
-  [S.items, S.recipes, S.vendor, S.farm] = await Promise.all([load('items'), load('recipes'), load('vendor'), load('farm').catch(() => null)]);
+  [S.items, S.recipes, S.vendor, S.farm, S.craft] = await Promise.all([load('items'), load('recipes'), load('vendor'), load('farm').catch(() => null), load('craft').catch(() => null)]);
   S.items = S.items || {}; S.recipes = S.recipes || []; S.vendor = S.vendor || [];
   buildSearch();
   $('#lock').style.display = 'none';
