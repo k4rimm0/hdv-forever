@@ -24,7 +24,9 @@ const T = {
     col_cost: 'Coût', col_sell: 'Vente nette', col_profit: 'Bénéfice/u', col_margin: 'Marge', col_ppd: 'Bénéfice/jour', col_prof: 'Métier',
     col_house: 'HDV', col_source: 'Source', col_value: 'Valeur', col_index: 'Indice',
     est: 'estimé', unknown: 'pas encore assez de relevés', results: 'résultats', none: 'Rien à afficher.',
-    item_houses: 'Dans chaque HDV', item_chart: 'Historique des prix', item_made_by: 'Se fabrique avec', item_used_in: 'Sert à fabriquer',
+    item_houses: 'Prix dans tes HDV', hs_horde: 'HDV Horde (le tien)', hs_alliance: 'HDV Alliance', hs_neutral: 'HDV neutre (Blackwater)', hs_group: 'groupe',
+    hs_more: 'Comparer avec les {n} HDV des autres groupes de serveurs', hs_nomine: 'Choisis tes HDV dans Réglages → Retrouver mon HDV pour ne garder que les tiens.',
+    hs_explain: "En Europe, les serveurs WoW Forever sont regroupés en 5 groupes. Chaque groupe a 3 HDV (Horde, Alliance, neutre), d'où les 15 HDV et les numéros. Tu ne peux acheter et vendre que dans ceux de ton groupe (en haut) : ces lignes servent juste à comparer.", item_chart: 'Historique des prix', item_made_by: 'Se fabrique avec', item_used_in: 'Sert à fabriquer',
     item_vendor_sell: 'Le PNJ te le rachète', item_vendor_buy: 'Le PNJ le vend', item_ilvl: 'Niveau d’objet', item_req: 'Niveau requis',
     watch_add: 'Suivre cet objet', watch_on: 'Suivi ✓', series_mkt: 'Prix du marché', series_min: 'Le moins cher', series_qty: 'Quantité',
     p_1d: '24 h', p_3d: '3 j', p_1w: '7 j', p_1m: '30 j', p_all: 'Tout',
@@ -102,7 +104,9 @@ const T = {
     col_cost: 'Cost', col_sell: 'Net sale', col_profit: 'Profit/u', col_margin: 'Margin', col_ppd: 'Profit/day', col_prof: 'Profession',
     col_house: 'House', col_source: 'Source', col_value: 'Value', col_index: 'Index',
     est: 'estimated', unknown: 'not enough snapshots yet', results: 'results', none: 'Nothing to show.',
-    item_houses: 'In every house', item_chart: 'Price history', item_made_by: 'Made from', item_used_in: 'Used to craft',
+    item_houses: 'Prices in your houses', hs_horde: 'Horde AH (yours)', hs_alliance: 'Alliance AH', hs_neutral: 'Neutral AH (Blackwater)', hs_group: 'group',
+    hs_more: 'Compare with the {n} houses of the other realm groups', hs_nomine: 'Pick your houses in Settings to keep only yours.',
+    hs_explain: 'In Europe, WoW Forever realms are grouped into 5 groups, each with 3 auction houses (Horde, Alliance, neutral): hence 15 houses and the numbers. You can only trade in your own group (above); these rows are for comparison.', item_chart: 'Price history', item_made_by: 'Made from', item_used_in: 'Used to craft',
     item_vendor_sell: 'Vendor buys it for', item_vendor_buy: 'Vendor sells it for', item_ilvl: 'Item level', item_req: 'Required level',
     watch_add: 'Watch this item', watch_on: 'Watching ✓', series_mkt: 'Market price', series_min: 'Cheapest', series_qty: 'Quantity',
     p_1d: '24h', p_3d: '3d', p_1w: '7d', p_1m: '30d', p_all: 'All',
@@ -574,15 +578,24 @@ async function viewItem(id) {
   }
   draw();
   const all = await Promise.all(S.meta.tracked.map(async x => [x, await market(x)]));
-  const mine = Object.values(myHouses());
-  table($('#hs'), [
-    { k: 'h', label: t('col_house'), f: x => `<span class="badge ${mine.includes(x[0]) ? 'good' : ''}">${houseLabel(houseById(x[0]))}</span>`, cls: 'l', v: x => x[0] },
+  const myH = myHouses(); const mine = Object.values(myH).filter(Boolean);
+  const FNAME = { horde: t('hs_horde'), alliance: t('hs_alliance'), neutral: t('hs_neutral') };
+  const hsCols = own => [
+    { k: 'h', label: t('col_house'), f: x => { const hh = houseById(x[0]); return own ? `<b>${FNAME[hh.faction]}</b>` : `<span class="dim">${t(hh.faction)} · ${t('hs_group')} ${x[0]}</span>`; }, cls: 'l', v: x => x[0] },
     { k: 'min', label: t('col_min'), f: x => money(x[1][MIN]), v: x => x[1][MIN] },
     { k: 'mkt', label: t('col_mkt'), f: x => money(x[1][MKT]), v: x => x[1][MKT] },
     { m: false, k: 'qty', label: t('col_qty'), f: x => num(x[1][QTY]), v: x => x[1][QTY] },
     { k: 'pd', label: t('col_pd'), f: x => num(x[1][PD]), v: x => x[1][PD] },
     { m: false, k: 'd7', label: t('col_d7'), f: x => pctf(x[1][C7]), v: x => x[1][C7] },
-  ], all.filter(([, mm]) => mm && mm.items[id]).map(([x, mm]) => [x, mm.items[id]]), { sort: 'mkt', desc: false });
+  ];
+  const rowsH = all.filter(([, mm]) => mm && mm.items[id]).map(([x, mm]) => [x, mm.items[id]]);
+  const order = { horde: 0, neutral: 1, alliance: 2 };
+  const ownRows = rowsH.filter(r => mine.includes(r[0])).sort((a, b) => order[houseById(a[0]).faction] - order[houseById(b[0]).faction]);
+  const otherRows = rowsH.filter(r => !mine.includes(r[0]));
+  $('#hs').innerHTML = `<div id="hsOwn"></div>${mine.length ? '' : `<p class="note">${t('hs_nomine')}</p>`}
+    ${otherRows.length ? `<details class="hs-more"><summary>${t('hs_more', { n: otherRows.length })}</summary><p class="note">${t('hs_explain')}</p><div id="hsOther"></div></details>` : ''}`;
+  table($('#hsOwn'), hsCols(true), mine.length ? ownRows : rowsH, { sort: null });
+  if (otherRows.length) table($('#hsOther'), hsCols(false), otherRows, { sort: 'mkt', desc: false });
   const made = S.recipes.filter(rc => rc.o === id), used = S.recipes.filter(rc => rc.r.some(x => x[0] === id));
   $('#mk').innerHTML = made.map(rc => `<p>${profName(rc.p)} : ${rc.r.map(([rid, q]) => `${q} × <a href="#/item/${rid}">${esc(itemName(rid))}</a>`).join(', ')}</p>`).join('') || `<p class="muted">${t('none')}</p>`;
   $('#us').innerHTML = used.map(rc => `<p><a href="#/item/${rc.o}">${esc(itemName(rc.o))}</a> <span class="dim">(${profName(rc.p)})</span></p>`).join('') || `<p class="muted">${t('none')}</p>`;
@@ -1102,7 +1115,7 @@ async function renderNav() {
 }
 function renderHousebar() {
   const mine = myHouses();
-  $('#housebar').innerHTML = ['horde', 'alliance', 'neutral'].map(f => `<button class="chip ${f} ${S.view === f ? 'on' : ''}" data-v="${f}">${t(f)}${mine[f] ? ' <span class="dim">#' + mine[f] + '</span>' : ''}</button>`).join('')
+  $('#housebar').innerHTML = ['horde', 'alliance', 'neutral'].map(f => `<button class="chip ${f} ${S.view === f ? 'on' : ''}" data-v="${f}">${t(f)}</button>`).join('')
     + `<span class="note" style="margin-left:auto">${t('updated')} ${when(S.meta.t)} · ${t('next_update')} ${new Date((S.meta.t + 3600) * 1000).toLocaleTimeString(S.lang, { hour: '2-digit', minute: '2-digit' })}</span>`;
   $('#housebar').querySelectorAll('[data-v]').forEach(b => b.onclick = () => { S.view = b.dataset.v; store('hf_view', S.view); renderHousebar(); route(); });
 }
