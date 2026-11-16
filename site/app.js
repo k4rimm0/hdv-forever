@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------ textes FR / EN
 const T = {
   fr: {
-    nav_market: 'Marché', nav_best: 'Bestiaire', nav_farm: 'Farm par niveau', nav_craft: 'Métiers', nav_vendor: 'PNJ → HDV',
+    nav_market: 'Marché', nav_best: 'Bestiaire', nav_farm: 'Farm par niveau', nav_craft: 'Métiers', nav_guide: '📘 Guides métiers', gd_title: 'Guides de montée de métier', gd_sub: 'Choisis ton métier et entre ta compétence actuelle : le guide te donne, palier par palier, quoi fabriquer et combien, avec le plan le moins cher selon les prix de ton HDV (composants, recettes, où les trouver).', nav_vendor: 'PNJ → HDV',
     nav_gaps: 'Écarts entre HDV', nav_watch: 'Suivi', nav_settings: 'Réglages',
     search_ph: 'Chercher un objet (FR ou EN)…', lock_text: 'Entre le mot de passe de ton site.', remember: 'Se souvenir de moi sur cet appareil',
     unlock: 'Ouvrir', bad_pw: 'Mot de passe incorrect, ou données pas encore générées.', loading: 'Chargement…',
@@ -120,7 +120,7 @@ const T = {
     sales_note: 'Ventes estimées : une annonce qui disparaît alors qu’il lui restait du temps est comptée comme vendue. C’est une estimation (une annonce annulée disparaît aussi).',
   },
   en: {
-    nav_market: 'Market', nav_best: 'Bestiary', nav_farm: 'Farm by level', nav_craft: 'Professions', nav_vendor: 'Vendor → AH',
+    nav_market: 'Market', nav_best: 'Bestiary', nav_farm: 'Farm by level', nav_craft: 'Professions', nav_guide: '📘 Leveling guides', gd_title: 'Profession leveling guides', gd_sub: 'Pick your profession and enter your current skill: the guide tells you, step by step, what to craft and how many, using the cheapest plan from your auction house prices (materials, recipes, where to find them).', nav_vendor: 'Vendor → AH',
     nav_gaps: 'House gaps', nav_watch: 'Watchlist', nav_settings: 'Settings',
     search_ph: 'Search an item (EN or FR)…', lock_text: 'Enter your site password.', remember: 'Remember me on this device',
     unlock: 'Open', bad_pw: 'Wrong password, or data not generated yet.', loading: 'Loading…',
@@ -756,14 +756,14 @@ function recipeCell(ci, items) {
   return `<span class="tag warn">${t('pr_recipe')}</span> ${src ? `<span class="dim">${src}</span>` : ''}${ah ? `<br>${t('pr_ah')} <b>${money(ah)}</b>` : ''}`;
 }
 function profSkills() { try { return JSON.parse(store('hf_pskill') || '{}'); } catch (e) { return {}; } }
-async function viewCraft() {
+async function viewCraft(page) {
   const m = await market(viewHouseId());
   if (!m) { app().innerHTML = `<div class="panel">${t('no_data')}</div>`; return; }
   const cut = S.meta.ah_cut || 0.05, vs = vendorSet();
   const profs = [...new Set(S.recipes.map(r => r.p))].sort();
   let prof = store('hf_prof'); if (!profs.includes(prof)) prof = profs.includes('Cooking') ? 'Cooking' : profs[0];
-  let mode = store('hf_pmode') || 'gold', minPd = Number(store('hf_minpd') || 0), onlyCan = store('hf_onlycan') === '1', noRecipe = store('hf_norec') === '1';
-  app().innerHTML = `<div class="hero"><h1>${t('pr_title')}</h1><p>${t('pr_sub', { cut: Math.round(cut * 100) })}</p></div>
+  let mode = store('hf_pmode') || 'gold'; if (page === 'guide') mode = 'guide'; else if (mode === 'guide') mode = 'gold'; let minPd = Number(store('hf_minpd') || 0), onlyCan = store('hf_onlycan') === '1', noRecipe = store('hf_norec') === '1';
+  app().innerHTML = `<div class="hero"><h1>${page === 'guide' ? t('gd_title') : t('pr_title')}</h1><p>${page === 'guide' ? t('gd_sub') : t('pr_sub', { cut: Math.round(cut * 100) })}</p></div>
     <div class="panel"><div class="row" id="profs"></div>
     <div class="row" style="margin-top:10px"><label>${t('pr_my')} <b id="pname"></b> <input type="number" id="psk" min="0" max="300"></label>
       <span class="seg"><button class="chip" data-m="gold">${t('pr_mode_gold')}</button><button class="chip" data-m="lvl">${t('pr_mode_lvl')}</button><button class="chip" data-m="guide">📘 ${t('pr_mode_guide')}</button></span></div>
@@ -776,7 +776,7 @@ async function viewCraft() {
   function draw() {
     $('#profs').innerHTML = profs.map(p => `<button class="chip ${p === prof ? 'on' : ''}" data-p="${esc(p)}">${esc(profName(p))}</button>`).join('');
     $('#profs').querySelectorAll('[data-p]').forEach(b => b.onclick = () => { prof = b.dataset.p; store('hf_prof', prof); draw(); });
-    document.querySelectorAll('[data-m]').forEach(b => { b.classList.toggle('on', b.dataset.m === mode); b.onclick = () => { mode = b.dataset.m; store('hf_pmode', mode); draw(); }; });
+    document.querySelectorAll('[data-m]').forEach(b => { b.classList.toggle('on', b.dataset.m === mode); b.onclick = () => { const nm = b.dataset.m; store('hf_pmode', nm); if ((nm === 'guide') !== (page === 'guide')) { location.hash = nm === 'guide' ? '#/guide' : '#/craft'; return; } mode = nm; draw(); }; });
     $('#pname').textContent = profName(prof);
     const sks = profSkills(); const my = sks[prof] ?? '';
     $('#psk').value = my;
@@ -1662,7 +1662,7 @@ function setLang(l) { S.lang = l; store('hf_lang', l); document.documentElement.
 async function renderNav() {
   const cur = (location.hash.split('/')[1] || '').split('?')[0];
   const n = await alertsCount();
-  $('#nav').innerHTML = [['', 'nav_market'], ['best', 'nav_best'], ['farm', 'nav_farm'], ['craft', 'nav_craft'], ['vendor', 'nav_vendor'], ['gaps', 'nav_gaps'], ['watch', 'nav_watch'], ['settings', 'nav_settings']]
+  $('#nav').innerHTML = [['', 'nav_market'], ['best', 'nav_best'], ['farm', 'nav_farm'], ['craft', 'nav_craft'], ['guide', 'nav_guide'], ['vendor', 'nav_vendor'], ['gaps', 'nav_gaps'], ['watch', 'nav_watch'], ['settings', 'nav_settings']]
     .map(([k, l]) => `<a href="#/${k}" class="${cur === k ? 'on' : ''}">${t(l)}${k === 'watch' && n ? ` <span class="badge warn">${n}</span>` : ''}</a>`).join('');
 }
 function renderHousebar() {
@@ -1687,7 +1687,8 @@ async function route() {
     else if (h.startsWith('/search')) await viewSearch(new URLSearchParams(h.split('?')[1] || '').get('q') || '');
     else if (h.startsWith('/farm')) await viewFarm();
     else if (h.startsWith('/best')) await viewBestiary();
-    else if (h.startsWith('/craft')) await viewCraft();
+    else if (h.startsWith('/craft')) await viewCraft('craft');
+    else if (h.startsWith('/guide')) await viewCraft('guide');
     else if (h.startsWith('/vendor')) await viewVendor();
     else if (h.startsWith('/gaps')) await viewGaps();
     else if (h.startsWith('/watch')) await viewWatch();
