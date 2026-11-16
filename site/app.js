@@ -55,6 +55,20 @@ const T = {
     cat_ALL: 'Tout le marché', cat_TRADE: 'Artisanat', cat_CONS: 'Consommables', cat_GEAR: 'Équipement', cat_RECIPE: 'Recettes',
     cat_CLOTH: 'Tissu', cat_LEATHER: 'Cuir', cat_ORE: 'Minerai et barres', cat_MEAT: 'Viande et poisson', cat_HERB: 'Herbes',
     cat_ELEM: 'Élémentaire', cat_ENCH: 'Enchantement', cat_POT: 'Potions', cat_ELIX: 'Élixirs', cat_SCROLL: 'Parchemins', cat_FOOD: 'Nourriture', cat_BAND: 'Bandages',
+    pr_mode_guide: 'Guide de montée', pr_help_guide: "Plan calculé avec les prix de ton HDV : à chaque point, la recette la moins chère par point gagné (orange = 100 %, jaune puis vert = de moins en moins). Il part de ton niveau actuel.",
+    gd_total: 'Coût total estimé', gd_total_s: 'de {a} à {b}, composants + recettes', gd_steps: 'Étapes', gd_crafts: '{n} fabrications au total', gd_recipes: 'Recettes à acheter', gd_recipes_s: 'déjà compris dans le total',
+    gd_range: 'Niveaux', gd_recipe: 'Recette', gd_n: 'Nombre', gd_mats: 'Composants (total)', gd_learn: "Où l'apprendre", gd_at: 'à', gd_shop: 'Liste de courses',
+    gd_qty: 'Quantité', gd_unit: "Prix à l'unité", gd_where: 'Où', gd_vendor: 'PNJ (moins cher)', gd_ah: 'HDV', gd_resale: 'Compter la revente des objets fabriqués (moitié du prix HDV)',
+    gd_gap: 'À partir de {s}, aucune recette connue avec des prix à ton HDV : regarde le guide de référence.',
+    gd_note: "Les nombres de fabrications sont des moyennes (la chance de gagner un point baisse quand la recette passe au jaune puis au vert). Les prix bougent : recharge la page avant d'acheter.",
+    gd_ref: 'Guide de référence (en anglais), pour comparer :',
+    rank_journeyman: "palier bloqué : entraîne Compagnon chez ton maître de métier (possible dès 50).",
+    rank_expert: 'palier bloqué : entraîne Expert chez ton maître de métier (dès 125).',
+    rank_artisan: 'palier bloqué : entraîne Artisan chez un maître artisan (dès 200).',
+    rank_cook_expert: 'palier bloqué : achète le livre « The Expert Cookbook » chez Wulan (Désolace, Horde) ou Shandrina.',
+    rank_cook_artisan: 'palier bloqué : Artisan s’apprend avec la quête « Clamlette Surprise ».',
+    rank_fa_expert: 'palier bloqué : il faut le livre de Secourisme Expert (vendu par un PNJ spécialisé), voir le guide de référence.',
+    rank_fa_artisan: 'palier bloqué : Artisan s’apprend par une quête (voir le guide de référence).',
     pr_title: 'Métiers', pr_sub: "Par métier : ce qui rapporte le plus, ce qui monte le métier au moins cher, où apprendre chaque recette. Taxe de l'HDV ({cut} %) déduite.",
     pr_my: 'Mon niveau en', pr_mode_gold: "Gagner de l'or", pr_mode_lvl: 'Monter le métier', pr_onlycan: 'Seulement ce que je peux faire', pr_norec: 'Sans recette à acheter (entraîneur)',
     pr_help_gold: "Bénéfice/jour = bénéfice par objet × ventes estimées par jour : c'est ce qui dit si ça vaut le coup. Chaque composant est compté au moins cher entre l'HDV et le PNJ.",
@@ -156,6 +170,17 @@ const T = {
     cat_ALL: 'Whole market', cat_TRADE: 'Trade goods', cat_CONS: 'Consumables', cat_GEAR: 'Gear', cat_RECIPE: 'Recipes',
     cat_CLOTH: 'Cloth', cat_LEATHER: 'Leather', cat_ORE: 'Ore & bars', cat_MEAT: 'Meat & fish', cat_HERB: 'Herbs',
     cat_ELEM: 'Elemental', cat_ENCH: 'Enchanting', cat_POT: 'Potions', cat_ELIX: 'Elixirs', cat_SCROLL: 'Scrolls', cat_FOOD: 'Food & drink', cat_BAND: 'Bandages',
+    pr_mode_guide: 'Leveling guide', pr_help_guide: 'Plan built with your AH prices: at each point, the recipe that costs the least per skill point (orange = 100%, then yellow and green less and less). It starts from your current skill.',
+    gd_total: 'Estimated total cost', gd_total_s: 'from {a} to {b}, reagents + recipes', gd_steps: 'Steps', gd_crafts: '{n} crafts in total', gd_recipes: 'Recipes to buy', gd_recipes_s: 'already in the total',
+    gd_range: 'Skill', gd_recipe: 'Recipe', gd_n: 'Count', gd_mats: 'Reagents (total)', gd_learn: 'Where to learn', gd_at: 'at', gd_shop: 'Shopping list',
+    gd_qty: 'Quantity', gd_unit: 'Unit price', gd_where: 'Where', gd_vendor: 'vendor (cheaper)', gd_ah: 'AH', gd_resale: 'Count resale of crafted items (half AH price)',
+    gd_gap: 'From {s}, no known recipe with prices at your AH: check the reference guide.',
+    gd_note: 'Craft counts are averages (skill-up chance drops as the recipe turns yellow then green). Prices move: reload before buying.',
+    gd_ref: 'Reference guide, to compare:',
+    rank_journeyman: 'cap reached: train Journeyman at your trainer (from 50).', rank_expert: 'cap reached: train Expert at your trainer (from 125).',
+    rank_artisan: 'cap reached: train Artisan at an artisan trainer (from 200).', rank_cook_expert: 'cap reached: buy “The Expert Cookbook” from Wulan (Desolace, Horde) or Shandrina.',
+    rank_cook_artisan: 'cap reached: Artisan is learned through the quest “Clamlette Surprise”.', rank_fa_expert: 'cap reached: you need the Expert First Aid book from a vendor, see the reference guide.',
+    rank_fa_artisan: 'cap reached: Artisan is learned through a quest (see the reference guide).',
     pr_title: 'Professions', pr_sub: 'Per profession: what earns the most, what levels it cheapest, where to learn each recipe. AH cut ({cut}%) included.',
     pr_my: 'My skill in', pr_mode_gold: 'Make gold', pr_mode_lvl: 'Level it', pr_onlycan: 'Only what I can make', pr_norec: 'No recipe to buy (trainer)',
     pr_help_gold: 'Profit/day = profit per item × estimated sales per day. Each reagent is counted at the cheaper of AH and vendor.',
@@ -741,7 +766,7 @@ async function viewCraft() {
   app().innerHTML = `<div class="hero"><h1>${t('pr_title')}</h1><p>${t('pr_sub', { cut: Math.round(cut * 100) })}</p></div>
     <div class="panel"><div class="row" id="profs"></div>
     <div class="row" style="margin-top:10px"><label>${t('pr_my')} <b id="pname"></b> <input type="number" id="psk" min="0" max="300"></label>
-      <span class="seg"><button class="chip" data-m="gold">${t('pr_mode_gold')}</button><button class="chip" data-m="lvl">${t('pr_mode_lvl')}</button></span></div>
+      <span class="seg"><button class="chip" data-m="gold">${t('pr_mode_gold')}</button><button class="chip" data-m="lvl">${t('pr_mode_lvl')}</button><button class="chip" data-m="guide">📘 ${t('pr_mode_guide')}</button></span></div>
     <div class="row" style="margin-top:8px"><label><input type="checkbox" id="onlycan"> ${t('pr_onlycan')}</label><label><input type="checkbox" id="norec"> ${t('pr_norec')}</label>
       <label id="minpdl">${t('min_sales')} <input type="number" id="minpd" min="0" value="${minPd}"></label></div>
     <p class="help" id="phelp"></p></div>
@@ -757,11 +782,19 @@ async function viewCraft() {
     $('#psk').value = my;
     $('#psk').oninput = e => { const s = profSkills(); s[prof] = e.target.value === '' ? '' : Number(e.target.value); store('hf_pskill', JSON.stringify(s)); drawList(); };
     $('#minpdl').style.display = mode === 'gold' ? '' : 'none';
-    $('#phelp').textContent = mode === 'gold' ? t('pr_help_gold') : t('pr_help_lvl');
+    $('#phelp').textContent = mode === 'gold' ? t('pr_help_gold') : mode === 'guide' ? t('pr_help_guide') : t('pr_help_lvl');
     drawList();
   }
   function drawList() {
     const my = profSkills()[prof]; const myN = my === '' || my == null ? null : Number(my);
+    if (mode === 'guide') {
+      $('#advice').style.display = 'none';
+      $('#list').innerHTML = guideHtml(prof, Math.max(1, myN || 1), m, vs, { noRecipe, resale: store('hf_gresale') === '1' })
+        + `<label class="chk" style="margin-top:8px"><input type="checkbox" id="gresale" ${store('hf_gresale') === '1' ? 'checked' : ''}> ${t('gd_resale')}</label>`;
+      $('#gresale').onchange = e => { store('hf_gresale', e.target.checked ? '1' : '0'); drawList(); };
+      return;
+    }
+    $('#advice').style.display = '';
     let rows = S.recipes.filter(rc => rc.p === prof).map(rc => {
       const out = m.items[rc.o]; const c = craftCost(rc, m.items, vs); const ci = craftInfo(rc.o, prof);
       const sell = out && out[MKT] ? out[MKT] * rc.oq * (1 - cut) : null;
@@ -1517,6 +1550,87 @@ document.addEventListener('click', e => {
   const a = e.target.closest && e.target.closest('[data-mob]'); if (!a) return;
   e.preventDefault(); e.stopPropagation(); const [n, s] = JSON.parse(a.dataset.mob); openMob(n, s);
 });
+
+// ------------------------------------------------------------------ guide de montée de métier
+// Paliers à débloquer (formation) : valeurs de WoW Forever d'après Wowhead (overview des métiers, novembre 2026).
+const PROF_RANKS = {
+  _default: [[75, 'rank_journeyman'], [150, 'rank_expert'], [225, 'rank_artisan']],
+  Cooking: [[75, 'rank_journeyman'], [150, 'rank_cook_expert'], [225, 'rank_cook_artisan']],
+  'First Aid': [[75, 'rank_journeyman'], [150, 'rank_fa_expert'], [225, 'rank_fa_artisan']],
+};
+// Plan le moins cher de `from` à `to` : à chaque point, la recette (connue ou achetable) qui coûte le moins par point
+// gagné, puis on regroupe en étapes et on évite les étapes trop courtes (on ne change pas de recette pour 3 points).
+function buildGuide(prof, from, to, mk, vs, opts) {
+  const cands = S.recipes.filter(rc => rc.p === prof).map(rc => {
+    const ci = craftInfo(rc.o, prof); if (!ci || !ci.sk) return null;
+    const c = craftCost(rc, mk.items, vs); if (c.missing) return null;
+    let learn = 0, learnTxt = 'trainer';
+    if (!ci.tr) {
+      const r = recipeInfo(ci); if (!r) return null;
+      const ah = r.id && mk.items[r.id] ? mk.items[r.id][MKT] : null;
+      const v = r.v && r.v.length ? r.v.filter(x => x[1] !== 'a').sort((a, b) => (a[6] || 1e12) - (b[6] || 1e12))[0] : null;
+      if (v && v[6] != null) { learn = v[6]; learnTxt = 'vendor'; }
+      if (ah != null && (!learn || ah < learn)) { learn = ah; learnTxt = 'ah'; }
+      if (!learn && !(v && v[6] == null)) return null; // recette introuvable (drop rare, pas en vente)
+      if (opts.noRecipe) return null;
+    }
+    const out = mk.items[rc.o]; const resale = opts.resale && out && out[MKT] ? out[MKT] * rc.oq * 0.95 * 0.5 : 0;
+    return { rc, ci, cost: Math.max(0, c.cost - resale), raw: c.cost, learn, learnTxt, r: recipeInfo(ci) };
+  }).filter(Boolean);
+  const steps = []; let s = from; const learned = new Set();
+  while (s < to) {
+    let best = null;
+    for (const x of cands) {
+      const ch = skillChance(x.ci.sk, s); if (ch <= 0) continue;
+      const v = x.cost / ch + (learned.has(x) ? 0 : x.learn / 20); // le prix de la recette est étalé sur ~20 points
+      if (!best || v < best.v) best = { x, v, ch };
+    }
+    if (!best) { steps.push({ gap: true, from: s }); break; }
+    const last = steps[steps.length - 1];
+    if (last && !last.gap && last.x === best.x) { last.to = s + 1; last.crafts += 1 / best.ch; }
+    else steps.push({ x: best.x, from: s, to: s + 1, crafts: 1 / best.ch });
+    learned.add(best.x); s++;
+  }
+  // Lissage : une étape de moins de 5 points est absorbée par la précédente si cette recette rapporte encore des points.
+  for (let i = 1; i < steps.length; i++) {
+    const a = steps[i - 1], b = steps[i]; if (a.gap || b.gap || b.to - b.from >= 5) continue;
+    let crafts = 0, ok = true; for (let p = b.from; p < b.to; p++) { const ch = skillChance(a.x.ci.sk, p); if (ch <= 0) { ok = false; break; } crafts += 1 / ch; }
+    if (ok && crafts * a.x.cost <= b.crafts * b.x.cost * 1.25 + (learned.has(b.x) ? b.x.learn : 0)) { a.to = b.to; a.crafts += crafts; steps.splice(i, 1); i--; }
+  }
+  for (const st of steps) if (!st.gap) { st.n = Math.ceil(st.crafts); st.cost = st.n * st.x.raw; }
+  return steps;
+}
+function guideHtml(prof, from, mk, vs, opts) {
+  const to = 300; const steps = buildGuide(prof, from, to, mk, vs, opts);
+  const ranks = (PROF_RANKS[prof] || PROF_RANKS._default).filter(r => r[0] >= from && r[0] < to);
+  let total = 0, learnTotal = 0; const shop = {};
+  const rowsHtml = steps.map(st => {
+    if (st.gap) return `<tr><td colspan="6" class="dim">${t('gd_gap', { s: st.from })}</td></tr>`;
+    total += st.cost; if (!st.x.ci.tr) learnTotal += st.x.learn;
+    st.x.rc.r.forEach(([rid, q]) => { shop[rid] = (shop[rid] || 0) + q * st.n; });
+    const rank = ranks.filter(r => r[0] >= st.from && r[0] < st.to).map(r => `<div class="note">⚠ ${t('gd_at')} ${r[0]} : ${t(r[1])}</div>`).join('');
+    const r = st.x.r; const v = r && r.v ? r.v.filter(x => x[1] !== 'a')[0] : null;
+    const learn = st.x.ci.tr ? `<span class="tag">${t('pr_trainer')}</span>`
+      : `<span class="tag warn">${t('pr_recipe')}</span> ${st.x.learnTxt === 'ah' ? `${t('pr_ah')} ${money(st.x.learn)}` : v ? `<a href="#" class="vgps" data-vg="${esc(JSON.stringify([v[3], v[4], v[5], v[0]]))}"><b>${esc(v[0])}</b> 🧭</a> · ${zoneName(v[3])} · ${money(st.x.learn)}` : ''}`;
+    return `<tr><td><b>${st.from}–${st.to}</b></td><td>${itemCell(st.x.rc.o, false)}</td><td class="r"><b>${st.n}</b></td>
+      <td class="l small">${st.x.rc.r.map(([rid, q]) => `${q * st.n}× <a href="#/item/${rid}">${esc(itemName(rid))}</a>`).join('<br>')}</td>
+      <td class="r">${money(st.cost)}</td><td class="l small">${learn}${rank}</td></tr>`;
+  }).join('');
+  const shopRows = Object.entries(shop).map(([rid, q]) => {
+    rid = Number(rid); const ah = mk.items[rid] ? mk.items[rid][MKT] : null; const vp = vendorBuyPrice(rid, vs);
+    const unit = [ah, vp].filter(x => x != null && x > 0).sort((a, b) => a - b)[0];
+    return { rid, q, unit, src: unit === vp && vp ? 'pnj' : 'hdv' };
+  }).sort((a, b) => (b.unit || 0) * b.q - (a.unit || 0) * a.q);
+  return `<div class="grid g3 gd-kpi">
+      <div class="kpi"><div class="l">${t('gd_total')}</div><div class="v">${money(total + learnTotal)}</div><div class="s">${t('gd_total_s', { a: from, b: to })}</div></div>
+      <div class="kpi"><div class="l">${t('gd_steps')}</div><div class="v">${steps.filter(s => !s.gap).length}</div><div class="s">${t('gd_crafts', { n: steps.reduce((a, s) => a + (s.n || 0), 0) })}</div></div>
+      <div class="kpi"><div class="l">${t('gd_recipes')}</div><div class="v">${money(learnTotal)}</div><div class="s">${t('gd_recipes_s')}</div></div></div>
+    <div class="tablewrap"><table class="t gd"><thead><tr><th>${t('gd_range')}</th><th>${t('gd_recipe')}</th><th class="r">${t('gd_n')}</th><th>${t('gd_mats')}</th><th class="r">${t('col_cost')}</th><th>${t('gd_learn')}</th></tr></thead><tbody>${rowsHtml}</tbody></table></div>
+    <h3>${t('gd_shop')}</h3><div class="tablewrap"><table class="t"><thead><tr><th>${t('col_item')}</th><th class="r">${t('gd_qty')}</th><th class="r">${t('gd_unit')}</th><th>${t('gd_where')}</th></tr></thead><tbody>
+    ${shopRows.map(x => `<tr><td>${itemCell(x.rid, false)}</td><td class="r"><b>${x.q}</b></td><td class="r">${money(x.unit)}</td><td class="small">${x.src === 'pnj' ? t('gd_vendor') : t('gd_ah')}</td></tr>`).join('')}</tbody></table></div>
+    <p class="note">${t('gd_note')}</p>
+    ${prof === 'Cooking' ? `<p class="note">${t('gd_ref')} <a href="https://www.wowhead.com/forever/profession-leveling-guides/cooking" target="_blank" rel="noopener">Wowhead ↗</a></p>` : `<p class="note">${t('gd_ref')} <a href="https://www.wowhead.com/forever/profession-leveling-guides/${PF_SLUG(prof)}" target="_blank" rel="noopener">Wowhead ↗</a></p>`}`;
+}
 
 // ------------------------------------------------------------------ cadre
 function setLang(l) { S.lang = l; store('hf_lang', l); document.documentElement.lang = l; renderChrome(); route(); }

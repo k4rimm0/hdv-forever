@@ -170,3 +170,5 @@ a.vgps{color:inherit;text-decoration:none}a.vgps:hover b{text-decoration:underli
 .rl-out{stroke-width:calc(6px / var(--z,1))}.rl-in{stroke-width:calc(3px / var(--z,1))}
 .rt-extra li{font-size:14px}.rt-extra label{cursor:pointer}
 a.moblink{color:#ffd77a;text-decoration:none;border-bottom:1px dotted #ffd77a}a.moblink:hover{color:#fff}.mobfacts td:first-child{color:#a99}
+.gd td{vertical-align:top}.gd-kpi{margin-bottom:12px}
+.t.gd td:not(.r),.t.gd th:not(.r){text-align:left!important}.t.gd .it{justify-content:flex-start}
