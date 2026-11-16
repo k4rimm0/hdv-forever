@@ -296,6 +296,32 @@ class Collector:
         return {"lm": lm, "listing": listing}
 
     # ----- objets
+    def fill_icons(self, items):
+        """Complète les icônes manquantes avec le catalogue de LifeOnAzeroth (une fois par jour au plus)."""
+        missing = [k for k, m in items.items() if not k.startswith("_") and not m.get("ic")]
+        meta = items.setdefault("_icons", {})
+        if not missing or os.environ.get("MOCK_API") or self.t - meta.get("t", 0) < 86400:
+            return
+        meta["t"] = self.t
+        try:
+            import requests
+            r = requests.get("https://forever-live.sanredz.workers.dev/v1/catalog", timeout=60,
+                             headers={"User-Agent": "hdv-forever personal tracker"})
+            cat = r.json() if r.status_code == 200 else {}
+        except Exception as e:
+            log("catalogue d'icônes :", type(e).__name__)
+            return
+        if isinstance(cat, dict) and "items" in cat and isinstance(cat["items"], dict):
+            cat = cat["items"]
+        got = 0
+        for k in missing:
+            row = cat.get(k) if isinstance(cat, dict) else None
+            ic = row[2] if isinstance(row, list) and len(row) > 2 else (row or {}).get("icon") if isinstance(row, dict) else None
+            if ic:
+                items[k]["ic"] = str(ic).rsplit("/", 1)[-1].rsplit(".", 1)[0].lower()
+                got += 1
+        log(f"icônes : {len(missing)} manquantes, {got} complétées")
+
     def update_items(self, items, ids):
         miss = items.setdefault("_missing", {})
         retry = self.cfg["item_retry_days"] * 86400
@@ -537,6 +563,7 @@ class Collector:
 
         items = self.v.read("state/items", {}) or {}
         self.update_items(items, sorted(all_ids))
+        self.fill_icons(items)
         self.v.write("state/items", items)
 
         for house in selected:

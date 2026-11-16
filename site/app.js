@@ -263,6 +263,13 @@ function when(ts) { return new Date(ts * 1000).toLocaleString(S.lang === 'fr' ? 
 function itemName(id, lang = S.lang) { const m = S.items[id]; return m ? (m.n[lang] || m.n.en) : '#' + id; }
 function itemAlt(id) { const m = S.items[id]; if (!m) return ''; const o = S.lang === 'fr' ? m.n.en : m.n.fr; return o && o !== itemName(id) ? o : ''; }
 function icon(id) { const m = S.items[id]; const ic = m && m.ic ? m.ic : 'inv_misc_questionmark'; return `https://render.worldofwarcraft.com/eu/icons/56/${ic}.jpg`; }
+// Icône introuvable : on essaie la copie de metabot (icônes propres à Forever), puis le point d'interrogation.
+document.addEventListener('error', e => {
+  const im = e.target; if (!(im instanceof HTMLImageElement) || !im.src) return;
+  const m = im.src.match(/render\.worldofwarcraft\.com\/eu\/icons\/56\/([^.]+)\.jpg/);
+  if (m && m[1] !== 'inv_misc_questionmark') { im.src = `https://metabot.gg/web/wow-forever/icons/${m[1]}.webp`; return; }
+  if (/metabot\.gg\/web\/wow-forever\/icons\//.test(im.src)) im.src = 'https://render.worldofwarcraft.com/eu/icons/56/inv_misc_questionmark.jpg';
+}, true);
 function itemCell(id, withAlt = true) {
   const m = S.items[id];
   const alt = withAlt ? itemAlt(id) : '';
