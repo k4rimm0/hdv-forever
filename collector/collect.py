@@ -491,6 +491,12 @@ class Collector:
         self.v.write(f"d/idx_{hid}", series)
 
     # ----- exécution complète
+    def vendor_ids(self):
+        try:
+            return [v["id"] for v in json.load(open(os.path.join(ROOT, "data", "vendor_items.json"))).get("items", [])]
+        except Exception:
+            return []
+
     def run(self):
         houses = self.list_houses()
         log("HDV listés :", len(houses))
@@ -542,21 +548,25 @@ class Collector:
             self.update_indexes(house["id"], items, idx_points)
 
         farm = self.v.read("state/farm", None)
-        stale = not farm or self.t - farm.get("t", 0) > 7 * 86400
+        stale = not farm or self.t - farm.get("t", 0) > 7 * 86400 or farm.get("v", 1) < 2
         if stale and not os.environ.get("MOCK_API"):
             import requests
             from farm import collect as farm_collect
-            got = farm_collect(items, requests, log)
+            got = farm_collect(items, requests, log, extra_ids=self.vendor_ids())
             if got:
-                farm = {"t": self.t, "items": got}
+                farm = {"t": self.t, "v": 2, "items": got}
             else:  # échec : on garde l'ancien et on réessaie dans un jour
                 farm = {"t": self.t - 6 * 86400, "items": (farm or {}).get("items", {})}
         elif stale:
             from mockapi import FARM
-            farm = {"t": self.t, "items": FARM}
+            farm = {"t": self.t, "v": 2, "items": FARM}
         farm = farm or {"t": 0, "items": {}}
         self.v.write("state/farm", farm)
         self.v.write("d/farm", farm["items"])
+        if not os.environ.get("MOCK_API"):
+            import requests
+            from farm import fetch_maps
+            fetch_maps(farm["items"], self.v.out, requests, log)
 
         recipes = self.update_recipes(self.v.read("state/recipes", None))
         self.v.write("state/recipes", recipes)

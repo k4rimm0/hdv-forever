@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------ textes FR / EN
 const T = {
   fr: {
-    nav_market: 'Marché', nav_farm: 'Farm par niveau', nav_craft: 'Craft rentable', nav_vendor: 'PNJ → HDV',
+    nav_market: 'Marché', nav_best: 'Bestiaire', nav_farm: 'Farm par niveau', nav_craft: 'Craft rentable', nav_vendor: 'PNJ → HDV',
     nav_gaps: 'Écarts entre HDV', nav_watch: 'Suivi', nav_settings: 'Réglages',
     search_ph: 'Chercher un objet (FR ou EN)…', lock_text: 'Entre le mot de passe de ton site.', remember: 'Se souvenir de moi sur cet appareil',
     unlock: 'Ouvrir', bad_pw: 'Mot de passe incorrect, ou données pas encore générées.', loading: 'Chargement…',
@@ -53,6 +53,13 @@ const T = {
     cat_ALL: 'Tout le marché', cat_TRADE: 'Artisanat', cat_CONS: 'Consommables', cat_GEAR: 'Équipement', cat_RECIPE: 'Recettes',
     cat_CLOTH: 'Tissu', cat_LEATHER: 'Cuir', cat_ORE: 'Minerai et barres', cat_MEAT: 'Viande et poisson', cat_HERB: 'Herbes',
     cat_ELEM: 'Élémentaire', cat_ENCH: 'Enchantement', cat_POT: 'Potions', cat_ELIX: 'Élixirs', cat_SCROLL: 'Parchemins', cat_FOOD: 'Nourriture', cat_BAND: 'Bandages',
+    ht_title: "Comment l'obtenir", ht_vendors: 'Vendu par', ht_neutral: 'Neutre', ht_limited: 'stock limité', ht_more_vendors: '+{n} autres vendeurs (les plus proches de chez toi peuvent ne pas être listés).',
+    ht_vendor_generic: 'Vendu chez les PNJ marchands (fournitures, cuisine…), par exemple en ville.', ht_mobs: 'Monstres qui le lâchent', ht_mob: 'Monstre', ht_zone: 'Zone', ht_rate: 'Taux de drop',
+    ht_nodes: 'Ramassé sur', ht_map: 'Carte', ht_nomap: 'Carte en cours de téléchargement, réessaie après la prochaine mise à jour.',
+    ht_map_help: 'Survole un point pour voir le nom, clique pour copier la commande /way. Clique sur la légende pour masquer ou afficher une source.',
+    kind_d: 'monstre', kind_o: 'objet', kind_v: 'PNJ', copy_way: 'Copier /way', copied: 'Copié :',
+    best_sub: 'Toutes les ressources dont on connaît la source : PNJ, monstres, herbes, minerais, dépeçage, pêche. Clique sur une ligne pour la carte.',
+    bk_all: 'Tout', bk_mob: 'Monstres', bk_vendor: 'PNJ', bk_herb: 'Herboristerie', bk_mining: 'Minage', bk_skin: 'Dépeçage', bk_fish: 'Pêche', bk_node: 'Coffres / objets', bk_other: 'Autre',
     col_where: 'Où / comment', col_skill: 'Compétence', where_title: 'Où le trouver',
     sk_herb: 'Herboristerie', sk_mining: 'Minage', sk_skin: 'Dépeçage', sk_fish: 'Pêche', beasts: 'bêtes niv.',
     lvl_s: 'niv.', of_catches: 'des prises', farm_new: 'Nouveau dans Forever : source pas encore connue.',
@@ -60,7 +67,7 @@ const T = {
     sales_note: 'Ventes estimées : une annonce qui disparaît alors qu’il lui restait du temps est comptée comme vendue. C’est une estimation (une annonce annulée disparaît aussi).',
   },
   en: {
-    nav_market: 'Market', nav_farm: 'Farm by level', nav_craft: 'Profitable crafts', nav_vendor: 'Vendor → AH',
+    nav_market: 'Market', nav_best: 'Bestiary', nav_farm: 'Farm by level', nav_craft: 'Profitable crafts', nav_vendor: 'Vendor → AH',
     nav_gaps: 'House gaps', nav_watch: 'Watchlist', nav_settings: 'Settings',
     search_ph: 'Search an item (EN or FR)…', lock_text: 'Enter your site password.', remember: 'Remember me on this device',
     unlock: 'Open', bad_pw: 'Wrong password, or data not generated yet.', loading: 'Loading…',
@@ -108,6 +115,13 @@ const T = {
     cat_ALL: 'Whole market', cat_TRADE: 'Trade goods', cat_CONS: 'Consumables', cat_GEAR: 'Gear', cat_RECIPE: 'Recipes',
     cat_CLOTH: 'Cloth', cat_LEATHER: 'Leather', cat_ORE: 'Ore & bars', cat_MEAT: 'Meat & fish', cat_HERB: 'Herbs',
     cat_ELEM: 'Elemental', cat_ENCH: 'Enchanting', cat_POT: 'Potions', cat_ELIX: 'Elixirs', cat_SCROLL: 'Scrolls', cat_FOOD: 'Food & drink', cat_BAND: 'Bandages',
+    ht_title: 'How to get it', ht_vendors: 'Sold by', ht_neutral: 'Neutral', ht_limited: 'limited stock', ht_more_vendors: '+{n} more vendors (ones near you may not be listed).',
+    ht_vendor_generic: 'Sold by merchant NPCs (trade supplies, cooking…), for example in cities.', ht_mobs: 'Mobs that drop it', ht_mob: 'Mob', ht_zone: 'Zone', ht_rate: 'Drop rate',
+    ht_nodes: 'Gathered from', ht_map: 'Map', ht_nomap: 'Map is downloading, try again after the next update.',
+    ht_map_help: 'Hover a dot to see the name, click to copy the /way command. Click the legend to hide or show a source.',
+    kind_d: 'mob', kind_o: 'object', kind_v: 'NPC', copy_way: 'Copy /way', copied: 'Copied:',
+    best_sub: 'Every resource with a known source: NPCs, mobs, herbs, ores, skinning, fishing. Click a row for the map.',
+    bk_all: 'All', bk_mob: 'Mobs', bk_vendor: 'NPCs', bk_herb: 'Herbalism', bk_mining: 'Mining', bk_skin: 'Skinning', bk_fish: 'Fishing', bk_node: 'Chests / objects', bk_other: 'Other',
     col_where: 'Where / how', col_skill: 'Skill', where_title: 'Where to get it',
     sk_herb: 'Herbalism', sk_mining: 'Mining', sk_skin: 'Skinning', sk_fish: 'Fishing', beasts: 'beasts lvl',
     lvl_s: 'lvl', of_catches: 'of catches', farm_new: 'New in Forever: source not known yet.',
@@ -495,9 +509,10 @@ async function viewItem(id) {
       <div class="kpi"><div class="l">${t('item_vendor_sell')}</div><div class="v">${money(meta.sp || null)}</div><div class="s">${vb ? t('item_vendor_buy') + ' ' + money(vb) : ''}</div></div>
     </div>
     <div class="panel"><div class="row spread"><h2>${t('item_chart')}</h2><div id="per"></div></div><div class="chart" id="ch"></div><div id="lg"></div></div>
-    ${farmInfo(id) ? `<div class="panel"><h2>${t('where_title')}</h2><div class="where">${farmInfo(id).html}</div><p class="note">${t('farm_src_note')}</p></div>` : ''}
+    ${howToHtml(id) ? `<div class="panel"><h2>${t('ht_title')}</h2>${howToHtml(id)}</div>` : ''}
     <div class="panel"><h2>${t('item_houses')}</h2><div id="hs"></div></div>
     <div class="grid g2"><div class="panel"><h2>${t('item_made_by')}</h2><div id="mk"></div></div><div class="panel"><h2>${t('item_used_in')}</h2><div id="us"></div></div></div>`;
+  drawWhereMap(id); bindWay(app());
   $('#watchBtn').onclick = () => {
     if (S.watch.some(w => w.id === id)) S.watch = S.watch.filter(w => w.id !== id); else S.watch.push({ id, buy: null, sell: null });
     store('hf_watch', JSON.stringify(S.watch)); viewItem(id); renderNav();
@@ -728,12 +743,110 @@ async function viewSettings() {
   }
 }
 
+// ------------------------------------------------------------------ comment l'obtenir + carte interactive
+const PIN_COLORS = ['#ff4d4d', '#ffd23f', '#4dd2ff', '#7dff6b', '#ff8cf0', '#ff9a3c', '#b18cff', '#ffffff'];
+const SIDE = { h: 'Horde', a: 'Alliance', '': '' };
+function wayBtn(x, y) { return x == null ? '' : `<button class="way" data-way="/way ${x} ${y}" title="${t('copy_way')}">${x}, ${y}</button>`; }
+function bindWay(root) {
+  root.querySelectorAll('[data-way]').forEach(b => b.onclick = e => {
+    e.preventDefault(); e.stopPropagation();
+    const txt = b.dataset.way;
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast(t('copied') + ' ' + txt), () => toast(txt));
+  });
+}
+function toast(msg) {
+  let el = $('#toast'); if (!el) { el = document.createElement('div'); el.id = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg; el.className = 'show'; clearTimeout(el._t); el._t = setTimeout(() => el.className = '', 1800);
+}
+function howToHtml(id) {
+  const f = S.farm && S.farm[id];
+  const meta = S.items[id];
+  const blocks = [];
+  const fi = farmInfo(id);
+  if (fi && (f.k || f.s || f.f)) blocks.push(`<div class="where" style="margin-bottom:10px">${fi.html.split('<br>')[0]}${f.f && (f.k || f.s) ? '<br>' + fi.html.split('<br>')[1] : ''}</div>`);
+  if (f && f.v && f.v.length) {
+    const order = { h: 0, '': 1, a: 2 };
+    const vs = [...f.v].sort((a, b) => order[a[1]] - order[b[1]]);
+    blocks.push(`<h3>${t('ht_vendors')} <span class="dim">(${f.vn || vs.length})</span></h3><ul class="vlist">${vs.map(v => `<li>
+      <b>${esc(v[0])}</b> ${v[1] ? `<span class="badge ${v[1] === 'h' ? 'bad' : 'info'}">${SIDE[v[1]]}</span>` : `<span class="badge">${t('ht_neutral')}</span>`}
+      ${v[2] ? `<span class="dim">&lt;${esc(v[2])}&gt;</span>` : ''}<br>
+      ${zoneName(v[3])} ${wayBtn(v[4], v[5])} · ${money(v[6])}${v[7] ? ` · <span class="dim">${t('ht_limited')}</span>` : ''}</li>`).join('')}</ul>
+      ${(f.vn || 0) > vs.length ? `<p class="note">${t('ht_more_vendors').replace('{n}', f.vn - vs.length)}</p>` : ''}`);
+  } else if (vendorSet().has(id)) {
+    blocks.push(`<p>${t('ht_vendor_generic')}</p>`);
+  }
+  if (f && f.m && f.m.length) {
+    blocks.push(`<h3>${t('ht_mobs')}</h3><div class="tablewrap"><table class="t"><thead><tr><th>${t('ht_mob')}</th><th>${t('lvl_s')}</th><th>${t('ht_zone')}</th><th class="r">${t('ht_rate')}</th></tr></thead><tbody>
+      ${f.m.map(m => `<tr><td>${esc(m[0])}</td><td>${m[1] ?? ''}${m[2] && m[2] !== m[1] ? '–' + m[2] : ''}</td><td>${zoneName(m[3])}</td><td class="r"><b>${pctTxt(m[4])}</b>${m[5] ? ' <span class="dim">×' + m[5] + '</span>' : ''}</td></tr>`).join('')}
+      </tbody></table></div>`);
+  }
+  if (f && f.n && f.n.length && !f.k) {
+    blocks.push(`<h3>${t('ht_nodes')}</h3><ul class="vlist">${f.n.map(n => `<li>${esc(n[0])} · ${n[1].map(zoneName).join(', ')}${n[2] ? ' +' + n[2] : ''} · <b>${pctTxt(n[3])}</b></li>`).join('')}</ul>`);
+  }
+  if (f && f.p && f.p.length) blocks.push(`<h3>${t('ht_map')}</h3><div id="wmap"></div>`);
+  if (!blocks.length) {
+    if (f && f.new) return `<p class="muted">${t('farm_new')}</p>`;
+    return '';
+  }
+  return blocks.join('') + `<p class="note">${t('farm_src_note')}</p>`;
+}
+function drawWhereMap(id) {
+  const f = S.farm && S.farm[id]; const box = $('#wmap');
+  if (!f || !f.p || !box) return;
+  let cur = 0; const hidden = new Set();
+  const render = () => {
+    const [mid, zone, names, pins] = f.p[cur];
+    box.innerHTML = `${f.p.length > 1 ? `<div class="row" style="margin-bottom:8px">${f.p.map((m, i) => `<button class="chip ${i === cur ? 'on' : ''}" data-z="${i}">${zoneName(m[1])} <span class="dim">${m[3].length}</span></button>`).join('')}</div>` : `<p class="muted">${zoneName(zone)}</p>`}
+      <div class="wmap"><img src="maps/${mid}.webp" alt="${esc(zoneName(zone))}" onerror="this.parentNode.classList.add('nomap')">
+      ${pins.map(p => hidden.has(p[2]) ? '' : `<span class="pin${names[p[2]][1] === 'v' ? ' big' : ''}" style="left:${p[0]}%;top:${p[1]}%;background:${PIN_COLORS[p[2] % PIN_COLORS.length]}" data-way="/way ${p[0]} ${p[1]}" title="${esc(names[p[2]][0])} (${p[0]}, ${p[1]})"></span>`).join('')}
+      <div class="nomapmsg">${t('ht_nomap')}</div></div>
+      <div class="row legend">${names.map((n, i) => `<button class="chip ${hidden.has(i) ? '' : 'on'}" data-l="${i}"><span class="dot" style="background:${PIN_COLORS[i % PIN_COLORS.length]}"></span>${esc(n[0])} <span class="dim">${t('kind_' + n[1]) || ''}</span></button>`).join('')}</div>
+      <p class="note">${t('ht_map_help')}</p>`;
+    box.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { cur = +b.dataset.z; hidden.clear(); render(); });
+    box.querySelectorAll('[data-l]').forEach(b => b.onclick = () => { const i = +b.dataset.l; hidden.has(i) ? hidden.delete(i) : hidden.add(i); render(); });
+    bindWay(box);
+  };
+  render();
+}
+async function viewBestiary() {
+  const ids = Object.keys(S.farm || {}).map(Number).filter(id => S.items[id]);
+  const kindOf = id => {
+    const f = S.farm[id];
+    if (f.k) return f.k[0] === 'herb' ? 'herb' : 'mining';
+    if (f.s) return 'skin';
+    if (f.f) return 'fish';
+    if (f.v && f.v.length) return 'vendor';
+    if (f.m && f.m.length) return 'mob';
+    if (f.n && f.n.length) return 'node';
+    return 'other';
+  };
+  const kinds = ['all', 'mob', 'vendor', 'herb', 'mining', 'skin', 'fish', 'node'];
+  let kind = store('hf_bkind') || 'all', q = '';
+  app().innerHTML = `<div class="hero"><h1>${t('nav_best')}</h1><p>${t('best_sub')}</p></div>
+    <div class="panel"><div class="row"><input id="bq" placeholder="${t('search_ph')}" style="flex:1;min-width:200px"></div>
+    <div class="row" id="bk" style="margin-top:8px"></div></div><div class="panel"><div id="list"></div></div>`;
+  const draw = () => {
+    $('#bk').innerHTML = kinds.map(k => `<button class="chip ${k === kind ? 'on' : ''}" data-k="${k}">${t('bk_' + k)}</button>`).join('');
+    $('#bk').querySelectorAll('[data-k]').forEach(b => b.onclick = () => { kind = b.dataset.k; store('hf_bkind', kind); draw(); });
+    const nq = norm(q);
+    const rows = ids.filter(id => (kind === 'all' || kindOf(id) === kind) && (!nq || norm(itemName(id) + ' ' + itemAlt(id)).includes(nq)));
+    table($('#list'), [
+      { k: 'n', label: t('col_item'), f: id => itemCell(id), v: id => itemName(id), cls: 'l' },
+      { k: 'k', label: t('col_source'), f: id => `<span class="tag">${t('bk_' + kindOf(id))}</span>`, v: id => kindOf(id) },
+      { k: 'w', label: t('col_where'), f: id => { const fi = farmInfo(id); const f = S.farm[id]; const v = f.v && f.v.length ? [...f.v].sort((a, b) => (a[1] === 'h' ? -1 : 0) - (b[1] === 'h' ? -1 : 0))[0] : null;
+        return `<div class="where">${fi ? fi.html : ''}${v ? (fi ? '<br>' : '') + `${esc(v[0])} · ${zoneName(v[3])}` : ''}</div>`; }, cls: 'l' },
+    ], rows, { sort: 'n', desc: false });
+  };
+  $('#bq').oninput = e => { q = e.target.value; draw(); };
+  draw();
+}
+
 // ------------------------------------------------------------------ cadre
 function setLang(l) { S.lang = l; store('hf_lang', l); document.documentElement.lang = l; renderChrome(); route(); }
 async function renderNav() {
   const cur = (location.hash.split('/')[1] || '').split('?')[0];
   const n = await alertsCount();
-  $('#nav').innerHTML = [['', 'nav_market'], ['farm', 'nav_farm'], ['craft', 'nav_craft'], ['vendor', 'nav_vendor'], ['gaps', 'nav_gaps'], ['watch', 'nav_watch'], ['settings', 'nav_settings']]
+  $('#nav').innerHTML = [['', 'nav_market'], ['best', 'nav_best'], ['farm', 'nav_farm'], ['craft', 'nav_craft'], ['vendor', 'nav_vendor'], ['gaps', 'nav_gaps'], ['watch', 'nav_watch'], ['settings', 'nav_settings']]
     .map(([k, l]) => `<a href="#/${k}" class="${cur === k ? 'on' : ''}">${t(l)}${k === 'watch' && n ? ` <span class="badge warn">${n}</span>` : ''}</a>`).join('');
 }
 function renderHousebar() {
@@ -757,6 +870,7 @@ async function route() {
     if (h.startsWith('/item/')) await viewItem(Number(h.split('/')[2]));
     else if (h.startsWith('/search')) await viewSearch(new URLSearchParams(h.split('?')[1] || '').get('q') || '');
     else if (h.startsWith('/farm')) await viewFarm();
+    else if (h.startsWith('/best')) await viewBestiary();
     else if (h.startsWith('/craft')) await viewCraft();
     else if (h.startsWith('/vendor')) await viewVendor();
     else if (h.startsWith('/gaps')) await viewGaps();

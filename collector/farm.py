@@ -90,7 +90,65 @@ def parse_page(html):
     return desc, tables
 
 
-def summarize(name, desc, tables):
+def _coins(label):
+    g = re.search(r"(\d+) gold, (\d+) silver, (\d+) copper", label or "")
+    return int(g.group(1)) * 10000 + int(g.group(2)) * 100 + int(g.group(3)) if g else None
+
+
+def parse_where(html):
+    """Section « Where to get » : meilleure méthode, vendeurs, cartes avec points."""
+    mm = re.search(r"<h2[^>]*>Where to get", html)
+    if not mm:
+        return {}
+    i = mm.start()
+    end = html.find("<section", i + 20)
+    sec = html[i:end if end > 0 else len(html)]
+    out = {}
+    best = re.search(r'_bestText">(.*?)</p>', sec, flags=re.S)
+    if best:
+        out["b"] = _text(best.group(1))
+    vendors = []
+    for li in re.findall(r'<li class="[^"]*_vendor">(.*?)</li>', sec, flags=re.S):
+        name = re.search(r"<bdi>(.*?)</bdi>", li, flags=re.S)
+        side = re.search(r'data-side="(\w+)"', li)
+        sub = re.search(r'_sub">&lt;<bdi>(.*?)</bdi>', li, flags=re.S)
+        zone = re.search(r'/zones/[^"]*">(.*?)</a>', li, flags=re.S)
+        xy = re.search(r'_coords"[^>]*>\((?:<!-- -->)?([\d.]+), ([\d.]+)', li)
+        price = re.search(r'aria-label="(\d+ gold, \d+ silver, \d+ copper)"', li)
+        stock = re.search(r'_dim">([^<]*stock[^<]*)<', li, flags=re.I)
+        vendors.append([_text(name.group(1)) if name else "?", side.group(1)[0] if side else "", _text(sub.group(1)) if sub else "",
+                        _text(zone.group(1)) if zone else "", float(xy.group(1)) if xy else None, float(xy.group(2)) if xy else None,
+                        _coins(price.group(1)) if price else None, 0 if stock and "Always" in stock.group(1) else 1])
+    if vendors:
+        out["v"] = vendors
+        more = re.search(r"(\d+) vendors sell", sec)
+        out["vn"] = int(more.group(1)) if more else len(vendors)
+    maps = []
+    for fig in re.findall(r"<figure.*?</figure>", sec, flags=re.S):
+        mid = re.search(r"maps%2F(\d+)\.webp", fig)
+        cap = re.search(r"<figcaption[^>]*>(.*?)</figcaption>", fig, flags=re.S)
+        if not mid:
+            continue
+        pins = []
+        for tag in re.findall(r'<span class="[^"]*_srcPin"[^>]*>', fig):
+            xy = re.search(r"left:([\d.]+)%;top:([\d.]+)%", tag)
+            ti = re.search(r'title="([^"]*)"', tag)
+            kd = re.search(r'data-kind="(\w+)"', tag)
+            if xy:
+                pins.append([float(xy.group(1)), float(xy.group(2)), _text(ti.group(1)) if ti else "?",
+                             (kd.group(1) if kd else "o")[0]])
+        names = []
+        for p in pins:
+            if [p[2], p[3]] not in names:
+                names.append([p[2], p[3]])
+        maps.append([int(mid.group(1)), _text(cap.group(1)).split(":")[0] if cap else "", names,
+                     [[p[0], p[1], names.index([p[2], p[3]])] for p in pins[:200]]])
+    if maps:
+        out["p"] = maps
+    return out
+
+
+def summarize(name, desc, tables, where=None):
     mobs, seen = [], set()
     for key in ("B", "D"):
         for r in tables.get(key, []):
@@ -108,7 +166,9 @@ def summarize(name, desc, tables):
     nodes = nodes[:3]
     sk = re.search(r"skinned from level (\d+)–(\d+) creatures; (.+?) in (.+?) gives it most often \(([\d.]+)%\)", desc)
     fi = re.search(r"caught by fishing in (?:\d+ zones?, most often in )?(.+?) \(([\d.]+)% of catches\)", desc)
-    out = {"m": mobs[:3], "n": nodes}
+    out = {"m": mobs[:8], "n": nodes}
+    if where:
+        out.update(where)
     if sk:
         lo = int(sk.group(1))
         out["s"] = [lo, int(sk.group(2)), sk.group(3), sk.group(4), float(sk.group(5)), skinning_skill(max(lo, 1))]
@@ -123,14 +183,15 @@ def summarize(name, desc, tables):
     return out
 
 
-def collect(items, requests_mod, log, delay=0.6):
+def collect(items, requests_mod, log, delay=0.5, extra_ids=None):
     """items : dict id -> meta (avec n.en, c, sc). Renvoie {id: résumé}."""
     targets = []
+    extra = {str(x) for x in (extra_ids or [])}
     for k, m in items.items():
-        if k.startswith("_") or m.get("c") != 7 or m.get("sc") not in (5, 6, 7, 8, 9, 10):
+        if k.startswith("_") or (m.get("c") != 7 and k not in extra):
             continue
         en = (m.get("n") or {}).get("en") or ""
-        if en and not CRAFTED.search(en):
+        if en:
             targets.append((k, en))
     log("sources de farm à récupérer :", len(targets))
     s = requests_mod.Session()
@@ -141,7 +202,7 @@ def collect(items, requests_mod, log, delay=0.6):
             r = s.get(f"https://metabot.gg/en/wow-forever/items/{slug(en)}", timeout=30)
             if r.status_code == 200:
                 desc, tables = parse_page(r.text)
-                out[k] = summarize(en, desc, tables)
+                out[k] = summarize(en, desc, tables, parse_where(r.text))
             else:
                 fails += 1
                 if r.status_code in (403, 429) and fails > 5:
@@ -153,3 +214,24 @@ def collect(items, requests_mod, log, delay=0.6):
         time.sleep(delay)
     log("sources de farm récupérées :", len(out), "échecs :", fails)
     return out
+
+
+def fetch_maps(farm_items, out_dir, requests_mod, log):
+    """Télécharge une fois les fonds de carte (1002x668) utilisés par les points."""
+    import os
+    ids = {m[0] for f in farm_items.values() for m in f.get("p", [])}
+    os.makedirs(os.path.join(out_dir, "maps"), exist_ok=True)
+    got = 0
+    for mid in sorted(ids):
+        path = os.path.join(out_dir, "maps", f"{mid}.webp")
+        if os.path.exists(path):
+            continue
+        try:
+            r = requests_mod.get(f"https://metabot.gg/web/wow-forever/maps/{mid}.webp", headers={"User-Agent": UA}, timeout=30)
+            if r.status_code == 200 and len(r.content) > 1000:
+                open(path, "wb").write(r.content)
+                got += 1
+        except Exception as e:
+            log("carte", mid, type(e).__name__)
+        time.sleep(0.3)
+    log("cartes : ", len(ids), "utilisées,", got, "téléchargées")
