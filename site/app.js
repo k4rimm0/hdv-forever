@@ -73,7 +73,7 @@ const T = {
     pr_my: 'Mon niveau en', pr_mode_gold: "Gagner de l'or", pr_mode_lvl: 'Monter le métier', pr_onlycan: 'Seulement ce que je peux faire', pr_norec: 'Sans recette à acheter (entraîneur)',
     pr_help_gold: "Bénéfice/jour = bénéfice par objet × ventes estimées par jour : c'est ce qui dit si ça vaut le coup. Chaque composant est compté au moins cher entre l'HDV et le PNJ.",
     pr_help_lvl: "Coût par point = coût des composants (moins la moitié de la revente) ÷ chance de gagner un point. Orange = 100 %, jaune puis vert = de moins en moins, gris = 0.",
-    pr_skill: 'Niveau', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_tiers_tip: 'Tu peux l\'apprendre à {a}. De {a} à {b} (orange) : chaque fabrication donne 1 point à coup sûr. De {b} à {c} (jaune) : souvent un point. De {c} à {d} (vert) : rarement. À partir de {d} (gris) : plus aucun point.', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
+    pr_skill: 'Niveau', cd_open: 'Voir le prix de chaque composant', cd_mat: 'Composant', cd_qty: 'Quantité', cd_unit: "Prix à l'unité", cd_src: 'Où l\'acheter', cd_total: 'Total', cd_vendor: 'PNJ', cd_ah: 'HDV', cd_none: 'aucun prix connu', cd_sum: 'Coût pour une fabrication', cd_makes: 'donne {n} objets', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_tiers_tip: 'Tu peux l\'apprendre à {a}. De {a} à {b} (orange) : chaque fabrication donne 1 point à coup sûr. De {b} à {c} (jaune) : souvent un point. De {c} à {d} (vert) : rarement. À partir de {d} (gris) : plus aucun point.', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
     pr_chance: 'Chance de point', pr_ppp: 'Coût par point', pr_pt: 'point', pr_day: 'jour', pr_at: 'à',
     pr_adv_title: 'Conseils pour toi', pr_adv_lvl: 'Pour monter le moins cher', pr_adv_gold: "Pour faire de l'or", pr_adv_nogold: 'Rien de rentable à ton niveau pour le moment.', pr_adv_next: 'Ce qui se débloque bientôt',
     pr_adv_noskill: 'Entre ton niveau en {p} juste au-dessus pour avoir des conseils adaptés.',
@@ -185,7 +185,7 @@ const T = {
     pr_my: 'My skill in', pr_mode_gold: 'Make gold', pr_mode_lvl: 'Level it', pr_onlycan: 'Only what I can make', pr_norec: 'No recipe to buy (trainer)',
     pr_help_gold: 'Profit/day = profit per item × estimated sales per day. Each reagent is counted at the cheaper of AH and vendor.',
     pr_help_lvl: 'Cost per point = reagent cost (minus half the resale) ÷ chance of a skill-up. Orange = 100%, yellow then green = less and less, grey = 0.',
-    pr_skill: 'Skill', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_tiers_tip: 'Learnable at {a}. From {a} to {b} (orange): every craft gives a skill point. From {b} to {c} (yellow): usually a point. From {c} to {d} (green): rarely. From {d} (grey): no more points.', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
+    pr_skill: 'Skill', cd_open: 'Show the price of each material', cd_mat: 'Material', cd_qty: 'Qty', cd_unit: 'Unit price', cd_src: 'Where to buy', cd_total: 'Total', cd_vendor: 'Vendor', cd_ah: 'AH', cd_none: 'no known price', cd_sum: 'Cost for one craft', cd_makes: 'makes {n} items', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_tiers_tip: 'Learnable at {a}. From {a} to {b} (orange): every craft gives a skill point. From {b} to {c} (yellow): usually a point. From {c} to {d} (green): rarely. From {d} (grey): no more points.', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
     pr_chance: 'Skill-up chance', pr_ppp: 'Cost per point', pr_pt: 'point', pr_day: 'day', pr_at: 'at',
     pr_adv_title: 'Advice for you', pr_adv_lvl: 'Cheapest to level', pr_adv_gold: 'To make gold', pr_adv_nogold: 'Nothing profitable at your skill yet.', pr_adv_next: 'Unlocking soon',
     pr_adv_noskill: 'Enter your {p} skill above for tailored advice.',
@@ -714,14 +714,15 @@ async function viewFarm() {
 }
 
 function craftCost(rc, items, vs) {
-  let cost = 0, missing = false; const parts = [];
+  let cost = 0, missing = false; const parts = [], det = [];
   for (const [rid, q] of rc.r) {
     const ah = items[rid] ? items[rid][MKT] : null; const vp = vendorBuyPrice(rid, vs);
     const unit = [ah, vp].filter(x => x != null && x > 0).sort((a, b) => a - b)[0];
-    if (unit == null) { missing = true; parts.push(`${q}× ${itemName(rid)} : ?`); continue; }
-    cost += unit * q; parts.push(`${q}× ${itemName(rid)} : ${unit === vp ? 'PNJ' : 'HDV'}`);
+    if (unit == null) { missing = true; parts.push(`${q}× ${itemName(rid)} : ?`); det.push([rid, q, null, '']); continue; }
+    const src = unit === vp ? 'v' : 'a';
+    cost += unit * q; parts.push(`${q}× ${itemName(rid)} : ${src === 'v' ? 'PNJ' : 'HDV'}`); det.push([rid, q, unit, src, src === 'v' ? ah : vp]);
   }
-  return { cost, missing, parts };
+  return { cost, missing, parts, det };
 }
 // ------------------------------------------------------------------ métiers
 const PF_SLUG = p => String(p || '').toLowerCase().replace(/\s+/g, '-');
@@ -813,7 +814,7 @@ async function viewCraft(page) {
       { k: 'n', label: t('col_item'), f: x => itemCell(x.rc.o) + (x.rc.oq > 1 ? ` <span class="dim">×${x.rc.oq}</span>` : ''), v: x => itemName(x.rc.o), cls: 'l' },
       { k: 'sk', label: t('pr_skill'), f: x => x.ci && x.ci.sk ? `<span class="sk ${skillColor(x.ci.sk, myN)}" title="${t('pr_tiers_tip', { a: x.ci.sk[0], b: x.ci.sk[1], c: x.ci.sk[2], d: x.ci.sk[3] })}">${x.ci.sk[0]}</span> <span class="small" title="${t('pr_tiers_tip', { a: x.ci.sk[0], b: x.ci.sk[1], c: x.ci.sk[2], d: x.ci.sk[3] })}"><span class="sk yellow">${x.ci.sk[1]}</span>/<span class="sk green">${x.ci.sk[2]}</span>/<span class="sk grey">${x.ci.sk[3]}</span></span>` : '<span class="dim">?</span>', v: x => x.ci && x.ci.sk ? x.ci.sk[0] : null },
       { k: 'rec', label: t('pr_learn'), f: x => `<div class="where">${recipeCell(x.ci, m.items)}</div>`, v: x => x.ci && x.ci.tr ? 0 : 1, cls: 'l' },
-      { k: 'cost', label: t('col_cost'), f: x => `<span title="${esc(x.c.parts.join('\n'))}">${x.c.missing ? `<span class="badge bad">${t('incomplete')}</span>` : money(x.c.cost)}</span>`, v: x => x.c.missing ? null : x.c.cost },
+      { k: 'cost', label: t('col_cost'), f: x => `<button type="button" class="cbx" title="${t('cd_open')}" data-cd="${esc(JSON.stringify([x.rc.oq, x.c.det]))}">▸</button> ${x.c.missing ? `<span class="badge bad">${t('incomplete')}</span>` : money(x.c.cost)}`, v: x => x.c.missing ? null : x.c.cost },
     ];
     if (mode === 'gold') cols.push(
       { k: 'sell', label: t('col_sell'), f: x => money(x.sell), v: x => x.sell },
@@ -824,6 +825,20 @@ async function viewCraft(page) {
       { k: 'ch', label: t('pr_chance'), f: x => Math.round(x.ch * 100) + ' %', v: x => x.ch },
       { k: 'ppp', label: t('pr_ppp'), f: x => x.ppp == null ? '–' : (x.ppp <= 0 ? `<span class="up">${t('pr_free')}</span>` : `<b>${money(x.ppp)}</b>`), v: x => x.ppp == null ? null : Math.max(0, x.ppp) });
     table($('#list'), cols, rows, { sort: mode === 'gold' ? 'ppd' : 'ppp', desc: mode === 'gold', limit: 300 });
+    $('#list').onclick = e => {
+      const b = e.target.closest('.cbx'); if (!b) return; e.preventDefault(); e.stopPropagation();
+      const tr = b.closest('tr'); const nx = tr.nextElementSibling;
+      if (nx && nx.classList.contains('cdrow')) { nx.remove(); b.textContent = '▸'; b.classList.remove('on'); return; }
+      const [oq, det] = JSON.parse(b.dataset.cd);
+      const tot = det.reduce((a, d) => a + (d[2] || 0) * d[1], 0);
+      const row = document.createElement('tr'); row.className = 'cdrow';
+      row.innerHTML = `<td colspan="${tr.children.length}"><table class="cdt"><thead><tr><th class="l">${t('cd_mat')}</th><th>${t('cd_qty')}</th><th>${t('cd_unit')}</th><th class="l">${t('cd_src')}</th><th>${t('cd_total')}</th></tr></thead><tbody>
+        ${det.map(([rid, q, unit, src, alt]) => `<tr><td class="l">${itemCell(rid)}</td><td>${q}</td><td>${unit == null ? '<span class="badge bad">?</span>' : money(unit)}</td>
+          <td class="l small">${unit == null ? `<span class="dim">${t('cd_none')}</span>` : src === 'v' ? `${t('cd_vendor')}${alt ? ` <span class="dim">(${t('cd_ah')} ${money(alt)})</span>` : ''}` : `${t('cd_ah')}${alt ? ` <span class="dim">(${t('cd_vendor')} ${money(alt)})</span>` : ''}`}</td>
+          <td><b>${unit == null ? '–' : money(unit * q)}</b></td></tr>`).join('')}
+        <tr class="cdsum"><td class="l" colspan="4">${t('cd_sum')}${oq > 1 ? ` <span class="dim">(${t('cd_makes', { n: oq })})</span>` : ''}</td><td><b>${money(tot)}</b></td></tr></tbody></table></td>`;
+      tr.after(row); b.textContent = '▾'; b.classList.add('on');
+    };
   }
   function advice(rows, myN) {
     const box = $('#advice');

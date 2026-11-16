@@ -176,3 +176,10 @@ a.moblink{color:#ffd77a;text-decoration:none;border-bottom:1px dotted #ffd77a}a.
 .wmap .wz>img.terr{position:absolute;inset:0;opacity:0;transition:opacity .45s;pointer-events:none}
 .wmap.terr-on .wz>img.terr.ok{opacity:1}
 .wz-ctl button.wz-terr{font-size:14px}
+
+.cbx{background:none;border:1px solid #5a4626;color:#ffd77a;border-radius:4px;width:20px;height:20px;line-height:16px;padding:0;cursor:pointer;font-size:12px;vertical-align:middle}
+.cbx:hover,.cbx.on{background:#3a2a12;border-color:#c8a24a}
+tr.cdrow>td{background:#15100a;padding:6px 10px 10px}
+table.cdt{width:auto;min-width:60%;margin-left:auto;font-size:13px}
+table.cdt th,table.cdt td{padding:4px 10px}
+table.cdt tr.cdsum td{border-top:1px solid #5a4626}
