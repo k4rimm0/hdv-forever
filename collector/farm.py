@@ -245,7 +245,7 @@ def collect(items, requests_mod, log, delay=0.5, extra_ids=None):
 def fetch_maps(farm_items, out_dir, requests_mod, log):
     """Télécharge une fois chaque carte de zone utilisée (warcraft.wiki.gg, version Forever c60)."""
     import os
-    zones = {m[1] for f in farm_items.values() for m in f.get("p", [])}
+    zones = {m[1] for f in farm_items.values() for m in f.get("p", [])} | set(WIKI_MAPS)  # toutes les zones (GPS)
     os.makedirs(os.path.join(out_dir, "maps"), exist_ok=True)
     got, unknown = 0, sorted(z for z in zones if z not in WIKI_MAPS)
     for z in sorted(zones):

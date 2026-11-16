@@ -70,6 +70,8 @@ const T = {
     ht_vendor_generic: 'Vendu chez les PNJ marchands (fournitures, cuisine…), par exemple en ville.', ht_mobs: 'Monstres qui le lâchent', ht_mob: 'Monstre', ht_zone: 'Zone', ht_rate: 'Taux de drop',
     ht_nodes: 'Ramassé sur', ht_map: 'Carte', ht_nomap: 'Carte en cours de téléchargement, réessaie après la prochaine mise à jour.',
     ht_map_help: 'Survole un point pour voir le nom, clique dessus pour le GPS (itinéraire depuis là où tu es). Clique sur la légende pour masquer ou afficher une source.',
+    gps_pick: 'Je suis ici (sur la carte)', gps_pick_title: 'Où es-tu ?', gps_pick_zone: 'Zone', gps_pick_help: 'Clique sur la carte là où tu es. Les petits points blancs sont les villes et maîtres de vol connus.',
+    gps_pick_near: 'Départ pris depuis <b>{n}</b>, le lieu connu le plus proche de ton point.', gps_pick_zone_only: 'Pas de ville proche : départ depuis le centre de {z}.',
     gps_title: 'GPS : y aller', gps_click: 'clique pour le GPS', gps_way_help: '← clique pour copier /way (addon TomTom)', gps_from: 'Je suis à', gps_speed: 'Je me déplace', gps_foot: 'à pied', gps_m60: 'monture (60 %)', gps_m100: 'monture rapide (100 %)',
     gps_fp: "j'ai les points de vol", gps_go: "Calculer l'itinéraire", gps_last: 'Dernière étape dans {z}', gps_open: 'Ouvrir en grand ↗',
     gps_last_help: "Une fois dans la zone, le point jaune clignotant est ta destination. Avec l'addon TomTom, tape <b>{way}</b> pour avoir une flèche.",
@@ -150,6 +152,8 @@ const T = {
     ht_vendor_generic: 'Sold by merchant NPCs (trade supplies, cooking…), for example in cities.', ht_mobs: 'Mobs that drop it', ht_mob: 'Mob', ht_zone: 'Zone', ht_rate: 'Drop rate',
     ht_nodes: 'Gathered from', ht_map: 'Map', ht_nomap: 'Map is downloading, try again after the next update.',
     ht_map_help: 'Hover a dot to see the name, click it for the GPS (route from where you are). Click the legend to hide or show a source.',
+    gps_pick: 'I am here (on the map)', gps_pick_title: 'Where are you?', gps_pick_zone: 'Zone', gps_pick_help: 'Click the map where you are. Small white dots are known towns and flight masters.',
+    gps_pick_near: 'Starting from <b>{n}</b>, the known place closest to your point.', gps_pick_zone_only: 'No town nearby: starting from the middle of {z}.',
     gps_title: 'GPS: get there', gps_click: 'click for GPS', gps_way_help: '← click to copy /way (TomTom addon)', gps_from: 'I am at', gps_speed: 'Travel by', gps_foot: 'on foot', gps_m60: 'mount (60%)', gps_m100: 'fast mount (100%)',
     gps_fp: 'I have the flight paths', gps_go: 'Get route', gps_last: 'Last leg in {z}', gps_open: 'Open full size ↗',
     gps_last_help: 'Once in the zone, the blinking yellow dot is your destination. With the TomTom addon, type <b>{way}</b> for an arrow.',
@@ -940,7 +944,7 @@ function whereBlocks(f, boxId) {
     const order = { h: 0, '': 1, a: 2 };
     const vs = [...f.v].sort((a, b) => order[a[1]] - order[b[1]]);
     blocks.push(`<h3>${t('ht_vendors')} <span class="dim">(${f.vn || vs.length})</span></h3><ul class="vlist">${vs.map(v => `<li>
-      <b>${esc(v[0])}</b> ${v[1] ? `<span class="badge ${v[1] === 'h' ? 'bad' : 'info'}">${SIDE[v[1]]}</span>` : `<span class="badge">${t('ht_neutral')}</span>`}
+      ${v[4] != null ? `<a href="#" class="vgps" data-vg="${esc(JSON.stringify([v[3], v[4], v[5], v[0]]))}" title="${t('gps_click')}"><b>${esc(v[0])}</b> 🧭</a>` : `<b>${esc(v[0])}</b>`} ${v[1] ? `<span class="badge ${v[1] === 'h' ? 'bad' : 'info'}">${SIDE[v[1]]}</span>` : `<span class="badge">${t('ht_neutral')}</span>`}
       ${v[2] ? `<span class="dim">&lt;${esc(v[2])}&gt;</span>` : ''}<br>
       ${zoneName(v[3])} ${wayBtn(v[4], v[5])} · ${money(v[6])}${v[7] ? ` · <span class="dim">${t('ht_limited')}</span>` : ''}</li>`).join('')}</ul>
       ${(f.vn || 0) > vs.length ? `<p class="note">${t('ht_more_vendors').replace('{n}', f.vn - vs.length)}</p>` : ''}`);
@@ -1022,6 +1026,11 @@ function ttHtml(id) {
     ${!lines.length && S.tt ? `<div class="dim">${t('tt_none')}</div>` : ''}
     ${m.sp ? `<div class="tt-sell">${t('tt_sell')} ${money(m.sp)}</div>` : ''}`;
 }
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('[data-vg]'); if (!a) return;
+  e.preventDefault(); const [zone, x, y, name] = JSON.parse(a.dataset.vg);
+  openGps([null, zone, [[name, 'v']], [[x, y, 0]]], [x, y, 0]);
+});
 function setupTooltips() {
   if (!window.matchMedia('(hover: hover)').matches) return;
   const box = document.createElement('div'); box.id = 'itt'; document.body.appendChild(box);
@@ -1049,6 +1058,7 @@ function setupTooltips() {
 // Le calcul du trajet est confié à Travelcraft (planificateur WoW Forever : vols mesurés dans Forever,
 // zeppelins, bateaux, routes tracées à la main). On lui passe le départ et la zone d'arrivée,
 // puis on guide le dernier bout dans la zone avec la carte et la commande /way.
+const GPS_TOWNS = {"Durotar": [["Orgrimmar", 45.5, 10.5], ["Tours de zeppelin d'Orgrimmar", 50.8, 13.8], ["Tranchecolline", 52.0, 41.6], ["Village de Sen'jin", 55.5, 74.0]], "Orgrimmar": [["Orgrimmar", 45.3, 63.7]], "Tirisfal Glades": [["Brill", 61.0, 52.4], ["Tours de zeppelin d'Undercity", 60.7, 58.8], ["Undercity", 61.8, 70.0]], "Undercity": [["Undercity", 63.1, 48.3]], "Mulgore": [["Village de Sabot-de-Sang", 47.5, 58.5], ["Thunder Bluff", 37.0, 30.0]], "Thunder Bluff": [["Thunder Bluff", 46.6, 50.0]], "The Barrens": [["La Croisée", 51.5, 30.4], ["Cabestan", 63.1, 37.1], ["Camp Taurajo", 44.5, 59.1]], "Stranglethorn Vale": [["Camp de base de Grom'gol", 32.5, 29.3], ["Baie-du-Butin", 26.8, 77.0]], "Hillsbrad Foothills": [["Moulin-de-Tarren", 60.2, 18.8]], "Arathi Highlands": [["Trépas-d'Orgrim", 73.1, 32.6]], "Badlands": [["Kargath", 4.1, 44.9]], "Swamp of Sorrows": [["Pierrêche", 46.1, 54.7]], "The Hinterlands": [["Village de Revantusk", 81.7, 81.9]], "Ashenvale": [["Poste de Bois-Brisé", 73.3, 61.7], ["Avant-poste de Zoram'gar", 12.2, 33.8], ["Astranaar", 34.5, 48.0]], "Stonetalon Mountains": [["Retraite de Roche-Soleil", 45.2, 59.9], ["Pic des Serres-Rocheuses", 36.5, 7.2]], "Desolace": [["Village de Proie-de-l'Ombre", 21.6, 74.0], ["Pointe de Nijel", 64.7, 10.4]], "Thousand Needles": [["Poste de Librevent", 45.0, 49.1]], "Dustwallow Marsh": [["Village de Fougerelle", 35.6, 31.8], ["Île de Theramore", 67.5, 51.2]], "Feralas": [["Camp Mojache", 75.4, 44.3], ["Bastion de Plume-de-lune", 30.3, 43.3]], "Tanaris": [["Gadgetzan", 51.6, 25.5]], "Azshara": [["Valormok", 22.0, 49.7], ["Pointe Talrendis", 11.9, 77.5]], "Felwood": [["Poste de Sang-Venin", 34.4, 53.9], ["Clairière de Serre-Branche", 62.5, 24.2]], "Un'Goro Crater": [["Refuge de Marshal", 45.3, 6.0]], "Silithus": [["Fort Cénarien", 50.7, 34.6]], "Winterspring": [["Long-Guet", 60.5, 36.3]], "Silverpine Forest": [["Le Sépulcre", 45.6, 42.4]], "Searing Gorge": [["Pointe du Thorium", 37.9, 30.4]], "Burning Steppes": [["Crête-de-Flammes", 65.6, 24.2]], "Moonglade": [["Havrenuit", 44.3, 45.3]], "Eastern Plaguelands": [["Chapelle de l'Espoir de Lumière", 70.4, 47.6]], "Western Plaguelands": [["Camp de Vent-Glacial", 42.9, 85.0]], "Darkshore": [["Auberdine", 36.4, 45.6]], "Wetlands": [["Port de Menethil", 9.5, 59.7]], "Westfall": [["Colline des Sentinelles", 56.6, 52.7]], "Duskwood": [["Sombre-Comté", 77.6, 44.4]], "Redridge Mountains": [["Comté-du-Lac", 25.3, 59.0]], "Loch Modan": [["Thelsamar", 33.9, 50.8]], "Elwynn Forest": [["Comté-de-l'Or", 42.0, 65.0]], "Blasted Lands": [["Donjon de Garde-Néant", 65.5, 24.4]]};
 const GPS_PLACES = ["Orgrimmar", "Tours de zeppelin d'Orgrimmar", "Undercity", "Tours de zeppelin d'Undercity", "Thunder Bluff", "Camp de base de Grom'gol", "Brill", "Le Sépulcre", "Moulin-de-Tarren", "Trépas-d'Orgrim", "Kargath", "Pierrêche", "Village de Revantusk", "La Croisée", "Camp Taurajo", "Tranchecolline", "Village de Sen'jin", "Cabestan", "Baie-du-Butin", "Poste de Bois-Brisé", "Pic des Serres-Rocheuses", "Village de Proie-de-l'Ombre", "Poste de Librevent", "Camp Mojache", "Village de Fougerelle", "Gadgetzan", "Poste de Sang-Venin", "Valormok", "Avant-poste de Zoram'gar", "Village de Sabot-de-Sang", "Refuge de Marshal", "Fort Cénarien", "Long-Guet", "Chapelle de l'Espoir de Lumière", "Durotar", "Les Tarides", "Mulgore", "Clairières de Tirisfal", "Forêt des Pins argentés", "Contreforts d'Hillsbrad", "Montagnes d'Alterac", "Hautes-terres d'Arathi", "Vallée de Strangleronce", "Mille pointes", "Les Serres-Rocheuses", "Ashenvale", "Désolace", "Marécage d'Âprefange", "Terres ingrates", "Marais des Chagrins", "Feralas", "Tanaris", "Les Hinterlands", "Azshara", "Terres foudroyées", "Cratère d'Un'Goro", "Gangrebois", "Gorge des Vents brûlants", "Steppes ardentes", "Maleterres de l'ouest", "Maleterres de l'est", "Berceau-de-l'Hiver", "Silithus", "Les Paluns", "Bois de la Pénombre", "Les Carmines", "Marche de l'Ouest", "Forêt d'Elwynn", "Loch Modan", "Dun Morogh", "Sombrivage", "Riverglades", "Mont Hyjal", "Défilé de Deuillevent"];
 const zoneSlug = z => String(z || '').toLowerCase().replace(/'/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const REDRAWN = new Set(['Alterac Mountains', 'Eastern Plaguelands', 'Redridge Mountains', 'Stormwind City', 'Tirisfal Glades', 'Desolace', 'Mulgore']);
@@ -1070,6 +1080,7 @@ function openGps(mapEntry, pin) {
       <label>${t('gps_from')} <input id="gpsFrom" list="gpsPlaces" value="${esc(p.from || 'Orgrimmar')}" placeholder="Orgrimmar, Brill…"></label>
       <label>${t('gps_speed')} <select id="gpsBy">${[['foot', t('gps_foot')], ['m60', t('gps_m60')], ['m100', t('gps_m100')]].map(([v, l]) => `<option value="${v}" ${p.by === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
       <label class="chk"><input type="checkbox" id="gpsFp" ${p.fp !== false ? 'checked' : ''}> ${t('gps_fp')}</label>
+      <button class="act big" id="gpsPick">📍 ${t('gps_pick')}</button>
       <button class="act big" id="gpsGo">${t('gps_go')}</button>
       <button class="act big" id="gpsClose" title="Échap">✕</button>
     </div>
@@ -1077,6 +1088,9 @@ function openGps(mapEntry, pin) {
     <div class="gps-body">
       <div class="gps-route" id="gpsOut"></div>
       <div class="gps-side">
+        <div id="gpsPicker" style="display:none"><h3>📍 ${t('gps_pick_title')}</h3>
+          <label>${t('gps_pick_zone')} <select id="gpsZone">${Object.keys(GPS_TOWNS).sort((a, b) => zoneName(a).localeCompare(zoneName(b))).map(z => `<option value="${esc(z)}" ${p.zone === z ? 'selected' : ''}>${zoneName(z)}</option>`).join('')}</select></label>
+          <div class="wmap gps-map pick" id="gpsPickMap"></div><p class="note" id="gpsPickNote">${t('gps_pick_help')}</p><hr></div>
         <h3>${t('gps_last', { z: zoneName(zone) })}</h3>
         ${REDRAWN.has(zone) ? `<p class="note">${t('gps_redrawn')}</p>` : ''}
         <div class="wmap gps-map"><img src="maps/z_${zoneSlug(zone)}.jpg" alt="" onerror="this.parentNode.classList.add('nomap')">
@@ -1094,13 +1108,33 @@ function openGps(mapEntry, pin) {
   $('#gpsWay').onclick = () => (navigator.clipboard ? navigator.clipboard.writeText(way) : Promise.reject()).then(() => toast(t('copied') + ' ' + way), () => toast(way));
   const go = () => {
     const from = $('#gpsFrom').value.trim() || 'Orgrimmar', by = $('#gpsBy').value, fp = $('#gpsFp').checked;
-    store('hf_gps', JSON.stringify({ from, by, fp }));
+    store('hf_gps', JSON.stringify({ ...gpsPrefs(), from, by, fp }));
     const q = new URLSearchParams({ from, to: zone, f: 'horde', by }); if (fp) q.set('fp', '1');
     const url = `https://wow-travelcraft.com/${S.lang === 'fr' ? 'fr/' : ''}#${q}`;
     $('#gpsOut').innerHTML = `<iframe class="gps-frame" src="${url}" title="Travelcraft"></iframe>`;
     $('#gpsOpen').href = url;
   };
   $('#gpsGo').onclick = go;
+  const drawPick = () => {
+    const z = $('#gpsZone').value, me = gpsPrefs().me;
+    $('#gpsPickMap').innerHTML = `<img src="maps/z_${zoneSlug(z)}.jpg" alt="" onerror="this.parentNode.classList.add('nomap')"><div class="nomapmsg">${t('ht_nomap')}</div>
+      ${(GPS_TOWNS[z] || []).map(([n, tx, ty]) => `<span class="town" style="left:${tx}%;top:${ty}%" title="${esc(n)}"></span>`).join('')}
+      ${me && me.zone === z ? `<span class="pin me" style="left:${me.x}%;top:${me.y}%"></span>` : ''}`;
+  };
+  $('#gpsPick').onclick = () => { const el = $('#gpsPicker'); el.style.display = el.style.display === 'none' ? '' : 'none'; drawPick(); el.scrollIntoView({ block: 'nearest' }); };
+  $('#gpsZone').onchange = drawPick;
+  $('#gpsPickMap').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect(); const z = $('#gpsZone').value;
+    const mx = Math.round((e.clientX - r.left) / r.width * 1000) / 10, my = Math.round((e.clientY - r.top) / r.height * 1000) / 10;
+    // Point de départ = le lieu connu le plus proche (ville, maître de vol, zeppelin) ; sinon la zone elle-même.
+    let best = null;
+    for (const [n, tx, ty] of GPS_TOWNS[z] || []) { const d = Math.hypot(tx - mx, ty - my); if (!best || d < best.d) best = { n, d }; }
+    const from = best && best.d <= 18 ? best.n : z;
+    const pr = gpsPrefs(); pr.zone = z; pr.me = { zone: z, x: mx, y: my }; pr.from = from; store('hf_gps', JSON.stringify(pr));
+    $('#gpsFrom').value = from;
+    $('#gpsPickNote').innerHTML = best && best.d <= 18 ? t('gps_pick_near', { n: esc(best.n) }) : t('gps_pick_zone_only', { z: zoneName(z) });
+    drawPick(); go();
+  };
   $('#gpsFrom').onkeydown = e => { if (e.key === 'Enter') go(); };
   go();
 }
