@@ -38,7 +38,7 @@ TL_WEIGHT = {"VERY_LONG": 1.0, "LONG": 0.9, "MEDIUM": 0.4, "SHORT": 0.0}
 EXPANSION_WORDS = ("outland", "northrend", "cataclysm", "pandaria", "draenor", "legion",
                    "zandalari", "kul tiran", "shadowlands", "dragon isles", "khaz algar",
                    "midnight", "quel'thalas")
-CRAFT_PROFESSIONS = ("Alchemy", "Blacksmithing", "Cooking", "Engineering", "Leatherworking",
+CRAFT_PROFESSIONS = ("Alchemy", "Blacksmithing", "Cooking", "Engineering", "Leatherworking", "Mining",
                      "Tailoring", "First Aid", "Enchanting")
 
 
@@ -430,7 +430,7 @@ class Collector:
 
     # ----- recettes
     def update_recipes(self, recipes):
-        if recipes and self.t - recipes.get("t", 0) < self.cfg["recipes_refresh_days"] * 86400:
+        if recipes and recipes.get("v") == 2 and self.t - recipes.get("t", 0) < self.cfg["recipes_refresh_days"] * 86400:
             return recipes
         log("rafraîchissement des recettes")
         out = []
@@ -477,7 +477,7 @@ class Collector:
                 break
         if not out and recipes:
             return recipes
-        return {"t": self.t, "list": out}
+        return {"t": self.t, "v": 2, "list": out}
 
     # ----- historique et marché
     def update_history(self, hid, stats, sold, valid_sales):

@@ -187,3 +187,5 @@ table.cdt tr.cdsum td{border-top:1px solid #5a4626}
 svg.dif{vertical-align:-2px;margin-right:2px}
 .skw{white-space:nowrap}.skw .small{margin-left:3px}.dnow svg.dif{width:13px;height:15px;vertical-align:-3px;margin-right:4px}
 .gdi{display:flex;align-items:center;gap:6px}.gdi svg.dif{width:13px;height:15px;flex:none}
+tr.gg-cur td{background:rgba(255,128,64,.12)}tr.gg-cur td:first-child{box-shadow:inset 3px 0 0 #ff8040}
+table.gd td.l{white-space:normal}

@@ -73,7 +73,7 @@ const T = {
     pr_my: 'Mon niveau en', pr_mode_gold: "Gagner de l'or", pr_mode_lvl: 'Monter le métier', pr_onlycan: 'Seulement ce que je peux faire', pr_norec: 'Sans recette à acheter (entraîneur)',
     pr_help_gold: "Bénéfice/jour = bénéfice par objet × ventes estimées par jour : c'est ce qui dit si ça vaut le coup. Chaque composant est compté au moins cher entre l'HDV et le PNJ.",
     pr_help_lvl: "Coût par point = coût des composants (moins la moitié de la revente) ÷ chance de gagner un point. Orange = 100 %, jaune puis vert = de moins en moins, gris = 0.",
-    pr_skill: 'Niveau', rah_loading: 'Recherche dans tes 3 HDV…', rah_bop: "<b>Liée quand ramassée</b> : cette recette ne peut jamais être vendue à l'HDV, il faut la looter toi-même (voir ci-dessous).", rah_noid: "Jamais vue en vente dans aucun de tes 3 HDV (Horde, Alliance, neutre) depuis que le site les relève. C'est souvent une recette « liée quand ramassée » : elle ne peut pas être vendue, il faut la looter soi-même.", rah_found: 'En vente en ce moment :', rah_none_all: "Pas en vente en ce moment, ni à l'HDV Horde, ni à l'Alliance, ni au neutre (Blackwater).", rah_last: 'Dernier prix vu :', rah_ally: 'il faut un perso Alliance', rah_neutral: 'accessible aux deux factions (Baie-du-Butin, Gadgetzan, Everlook)', rah_alert: "🔔 M'avertir quand elle est en vente", rah_alert_on: '🔕 Alerte activée (cliquer pour retirer)', rah_notif: '{n} est en vente à l\'HDV !', rah_badge_on: 'en vente !', rah_badge_wait: 'pas encore en vente', rah_nosrc: "Aucune source connue dans nos données (souvent une recette qui tombe au hasard sur les monstres d'une tranche de niveau, ou une récompense de quête). Fiche complète :", cd_open: 'Voir le prix de chaque composant', cd_mat: 'Composant', cd_qty: 'Quantité', cd_unit: "Prix à l'unité", cd_src: 'Où l\'acheter', cd_total: 'Total', cd_vendor: 'PNJ', cd_ah: 'HDV', cd_none: 'aucun prix connu', cd_sum: 'Coût pour une fabrication', cd_makes: 'donne {n} objets', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_tiers_tip: 'Tu peux l\'apprendre à {a}. De {a} à {b} (orange) : chaque fabrication donne 1 point à coup sûr. De {b} à {c} (jaune) : souvent un point. De {c} à {d} (vert) : rarement. À partir de {d} (gris) : plus aucun point.', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
+    pr_skill: 'Niveau', gg_help_Herbalism: "Ramasse la plante indiquée pour ton niveau : tant qu'elle est orange, chaque cueillette donne un point. Clique sur « Route » pour un trajet de farm optimisé.", gg_help_Mining: "Mine le filon indiqué pour ton niveau (orange = un point à chaque fois). Fondre les minerais en barres fait aussi monter le Minage : voir plus bas. Clique sur « Route » pour un trajet optimisé.", gg_help_Skinning: "Le dépeçage dépend du niveau des bêtes : pour monter, dépèce les bêtes les plus hautes que tu peux. Formule : jusqu'au niveau 20, compétence = (niveau − 10) × 10 ; au-dessus, niveau × 5. Astuce : dépèce tout ce que tu tues en montant de niveau.", gg_help_Fishing: "La pêche monte un point par prise, de plus en plus lentement. Pêche dans des zones de ton niveau de pêche, avec un appât (+25 ou +50) si tu rates trop de prises.", gg_what: 'Quoi récolter', gg_rare: 'rare, à prendre si tu le croises :', gg_where: 'Où', gg_value: 'Valeur HDV', gg_nozone: 'zones inconnues', gg_note: "Niveaux requis de Classic : Forever a pu en changer quelques-uns. Une plante/un filon reste orange jusqu'à +25, jaune jusqu'à +50, vert jusqu'à +100 au-dessus du niveau requis. Paliers : Compagnon à 75, Expert à 150 et Artisan à 225 chez l'entraîneur.", gg_mobs: 'Bêtes à dépecer', gg_beasts: 'niveau {a} à {b}', gg_skin_note: "Paliers chez l'entraîneur de dépeçage : Compagnon (75), Expert (150), Artisan (225). Le cuir récupéré se vend bien à l'HDV.", gg_tip: 'Conseil', fish_1: "Apprends la pêche chez l'entraîneur (Orgrimmar). N'importe quelle eau de départ suffit.", fish_75: "Achète un appât (Appât brillant, +25) si tu rates des prises.", fish_150: "À 150 : quête « Commence par la fin » (livre Expert) chez le vieux Heming à Baie-du-Butin, Strangleronce.", fish_225: "À 225 : quête Artisan de Nat Pagle au marécage d'Âprefange (il faut rapporter 4 poissons rares).", gg_fish_note: "Zones conseillées de Classic. Une canne à pêche plus forte (+20 ou +25) aide beaucoup à partir de 150.", gg_smelt: 'Fonte (fait aussi monter le Minage)', rah_loading: 'Recherche dans tes 3 HDV…', rah_bop: "<b>Liée quand ramassée</b> : cette recette ne peut jamais être vendue à l'HDV, il faut la looter toi-même (voir ci-dessous).", rah_noid: "Jamais vue en vente dans aucun de tes 3 HDV (Horde, Alliance, neutre) depuis que le site les relève. C'est souvent une recette « liée quand ramassée » : elle ne peut pas être vendue, il faut la looter soi-même.", rah_found: 'En vente en ce moment :', rah_none_all: "Pas en vente en ce moment, ni à l'HDV Horde, ni à l'Alliance, ni au neutre (Blackwater).", rah_last: 'Dernier prix vu :', rah_ally: 'il faut un perso Alliance', rah_neutral: 'accessible aux deux factions (Baie-du-Butin, Gadgetzan, Everlook)', rah_alert: "🔔 M'avertir quand elle est en vente", rah_alert_on: '🔕 Alerte activée (cliquer pour retirer)', rah_notif: '{n} est en vente à l\'HDV !', rah_badge_on: 'en vente !', rah_badge_wait: 'pas encore en vente', rah_nosrc: "Aucune source connue dans nos données (souvent une recette qui tombe au hasard sur les monstres d'une tranche de niveau, ou une récompense de quête). Fiche complète :", cd_open: 'Voir le prix de chaque composant', cd_mat: 'Composant', cd_qty: 'Quantité', cd_unit: "Prix à l'unité", cd_src: 'Où l\'acheter', cd_total: 'Total', cd_vendor: 'PNJ', cd_ah: 'HDV', cd_none: 'aucun prix connu', cd_sum: 'Coût pour une fabrication', cd_makes: 'donne {n} objets', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_tiers_tip: 'Tu peux l\'apprendre à {a}. De {a} à {b} (orange) : chaque fabrication donne 1 point à coup sûr. De {b} à {c} (jaune) : souvent un point. De {c} à {d} (vert) : rarement. À partir de {d} (gris) : plus aucun point.', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
     pr_chance: 'Chance de point', pr_ppp: 'Coût par point', pr_pt: 'point', pr_day: 'jour', pr_at: 'à',
     pr_adv_title: 'Conseils pour toi', pr_adv_lvl: 'Pour monter le moins cher', pr_adv_gold: "Pour faire de l'or", pr_adv_nogold: 'Rien de rentable à ton niveau pour le moment.', pr_adv_next: 'Ce qui se débloque bientôt',
     pr_adv_noskill: 'Entre ton niveau en {p} juste au-dessus pour avoir des conseils adaptés.',
@@ -185,7 +185,7 @@ const T = {
     pr_my: 'My skill in', pr_mode_gold: 'Make gold', pr_mode_lvl: 'Level it', pr_onlycan: 'Only what I can make', pr_norec: 'No recipe to buy (trainer)',
     pr_help_gold: 'Profit/day = profit per item × estimated sales per day. Each reagent is counted at the cheaper of AH and vendor.',
     pr_help_lvl: 'Cost per point = reagent cost (minus half the resale) ÷ chance of a skill-up. Orange = 100%, yellow then green = less and less, grey = 0.',
-    pr_skill: 'Skill', rah_loading: 'Checking your 3 auction houses…', rah_bop: '<b>Binds when picked up</b>: this recipe can never be sold on the AH, you must loot it yourself (see below).', rah_noid: 'Never seen on sale in any of your 3 auction houses since the site started reading them. It is often a "binds when picked up" recipe: it cannot be sold, you have to loot it yourself.', rah_found: 'On sale right now:', rah_none_all: 'Not on sale right now, neither on the Horde, Alliance nor neutral (Blackwater) AH.', rah_last: 'Last price seen:', rah_ally: 'needs an Alliance character', rah_neutral: 'open to both factions (Booty Bay, Gadgetzan, Everlook)', rah_alert: '🔔 Notify me when it is on sale', rah_alert_on: '🔕 Alert on (click to remove)', rah_notif: '{n} is on the AH!', rah_badge_on: 'on sale!', rah_badge_wait: 'not on sale yet', rah_nosrc: 'No known source in our data (often a random world drop from mobs of a level range, or a quest reward). Full page:', cd_open: 'Show the price of each material', cd_mat: 'Material', cd_qty: 'Qty', cd_unit: 'Unit price', cd_src: 'Where to buy', cd_total: 'Total', cd_vendor: 'Vendor', cd_ah: 'AH', cd_none: 'no known price', cd_sum: 'Cost for one craft', cd_makes: 'makes {n} items', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_tiers_tip: 'Learnable at {a}. From {a} to {b} (orange): every craft gives a skill point. From {b} to {c} (yellow): usually a point. From {c} to {d} (green): rarely. From {d} (grey): no more points.', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
+    pr_skill: 'Skill', gg_help_Herbalism: 'Pick the plant shown for your skill: while it is orange every pick gives a point. Click "Route" for an optimized farm path.', gg_help_Mining: 'Mine the vein shown for your skill (orange = a point every time). Smelting ore into bars also raises Mining: see below. Click "Route" for an optimized path.', gg_help_Skinning: 'Skinning depends on beast level: skin the highest beasts you can. Formula: up to level 20, skill = (level − 10) × 10; above, level × 5. Tip: skin everything you kill while leveling.', gg_help_Fishing: 'Fishing gives a point per catch, slower and slower. Fish in zones matching your fishing skill, with a lure (+25 or +50) if you miss too many catches.', gg_what: 'What to gather', gg_rare: 'rare, take it if you see one:', gg_where: 'Where', gg_value: 'AH value', gg_nozone: 'unknown zones', gg_note: 'Classic skill requirements: Forever may have changed a few. A plant/vein stays orange until +25, yellow until +50, green until +100 above the requirement. Ranks: Journeyman at 75, Expert at 150, Artisan at 225 from the trainer.', gg_mobs: 'Beasts to skin', gg_beasts: 'level {a} to {b}', gg_skin_note: 'Skinning trainer ranks: Journeyman (75), Expert (150), Artisan (225). Leather sells well on the AH.', gg_tip: 'Tip', fish_1: 'Learn fishing from the trainer (Orgrimmar). Any starting water works.', fish_75: 'Buy a lure (Shiny Bauble, +25) if you miss catches.', fish_150: 'At 150: quest "Expert Fishing" (book) from Old Man Heming in Booty Bay, Stranglethorn.', fish_225: "At 225: Nat Pagle's Artisan quest in Dustwallow Marsh (bring back 4 rare fish).", gg_fish_note: 'Classic recommended zones. A better fishing pole (+20 or +25) helps a lot from 150.', gg_smelt: 'Smelting (also raises Mining)', rah_loading: 'Checking your 3 auction houses…', rah_bop: '<b>Binds when picked up</b>: this recipe can never be sold on the AH, you must loot it yourself (see below).', rah_noid: 'Never seen on sale in any of your 3 auction houses since the site started reading them. It is often a "binds when picked up" recipe: it cannot be sold, you have to loot it yourself.', rah_found: 'On sale right now:', rah_none_all: 'Not on sale right now, neither on the Horde, Alliance nor neutral (Blackwater) AH.', rah_last: 'Last price seen:', rah_ally: 'needs an Alliance character', rah_neutral: 'open to both factions (Booty Bay, Gadgetzan, Everlook)', rah_alert: '🔔 Notify me when it is on sale', rah_alert_on: '🔕 Alert on (click to remove)', rah_notif: '{n} is on the AH!', rah_badge_on: 'on sale!', rah_badge_wait: 'not on sale yet', rah_nosrc: 'No known source in our data (often a random world drop from mobs of a level range, or a quest reward). Full page:', cd_open: 'Show the price of each material', cd_mat: 'Material', cd_qty: 'Qty', cd_unit: 'Unit price', cd_src: 'Where to buy', cd_total: 'Total', cd_vendor: 'Vendor', cd_ah: 'AH', cd_none: 'no known price', cd_sum: 'Cost for one craft', cd_makes: 'makes {n} items', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_tiers_tip: 'Learnable at {a}. From {a} to {b} (orange): every craft gives a skill point. From {b} to {c} (yellow): usually a point. From {c} to {d} (green): rarely. From {d} (grey): no more points.', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
     pr_chance: 'Skill-up chance', pr_ppp: 'Cost per point', pr_pt: 'point', pr_day: 'day', pr_at: 'at',
     pr_adv_title: 'Advice for you', pr_adv_lvl: 'Cheapest to level', pr_adv_gold: 'To make gold', pr_adv_nogold: 'Nothing profitable at your skill yet.', pr_adv_next: 'Unlocking soon',
     pr_adv_noskill: 'Enter your {p} skill above for tailored advice.',
@@ -235,6 +235,7 @@ const T = {
 const PROF = {
   Alchemy: { fr: 'Alchimie' }, Blacksmithing: { fr: 'Forge' }, Cooking: { fr: 'Cuisine' }, Engineering: { fr: 'Ingénierie' },
   Leatherworking: { fr: 'Travail du cuir' }, Tailoring: { fr: 'Couture' }, 'First Aid': { fr: 'Secourisme' }, Enchanting: { fr: 'Enchantement' },
+  Mining: { fr: 'Minage' }, Herbalism: { fr: 'Herboristerie' }, Skinning: { fr: 'Dépeçage' }, Fishing: { fr: 'Pêche' },
 };
 
 // ------------------------------------------------------------------ état
@@ -771,7 +772,7 @@ async function viewCraft(page) {
   const m = await market(viewHouseId());
   if (!m) { app().innerHTML = `<div class="panel">${t('no_data')}</div>`; return; }
   const cut = S.meta.ah_cut || 0.05, vs = vendorSet();
-  const profs = [...new Set(S.recipes.map(r => r.p))].sort();
+  const profs = [...new Set(S.recipes.map(r => r.p).concat(page === 'guide' ? GATHER_PROFS : []))].sort((a, b) => profName(a).localeCompare(profName(b)));
   let prof = store('hf_prof'); if (!profs.includes(prof)) prof = profs.includes('Cooking') ? 'Cooking' : profs[0];
   let mode = store('hf_pmode') || 'gold'; if (page === 'guide') mode = 'guide'; else if (mode === 'guide') mode = 'gold'; let minPd = Number(store('hf_minpd') || 0), onlyCan = store('hf_onlycan') === '1', noRecipe = store('hf_norec') === '1';
   app().innerHTML = `<div class="hero"><h1>${page === 'guide' ? t('gd_title') : t('pr_title')}</h1><p>${page === 'guide' ? t('gd_sub') : t('pr_sub', { cut: Math.round(cut * 100) })}</p></div>
@@ -806,6 +807,12 @@ async function viewCraft(page) {
         const ch = ci && myN != null ? skillChance(ci.sk, myN) : null;
         return { rc, ci, ch, ppd: profit != null && out && out[PD] ? profit / rc.oq * out[PD] : null, ppp: ch ? (c.missing ? null : (c.cost - (sell || 0) * 0.5) / ch) : null };
       }), myN);
+      if (GATHER_PROFS.includes(prof)) {
+        const hasCraft = S.recipes.some(rc => rc.p === prof);
+        $('#list').innerHTML = gatherGuideHtml(prof, myN, m) + (hasCraft ? `<h2 style="margin-top:18px">${t('gg_smelt')}</h2>` + guideHtml(prof, Math.max(1, myN || 1), m, vs, { noRecipe, resale: false }) : '');
+        $('#list').querySelectorAll('[data-route]').forEach(b => b.onclick = () => openRoute(+b.dataset.route, m));
+        return;
+      }
       $('#list').innerHTML = guideHtml(prof, Math.max(1, myN || 1), m, vs, { noRecipe, resale: store('hf_gresale') === '1' })
         + `<label class="chk" style="margin-top:8px"><input type="checkbox" id="gresale" ${store('hf_gresale') === '1' ? 'checked' : ''}> ${t('gd_resale')}</label>`;
       $('#gresale').onchange = e => { store('hf_gresale', e.target.checked ? '1' : '0'); drawList(); };
@@ -1662,6 +1669,75 @@ document.addEventListener('click', e => {
 
 // ------------------------------------------------------------------ guide de montée de métier
 // Paliers à débloquer (formation) : valeurs de WoW Forever d'après Wowhead (overview des métiers, novembre 2026).
+// ------------------------------------------------------------------ guides des métiers de récolte
+// Niveaux de Classic (Forever a pu en changer quelques-uns). Un filon/une plante reste orange jusqu'à +25, jaune jusqu'à +50,
+// vert jusqu'à +100, puis gris (plus de point).
+const GATHER = {
+  Herbalism: [[2447, 'Peacebloom', 1], [765, 'Silverleaf', 1], [2449, 'Earthroot', 15], [785, 'Mageroyal', 50], [2450, 'Briarthorn', 70],
+    [3820, 'Stranglekelp', 85], [2453, 'Bruiseweed', 100], [3355, 'Wild Steelbloom', 115], [3369, 'Grave Moss', 120], [3356, 'Kingsblood', 125],
+    [3357, 'Liferoot', 150], [3818, 'Fadeleaf', 160], [3821, 'Goldthorn', 170], [3358, "Khadgar's Whisker", 185], [3819, 'Wintersbite', 195],
+    [4625, 'Firebloom', 205], [8831, 'Purple Lotus', 210], [8836, "Arthas' Tears", 220], [8838, 'Sungrass', 230], [8839, 'Blindweed', 235],
+    [8845, 'Ghost Mushroom', 245], [8846, 'Gromsblood', 250], [13464, 'Golden Sansam', 260], [13463, 'Dreamfoil', 270],
+    [13465, 'Mountain Silversage', 280], [13466, 'Plaguebloom', 285], [13467, 'Icecap', 290], [13468, 'Black Lotus', 300]],
+  Mining: [[2770, 'Copper Vein', 1], [2771, 'Tin Vein', 65], [2775, 'Silver Vein', 75, 1], [2772, 'Iron Deposit', 125], [2776, 'Gold Vein', 155, 1],
+    [3858, 'Mithril Deposit', 175], [7911, 'Truesilver Deposit', 230, 1], [11370, 'Dark Iron Deposit', 230, 1], [10620, 'Small Thorium Vein', 245],
+    [10620, 'Rich Thorium Vein', 275]],
+};
+const GATHER_PROFS = ['Mining', 'Herbalism', 'Skinning', 'Fishing'];
+// Zones par niveau de monstres (pour le dépeçage), version Horde.
+const SKIN_ZONES = [[1, 10, ['Durotar', 'Mulgore', 'Tirisfal Glades']], [10, 20, ['The Barrens', 'Silverpine Forest']], [20, 25, ['The Barrens', 'Stonetalon Mountains', 'Ashenvale']],
+  [25, 30, ['Ashenvale', 'Hillsbrad Foothills', 'Thousand Needles']], [30, 40, ['Arathi Highlands', 'Stranglethorn Vale', 'Desolace', 'Dustwallow Marsh']],
+  [40, 48, ['Tanaris', 'Feralas', 'The Hinterlands']], [48, 55, ["Un'Goro Crater", 'Felwood', 'Azshara']], [55, 61, ['Winterspring', 'Eastern Plaguelands', 'Burning Steppes']]];
+const FISH_STEPS = [[1, 75, ['Durotar', 'Mulgore', 'Tirisfal Glades', 'Orgrimmar'], 'fish_1'], [75, 150, ['The Barrens', 'Silverpine Forest', 'Ashenvale', 'Stonetalon Mountains'], 'fish_75'],
+  [150, 225, ['Desolace', 'Thousand Needles', 'Arathi Highlands', 'Stranglethorn Vale', 'Dustwallow Marsh'], 'fish_150'],
+  [225, 300, ['Tanaris', 'Feralas', 'Azshara', 'The Hinterlands', "Un'Goro Crater"], 'fish_225']];
+function skinLevel(s) { return s <= 100 ? Math.max(1, Math.floor(10 + s / 10)) : Math.floor(s / 5); }
+function gatherZones(id) {
+  const f = S.farm && S.farm[id]; const z = [];
+  for (const n of (f && f.n) || []) for (const zz of n[1] || []) if (!z.includes(zz)) z.push(zz);
+  return z;
+}
+function gatherGuideHtml(prof, my, mk) {
+  const head = `<p class="help">${t('gg_help_' + prof)}</p>`;
+  const cur = (a, b) => my != null && my >= a && my < b ? ' class="gg-cur"' : '';
+  if (GATHER[prof]) {
+    const ALL = GATHER[prof]; const L = ALL.filter(x => !x[3]); const RARE = ALL.filter(x => x[3]); const rows = [];
+    for (let i = 0; i < L.length; i++) {
+      const [id, en, req] = L[i];
+      // on change de cible dès que la suivante (plus haute) est disponible et pas déjà prise à ce niveau
+      let j = i + 1; while (j < L.length && L[j][2] === req) j++;
+      const until = j < L.length ? L[j][2] : 300;
+      if (until <= req && i < L.length - 1) continue;
+      const zones = gatherZones(id).slice(0, 4);
+      const price = mk && mk.items[id] ? mk.items[id][MKT] : null;
+      const same = L.filter(x => x[2] === req && x !== L[i]).map(x => x[1]);
+      if (L.slice(0, i).some(x => x[2] === req)) continue;
+      rows.push(`<tr${cur(req, until)}><td><b>${req}–${Math.min(300, until)}</b></td>
+        <td class="l"><span class="gdi">${diffIcon('orange')}${S.items[id] ? itemCell(id, false) : `<b>${esc(en)}</b>`}</span>${same.length ? `<span class="dim small">+ ${same.map(n => { const o = L.find(x => x[1] === n); return o && S.items[o[0]] ? esc(itemName(o[0])) : esc(n); }).join(', ')}</span>` : ''}${prof === 'Mining' ? `<div class="dim small">${esc(en)}</div>` : ''}${RARE.filter(x => x[2] >= req && x[2] < until).map(x => `<div class="small">✨ ${t('gg_rare')} ${S.items[x[0]] ? esc(itemName(x[0])) : esc(x[1])} <span class="dim">(${x[2]})</span></div>`).join('')}</td>
+        <td class="l small">${zones.length ? zones.map(zoneName).join(', ') : `<span class="dim">${t('gg_nozone')}</span>`}</td>
+        <td>${money(price)}</td>
+        <td>${routeAvailable(id) ? `<button class="chip small" data-route="${id}">🗺️ ${t('rt_btn')}</button>` : ''}</td></tr>`);
+    }
+    return head + `<div class="tablewrap"><table class="gd"><thead><tr><th>${t('gd_range')}</th><th class="l">${t('gg_what')}</th><th class="l">${t('gg_where')}</th><th>${t('gg_value')}</th><th></th></tr></thead><tbody>${rows.join('')}</tbody></table></div>
+      <p class="note">${t('gg_note')}</p>`;
+  }
+  if (prof === 'Skinning') {
+    const rows = []; for (let s = 1; s < 300; s += 25) {
+      const e = Math.min(300, s === 1 ? 75 : s + 25); const lo = s === 1 ? 1 : skinLevel(s), hi = skinLevel(e);
+      const zs = SKIN_ZONES.filter(z => z[1] > lo && z[0] <= hi).flatMap(z => z[2]).filter((v, i, a) => a.indexOf(v) === i).slice(0, 5);
+      rows.push(`<tr${cur(s, e)}><td><b>${s}–${e}</b></td><td>${t('gg_beasts', { a: lo, b: hi })}</td><td class="l small">${zs.map(zoneName).join(', ')}</td></tr>`);
+      if (s === 1) s = 50;
+    }
+    return head + `<div class="tablewrap"><table class="gd"><thead><tr><th>${t('gd_range')}</th><th>${t('gg_mobs')}</th><th class="l">${t('gg_where')}</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>
+      <p class="note">${t('gg_skin_note')}</p>`;
+  }
+  if (prof === 'Fishing') {
+    return head + `<div class="tablewrap"><table class="gd"><thead><tr><th>${t('gd_range')}</th><th class="l">${t('gg_where')}</th><th class="l">${t('gg_tip')}</th></tr></thead><tbody>
+      ${FISH_STEPS.map(([a, b, zs, k]) => `<tr${cur(a, b)}><td><b>${a}–${b}</b></td><td class="l small">${zs.map(zoneName).join(', ')}</td><td class="l small">${t(k)}</td></tr>`).join('')}</tbody></table></div>
+      <p class="note">${t('gg_fish_note')}</p>`;
+  }
+  return '';
+}
 const PROF_RANKS = {
   _default: [[75, 'rank_journeyman'], [150, 'rank_expert'], [225, 'rank_artisan']],
   Cooking: [[75, 'rank_journeyman'], [150, 'rank_cook_expert'], [225, 'rank_cook_artisan']],
