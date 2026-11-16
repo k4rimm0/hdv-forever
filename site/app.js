@@ -70,6 +70,9 @@ const T = {
     ht_vendor_generic: 'Vendu chez les PNJ marchands (fournitures, cuisine…), par exemple en ville.', ht_mobs: 'Monstres qui le lâchent', ht_mob: 'Monstre', ht_zone: 'Zone', ht_rate: 'Taux de drop',
     ht_nodes: 'Ramassé sur', ht_map: 'Carte', ht_nomap: 'Carte en cours de téléchargement, réessaie après la prochaine mise à jour.',
     ht_map_help: 'Survole un point pour voir le nom, clique dessus pour le GPS (itinéraire depuis là où tu es). Clique sur la légende pour masquer ou afficher une source.',
+    rt_extra_title: 'À ramasser aussi sur le chemin', rt_bonus: 'Bonus possible en chemin (matériau Scarce) :', rt_extra_n: '{n} point(s) près de la route', rt_each: "l'unité",
+    rt_sold_day: 'ventes/jour', rt_extra_skill: 'ta compétence est trop basse pour celle-ci', rt_extra_none: 'Rien de connu à moins de quelques pas de cette route.',
+    rt_extra_help: 'Classées par valeur à ton HDV (prix × nombre de points près du chemin). Coche pour les ajouter : la route passe aussi par elles, avec leur couleur.',
     rt_btn: 'Route de farm', rt_title: 'Route de farm', rt_none: "Pas de points de récolte connus pour cette ressource.",
     rt_summary: 'Ta route', rt_points: '{n} arrêts dans {z}, en boucle.', rt_skipped: '{n} point(s) évité(s)',
     rt_gain: 'Optimisée : {p} % plus courte que de passer les points dans le désordre.', rt_start: 'Départ conseillé : <b>{s}</b> (le ▶ sur la carte).', rt_go_start: "M'y amener (GPS)",
@@ -164,6 +167,9 @@ const T = {
     ht_vendor_generic: 'Sold by merchant NPCs (trade supplies, cooking…), for example in cities.', ht_mobs: 'Mobs that drop it', ht_mob: 'Mob', ht_zone: 'Zone', ht_rate: 'Drop rate',
     ht_nodes: 'Gathered from', ht_map: 'Map', ht_nomap: 'Map is downloading, try again after the next update.',
     ht_map_help: 'Hover a dot to see the name, click it for the GPS (route from where you are). Click the legend to hide or show a source.',
+    rt_extra_title: 'Also pick up along the way', rt_bonus: 'Possible bonus on the way (Scarce material):', rt_extra_n: '{n} point(s) near the route', rt_each: 'each',
+    rt_sold_day: 'sold/day', rt_extra_skill: 'your skill is too low for this one', rt_extra_none: 'Nothing known within a few steps of this route.',
+    rt_extra_help: 'Ranked by value at your AH (price × points near the path). Tick to add them: the route also visits them, in their colour.',
     rt_btn: 'Farm route', rt_title: 'Farm route', rt_none: 'No known gathering points for this resource.',
     rt_summary: 'Your route', rt_points: '{n} stops in {z}, as a loop.', rt_skipped: '{n} point(s) skipped',
     rt_gain: 'Optimised: {p}% shorter than visiting the points in any order.', rt_start: 'Suggested start: <b>{s}</b> (the ▶ on the map).', rt_go_start: 'Take me there (GPS)',
@@ -593,7 +599,7 @@ async function viewItem(id) {
   drawWhereMap(S.farm && S.farm[id], 'wmap');
   S.recipes.filter(rc => rc.o === id).forEach(rc => drawWhereMap(recipeInfo(craftInfo(id, rc.p)), 'rmap_' + rc.id));
   bindWay(app());
-  if ($('#routeBtn')) $('#routeBtn').onclick = () => openRoute(id);
+  if ($('#routeBtn')) $('#routeBtn').onclick = async () => openRoute(id, await market(viewHouseId()));
   $('#watchBtn').onclick = () => {
     if (S.watch.some(w => w.id === id)) S.watch = S.watch.filter(w => w.id !== id); else S.watch.push({ id, buy: null, sell: null });
     store('hf_watch', JSON.stringify(S.watch)); viewItem(id); renderNav();
@@ -1259,15 +1265,41 @@ function zoneStart(zone, pts) {
   return { name: tw[0], x: tw[1], y: tw[2] };
 }
 function routeAvailable(id) { const rs = routeSources(id); return Object.keys(routePoints(rs.ids.concat(rs.maybe))).length > 0; }
-function openRoute(id) {
+// Distance d'un point à la route (segments), dans la même unité que rdist.
+function distToPath(p, path) {
+  let best = Infinity;
+  for (let i = 0; i < path.length - 1; i++) {
+    const a = path[i], b = path[i + 1];
+    const ax = a.x * MAP_ASPECT, ay = a.y, bx = b.x * MAP_ASPECT, by = b.y, px = p.x * MAP_ASPECT, py = p.y;
+    const dx = bx - ax, dy = by - ay, L = dx * dx + dy * dy;
+    const tt = L ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L)) : 0;
+    best = Math.min(best, Math.hypot(px - (ax + tt * dx), py - (ay + tt * dy)));
+  }
+  return best;
+}
+const NEAR_ROUTE = 3; // ≈ 3 % de la carte de chaque côté du chemin
+// Autres ressources qui ont des points le long de la route, classées par valeur (prix HDV × nombre de points).
+function routeExtras(zone, path, exclude, mk) {
+  const out = [];
+  for (const k of Object.keys(S.farm || {})) {
+    const sid = Number(k); if (exclude.includes(sid) || !S.items[sid]) continue;
+    const pts = (routePoints([sid])[zone]) || []; if (!pts.length) continue;
+    const near = routeCluster(pts.filter(p => distToPath(p, path) <= NEAR_ROUTE));
+    if (!near.length) continue;
+    const fi = farmInfo(sid); const r = mk && mk.items[sid]; const price = r ? r[MKT] : null;
+    out.push({ sid, n: near.length, price, value: (price || 0) * near.length, pd: r ? r[PD] : null, tooHigh: !!(fi && fi.tooHigh), kind: fi && fi.kind });
+  }
+  return out.sort((a, b) => (a.tooHigh - b.tooHigh) || (b.value - a.value) || (b.n - a.n)).slice(0, 8);
+}
+function openRoute(id, mk) {
   const rs = routeSources(id);
-  let useMaybe = false, cur = null; const excluded = new Set();
+  let useMaybe = false, cur = null; const excluded = new Set(); const added = new Set();
   let ov = $('#gps'); if (!ov) { ov = document.createElement('div'); ov.id = 'gps'; document.body.appendChild(ov); }
   const close = () => { ov.style.display = 'none'; ov.innerHTML = ''; document.body.style.overflow = ''; document.removeEventListener('keydown', esc_); };
   const esc_ = e => { if (e.key === 'Escape') close(); };
   document.addEventListener('keydown', esc_); document.body.style.overflow = 'hidden';
   const render = () => {
-    const all = useMaybe ? rs.ids.concat(rs.maybe) : rs.ids;
+    const all = (useMaybe ? rs.ids.concat(rs.maybe) : rs.ids).concat([...added]);
     // On retire les sources que ta compétence ne permet pas encore de récolter.
     const tooHigh = all.filter(s => { const fi = farmInfo(s); return fi && fi.tooHigh; });
     const ids = all.filter(s => !tooHigh.includes(s));
@@ -1282,8 +1314,15 @@ function openRoute(id) {
       const clusters = ranked.find(r => r[0] === cur)[1].filter(c => !excluded.has(c.x + ',' + c.y));
       const st = zoneStart(cur, clusters);
       const startPt = st ? { x: st.x, y: st.y } : null;
-      const tour = routeSolve(clusters, startPt);
+      // Le départ fait partie de la boucle pendant l'optimisation (sinon les segments vers lui peuvent se croiser).
+      let tour;
+      if (startPt && clusters.length) { const sp = { x: startPt.x, y: startPt.y, isStart: true }; const tt = routeSolve(clusters.concat([sp]), null); const k = tt.indexOf(sp); tour = tt.slice(k + 1).concat(tt.slice(0, k)); }
+      else tour = routeSolve(clusters, null);
       const naive = tourLen(clusters), opt = tourLen(tour);
+      const pathPts = startPt ? [startPt].concat(tour, [startPt]) : tour.concat(tour.length ? [tour[0]] : []);
+      const extras = routeExtras(cur, pathPts, ids.concat(tooHigh), mk);
+      const bonus = Object.entries(SCARCE).filter(([en, sc]) => en !== (S.items[id].n || {}).en && sc.src.some(x => ids.includes(x)))
+        .map(([en]) => Object.keys(S.items).find(k => S.items[k].n && S.items[k].n.en === en)).filter(Boolean);
       const path = startPt ? [startPt].concat(tour, [startPt]) : tour.concat(tour.length ? [tour[0]] : []);
       body = `<div class="gps-body"><div class="gps-route rt-mapcol">
         <div class="row" style="padding:8px 12px;gap:8px">${ranked.map(([z, c]) => `<button class="chip ${z === cur ? 'on' : ''}" data-rz="${esc(z)}">${zoneName(z)} <span class="dim">${c.length}</span></button>`).join('')}</div>
@@ -1300,6 +1339,12 @@ function openRoute(id) {
           ${st ? `<p>${t('rt_start', { s: esc(st.name) })} <button class="act" id="rtGps">🧭 ${t('rt_go_start')}</button></p>` : `<p class="note">${t('rt_no_town')}</p>`}
           <div class="row legend">${ids.map((s, i) => `<span class="chip on"><span class="dot" style="background:${ROUTE_COLORS[i % ROUTE_COLORS.length]}"></span>${esc(srcNames[i])}</span>`).join('')}</div>
           ${warn.length ? `<p class="note">⚠ ${t('rt_skill_warn')} ${warn.map(esc).join(', ')}</p>` : ''}
+          <h3>${t('rt_extra_title')}</h3>
+          ${bonus.length ? `<p>✨ ${t('rt_bonus')} ${bonus.map(b => `<a href="#/item/${b}">${esc(itemName(+b))}</a>`).join(', ')}</p>` : ''}
+          ${(extras.length || added.size) ? `<ul class="vlist rt-extra">${[...added].map(a => ({ sid: a, n: (routeCluster((routePoints([a])[cur]) || [])).length, price: mk && mk.items[a] ? mk.items[a][MKT] : null, pd: mk && mk.items[a] ? mk.items[a][PD] : null, tooHigh: false })).concat(extras).map(x => `<li class="${x.tooHigh ? 'dim' : ''}"><label><input type="checkbox" data-add="${x.sid}" ${added.has(x.sid) ? 'checked' : ''} ${x.tooHigh ? 'disabled' : ''}>
+              <b>${esc(itemName(x.sid))}</b></label> · ${t('rt_extra_n', { n: x.n })}${x.price ? ` · ${money(x.price)} ${t('rt_each')}` : ''}${x.pd ? ` · ${num(x.pd)} ${t('rt_sold_day')}` : ''}
+              ${x.tooHigh ? `<br><span class="small">${t('rt_extra_skill')}</span>` : ''}</li>`).join('')}</ul><p class="note">${t('rt_extra_help')}</p>`
+            : `<p class="muted">${t('rt_extra_none')}</p>`}
           <p class="note">${t('rt_help')}</p>
           <p class="note">${t('rt_limits')}</p>
         </div></div>`;
@@ -1311,6 +1356,7 @@ function openRoute(id) {
     ov.style.display = 'flex';
     $('#rtClose').onclick = close; if ($('#rtMaybe')) $('#rtMaybe').onchange = e => { useMaybe = e.target.checked; render(); };
     ov.querySelectorAll('[data-rz]').forEach(b => b.onclick = () => { cur = b.dataset.rz; excluded.clear(); render(); });
+    ov.querySelectorAll('[data-add]').forEach(cb => cb.onchange = () => { const k = Number(cb.dataset.add); cb.checked ? added.add(k) : added.delete(k); render(); });
     ov.querySelectorAll('[data-rx]').forEach(el => el.onclick = () => { const k = el.dataset.rx; excluded.has(k) ? excluded.delete(k) : excluded.add(k); render(); });
     if ($('#rtGps')) $('#rtGps').onclick = () => { const st = zoneStart(cur, routeCluster(routePoints(useMaybe ? rs.ids.concat(rs.maybe) : rs.ids)[cur])); close(); openGps([null, cur, [[st.name, 'v']], [[st.x, st.y, 0]]], [st.x, st.y, 0]); };
   };

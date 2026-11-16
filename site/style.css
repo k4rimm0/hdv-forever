@@ -168,3 +168,4 @@ a.vgps{color:inherit;text-decoration:none}a.vgps:hover b{text-decoration:underli
 .wz-ctl button{width:30px;height:30px;border-radius:6px;border:1px solid #c8a24a;background:rgba(20,14,8,.85);color:#ffd77a;font:700 17px/1 Inter,sans-serif;cursor:pointer}
 .wz-ctl button:hover{background:#3a2a12}
 .rl-out{stroke-width:calc(6px / var(--z,1))}.rl-in{stroke-width:calc(3px / var(--z,1))}
+.rt-extra li{font-size:14px}.rt-extra label{cursor:pointer}
