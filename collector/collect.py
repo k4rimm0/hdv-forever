@@ -642,18 +642,18 @@ class Collector:
             self.update_indexes(house["id"], items, idx_points)
 
         farm = self.v.read("state/farm", None)
-        stale = not farm or self.t - farm.get("t", 0) > 7 * 86400 or farm.get("v", 1) < 2
+        stale = not farm or self.t - farm.get("t", 0) > 7 * 86400 or farm.get("v", 1) < 3
         if stale and not os.environ.get("MOCK_API"):
             import requests
             from farm import collect as farm_collect
             got = farm_collect(items, requests, log, extra_ids=self.vendor_ids())
             if got:
-                farm = {"t": self.t, "v": 2, "items": got}
+                farm = {"t": self.t, "v": 3, "items": got}
             else:  # échec : on garde l'ancien et on réessaie dans un jour
                 farm = {"t": self.t - 6 * 86400, "items": (farm or {}).get("items", {})}
         elif stale:
             from mockapi import FARM
-            farm = {"t": self.t, "v": 2, "items": FARM}
+            farm = {"t": self.t, "v": 3, "items": FARM}
         farm = farm or {"t": 0, "items": {}}
         self.v.write("state/farm", farm)
         self.v.write("d/farm", farm["items"])
@@ -688,6 +688,15 @@ class Collector:
         pub_rec = copy.deepcopy(craft["r"])
         problems = validate(pub_farm, pub_rec, self.v.out, log) if not os.environ.get("MOCK_API") else []
         self.v.write("d/farm", pub_farm)
+        npcs = self.v.read("state/npcs", None) or {}
+        if not os.environ.get("MOCK_API"):
+            from farm import collect_npcs
+            npcs = collect_npcs(npcs, self._farm_items, requests, log, self.t, budget=int(os.environ.get("NPC_BUDGET", "400")))
+        else:
+            from mockapi import NPCS
+            npcs = npcs or NPCS
+        self.v.write("state/npcs", npcs)
+        self.v.write("d/npcs", {k: {k2: v2 for k2, v2 in v.items() if k2 != "t"} for k, v in npcs.items() if v.get("nm")})
         self.v.write("d/checks", {"t": self.t, "problems": problems[:200], "n": len(problems)})
         self.v.write("state/craft", craft)
         self.v.write("d/craft", {"o": {k: v.get("c", []) for k, v in craft["o"].items()},

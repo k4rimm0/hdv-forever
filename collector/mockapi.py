@@ -134,7 +134,7 @@ FARM = {
     "2447": {"m": [], "n": [["Peacebloom", ["Teldrassil", "Tirisfal Glades"], 4, 100.0]], "k": ["herb", 1]},
     "765": {"m": [], "n": [["Silverleaf", ["Tirisfal Glades", "Teldrassil"], 4, 100.0]], "k": ["herb", 1]},
     "2450": {"m": [], "n": [["Briarthorn", ["Westfall", "Silverpine Forest"], 4, 100.0]], "k": ["herb", 70]},
-    "2673": {"m": [["Coyote", 10, 11, "Westfall", 54.0, ""], ["Coyote Packleader", 11, 12, "Westfall", 51.0, ""]], "n": [],
+    "2673": {"m": [["Coyote", 10, 11, "Westfall", 54.0, ""], ["Coyote Packleader", 11, 12, "Westfall", 51.0, "", "coyote-packleader-833"]], "n": [],
              "p": [[1436, "Westfall", [["Coyote", "d"], ["Coyote Packleader", "d"]], [[46.4, 20.5, 1], [47.5, 14.8, 1], [62.3, 42.0, 1], [55, 30, 0], [58, 35, 0], [40, 50, 0], [44, 60, 0]]]]},
     "2678": {"m": [], "n": [], "b": "Buy Mild Spices from Tharynn Bouden in Elwynn Forest for 10c.", "vn": 66,
              "v": [["Tharynn Bouden", "a", "Trade Supplies", "Elwynn Forest", 41.8, 67.2, 10, 0], ["Banalash", "h", "Trade Goods", "Swamp of Sorrows", 44.8, 56.6, 10, 0], ["Kelsey Yance", "", "Cook", "Stranglethorn Vale", 28.2, 74.3, 10, 0]],
@@ -163,3 +163,7 @@ TOOLTIPS = {
              [{"en": "Requires Level 5", "fr": "Niveau 5 requis"}, ""]],
     "118": [[{"en": "Use: Restores 70 to 90 health.", "fr": "Utiliser : Rend 70 à 90 points de vie."}, "u"]],
 }
+
+NPCS = {"coyote-packleader-833": {"t": 0, "nm": "Coyote Packleader", "lv": [11, 12], "role": "Enemy", "zone": "Westfall", "sp": 22,
+  "p": [["Westfall", [[46.4, 20.5], [47.5, 14.8], [62.3, 42.0], [55, 30], [58, 35]]]],
+  "dr": [["Coyote Meat", "coyote-meat", 51.0, "1", "#FFFFFF"], ["Fractured Canine", "fractured-canine", 47.0, "1", "#9D9D9D"], ["Linen Cloth", "linen-cloth", 12.0, "1-2", "#FFFFFF"]]}}

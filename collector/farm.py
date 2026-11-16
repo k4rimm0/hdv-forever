@@ -98,6 +98,7 @@ def parse_page(html):
                 continue
             first = cells[0]
             name_m = re.search(r"<bdi>(.*?)</bdi>", first, flags=re.S)
+            npc_m = re.search(r'/npcs/([\w-]+)"', first)
             name = _text(name_m.group(1)) if name_m else _text(first)
             sub = re.search(r'class="[^"]*_sub"[^>]*>(.*?)</span>', first, flags=re.S)
             lv = re.search(r"(\d+)(?:–(\d+))?", _text(sub.group(1))) if sub else None
@@ -111,6 +112,7 @@ def parse_page(html):
                 "lmax": int(lv.group(2) or lv.group(1)) if lv else None, "elite": elite,
                 "zones": zones, "more": int(more.group(1)) if more else 0,
                 "pct": float(pc.group(1)) if pc else None, "qty": qty.group(1) if qty else "",
+                "npc": npc_m.group(1) if npc_m else "",
             })
         tables.setdefault(key, []).extend(rows)
     return desc, tables
@@ -182,7 +184,7 @@ def summarize(name, desc, tables, where=None):
             if r["elite"] or r["pct"] is None or r["name"] in seen or DUNGEONS.search(zone) or not r["zones"]:
                 continue
             seen.add(r["name"])
-            mobs.append([r["name"], r["lmin"], r["lmax"], r["zones"][0], r["pct"], r["qty"]])
+            mobs.append([r["name"], r["lmin"], r["lmax"], r["zones"][0], r["pct"], r["qty"], r.get("npc", "")])
     mobs.sort(key=lambda x: -x[4])
     nodes = []
     for r in tables.get("L", []):
@@ -387,3 +389,80 @@ def validate(farm_items, craft_recipes, out_dir, log):
     for p in problems[:15]:
         log("  -", p)
     return problems
+
+
+def parse_npc(html):
+    """Page monstre metabot : niveau, rôle, zone, points d'apparition, butin."""
+    info = {}
+    for dt, dd in re.findall(r"<dt[^>]*>(.*?)</dt>\s*<dd[^>]*>(.*?)</dd>", html, flags=re.S):
+        k, v = _text(dt).lower(), _text(dd)
+        if k and v and k not in info:
+            info[k] = v
+    t = re.search(r'<span class="[^"]*titleMain">(.*?)</span>', html, flags=re.S)
+    out = {"nm": _text(t.group(1)) if t else ""}
+    lv = re.search(r"(\d+)(?:–(\d+))?", info.get("level", ""))
+    if lv:
+        out["lv"] = [int(lv.group(1)), int(lv.group(2) or lv.group(1))]
+    for src, dst in (("role", "role"), ("zone", "zone"), ("location", "zone"), ("type", "type"), ("classification", "rank")):
+        if info.get(src) and dst not in out:
+            out[dst] = info[src][:60]
+    sp = re.search(r"(\d+)", info.get("spawn points", ""))
+    if sp:
+        out["sp"] = int(sp.group(1))
+    hero = html[html.find("<h1"):html.find("<h1") + 3000] if "<h1" in html else ""
+    if re.search(r">\s*(Elite|Rare Elite)\s*<", hero):
+        out["elite"] = 1
+    if re.search(r">\s*Rare(?: Elite)?\s*<", hero):
+        out["rare"] = 1
+    maps = []
+    for fig in re.findall(r"<figure.*?</figure>", html, flags=re.S):
+        cap = re.search(r"<figcaption[^>]*>(.*?)</figcaption>", fig, flags=re.S)
+        pins = [[float(x), float(y)] for x, y in re.findall(r'<span class="[^"]*Pin"[^>]*left:([\d.]+)%;top:([\d.]+)%', fig)]
+        if cap and pins:
+            maps.append([_text(cap.group(1)).split(":")[0], pins[:200]])
+    if maps:
+        out["p"] = maps
+    drops = []
+    for tbl in re.findall(r"<table.*?</table>", html, flags=re.S):
+        if "drops" not in tbl[:400]:
+            continue
+        for tr in re.findall(r"<tr>(.*?)</tr>", tbl, flags=re.S):
+            it = re.search(r'/items/([\w-]+)"', tr)
+            nm = re.search(r'_nameText">(.*?)</bdi>', tr, flags=re.S)
+            q = re.search(r"--q:(#[0-9A-Fa-f]{6})", tr)
+            pc = re.search(r"<b>([\d.]+)%</b>", tr)
+            qty = re.search(r'<bdi dir="ltr">([\d–]+)</bdi>', tr)
+            if it and nm and pc:
+                drops.append([_text(nm.group(1)), it.group(1), float(pc.group(1)), qty.group(1) if qty else "1", q.group(1) if q else ""])
+    if drops:
+        out["dr"] = drops[:40]
+    return out
+
+
+def collect_npcs(prev, farm_items, requests_mod, log, now, budget=400, delay=0.5):
+    """Fiches monstres, mises à jour petit à petit (au plus `budget` pages par passage, revues tous les 21 jours)."""
+    prev = dict(prev or {})
+    slugs = {m[6] for f in farm_items.values() for m in f.get("m", []) if len(m) > 6 and m[6]}
+    todo = sorted((s for s in slugs if now - prev.get(s, {}).get("t", 0) > 21 * 86400), key=lambda s: prev.get(s, {}).get("t", 0))
+    sess = requests_mod.Session()
+    sess.headers["User-Agent"] = UA
+    done = fails = 0
+    for sl in todo[:budget]:
+        try:
+            r = sess.get(f"https://metabot.gg/en/wow-forever/npcs/{sl}", timeout=30)
+            if r.status_code == 200:
+                d = parse_npc(r.text)
+                d["t"] = now
+                prev[sl] = d
+                done += 1
+            else:
+                fails += 1
+                prev[sl] = {"t": now - 18 * 86400}
+                if r.status_code in (403, 429) and fails > 5:
+                    break
+        except Exception as e:
+            fails += 1
+            log("monstre", sl, type(e).__name__)
+        time.sleep(delay)
+    log(f"monstres : {len(slugs)} connus, {done} pages lues, {fails} échecs, {max(0, len(todo) - budget)} restantes")
+    return prev

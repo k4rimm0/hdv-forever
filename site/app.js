@@ -73,6 +73,10 @@ const T = {
     rt_extra_title: 'À ramasser aussi sur le chemin', rt_bonus: 'Bonus possible en chemin (matériau Scarce) :', rt_extra_n: '{n} point(s) près de la route', rt_each: "l'unité",
     rt_sold_day: 'ventes/jour', rt_extra_skill: 'ta compétence est trop basse pour celle-ci', rt_extra_none: 'Rien de connu à moins de quelques pas de cette route.',
     rt_extra_help: 'Classées par valeur à ton HDV (prix × nombre de points près du chemin). Coche pour les ajouter : la route passe aussi par elles, avec leur couleur.',
+    mob_open: 'voir la fiche du monstre', mob_nomap: "Pas de position connue pour ce monstre.", mob_loop: 'Afficher une boucle de farm sur ses apparitions',
+    mob_map_help: "Chaque point rouge est un endroit où il apparaît. Clique dessus pour le GPS. Zoom à la molette.", mob_elite: 'Élite', mob_rare: 'Rare',
+    mob_card: 'Fiche', mob_level: 'Niveau', mob_role: 'Type', mob_enemy: 'Ennemi', mob_spawns: "Points d'apparition", mob_value: 'Valeur moyenne par monstre tué',
+    mob_drops: 'Butin', mob_price: 'Prix HDV', mob_vendor: 'PNJ', mob_value_help: "Valeur par monstre = somme de (chance × quantité × prix) de chaque objet : prix de ton HDV, ou prix de revente au PNJ pour les objets gris.",
     rt_btn: 'Route de farm', rt_title: 'Route de farm', rt_none: "Pas de points de récolte connus pour cette ressource.",
     rt_summary: 'Ta route', rt_points: '{n} arrêts dans {z}, en boucle.', rt_skipped: '{n} point(s) évité(s)',
     rt_gain: 'Optimisée : {p} % plus courte que de passer les points dans le désordre.', rt_start: 'Départ conseillé : <b>{s}</b> (le ▶ sur la carte).', rt_go_start: "M'y amener (GPS)",
@@ -170,6 +174,10 @@ const T = {
     rt_extra_title: 'Also pick up along the way', rt_bonus: 'Possible bonus on the way (Scarce material):', rt_extra_n: '{n} point(s) near the route', rt_each: 'each',
     rt_sold_day: 'sold/day', rt_extra_skill: 'your skill is too low for this one', rt_extra_none: 'Nothing known within a few steps of this route.',
     rt_extra_help: 'Ranked by value at your AH (price × points near the path). Tick to add them: the route also visits them, in their colour.',
+    mob_open: 'open the creature card', mob_nomap: 'No known position for this creature.', mob_loop: 'Show a farm loop over its spawns',
+    mob_map_help: 'Each red dot is a spawn point. Click it for the GPS. Scroll to zoom.', mob_elite: 'Elite', mob_rare: 'Rare',
+    mob_card: 'Card', mob_level: 'Level', mob_role: 'Type', mob_enemy: 'Enemy', mob_spawns: 'Spawn points', mob_value: 'Average value per kill',
+    mob_drops: 'Loot', mob_price: 'AH price', mob_vendor: 'vendor', mob_value_help: 'Value per kill = sum of (chance × quantity × price) of each item: your AH price, or vendor price for grey items.',
     rt_btn: 'Farm route', rt_title: 'Farm route', rt_none: 'No known gathering points for this resource.',
     rt_summary: 'Your route', rt_points: '{n} stops in {z}, as a loop.', rt_skipped: '{n} point(s) skipped',
     rt_gain: 'Optimised: {p}% shorter than visiting the points in any order.', rt_start: 'Suggested start: <b>{s}</b> (the ▶ on the map).', rt_go_start: 'Take me there (GPS)',
@@ -457,7 +465,7 @@ function farmInfo(id) {
   }
   if (f.f) parts.push(`<b>${t('sk_fish')}</b> · ${zoneName(f.f[0])} (${pctTxt(f.f[1])} ${t('of_catches')})`);
   if (!f.k && !f.f && f.n && f.n.length) parts.push(f.n.slice(0, 2).map(n => `${esc(n[0])} · ${n[1].map(zoneName).join(', ')} (${pctTxt(n[3])})`).join('<br>'));
-  if (!f.k && f.m && f.m.length) parts.push(f.m.slice(0, 2).map(m => `${esc(m[0])} <span class="dim">(${t('lvl_s')} ${m[1]}${m[2] !== m[1] ? '–' + m[2] : ''})</span> · ${zoneName(m[3])} · <b>${pctTxt(m[4])}</b>${m[5] ? ' ×' + m[5] : ''}`).join('<br>'));
+  if (!f.k && f.m && f.m.length) parts.push(f.m.slice(0, 2).map(m => `${mobLink(m[0], m[6])} <span class="dim">(${t('lvl_s')} ${m[1]}${m[2] !== m[1] ? '–' + m[2] : ''})</span> · ${zoneName(m[3])} · <b>${pctTxt(m[4])}</b>${m[5] ? ' ×' + m[5] : ''}`).join('<br>'));
   if (f.new && !parts.length) parts.push(`<span class="dim">${t('farm_new')}</span>`);
   if (!parts.length) return null;
   const myv = kind ? mySkills()[kind] : null;
@@ -982,7 +990,7 @@ function whereBlocks(f, boxId) {
   }
   if (f.m && f.m.length) {
     blocks.push(`<h3>${t('ht_mobs')}</h3><div class="tablewrap"><table class="t"><thead><tr><th>${t('ht_mob')}</th><th>${t('lvl_s')}</th><th>${t('ht_zone')}</th><th class="r">${t('ht_rate')}</th></tr></thead><tbody>
-      ${f.m.map(m => `<tr><td>${esc(m[0])}</td><td>${m[1] ?? ''}${m[2] && m[2] !== m[1] ? '–' + m[2] : ''}</td><td>${zoneName(m[3])}</td><td class="r"><b>${pctTxt(m[4])}</b>${m[5] ? ' <span class="dim">×' + m[5] + '</span>' : ''}</td></tr>`).join('')}
+      ${f.m.map(m => `<tr><td>${mobLink(m[0], m[6])}</td><td>${m[1] ?? ''}${m[2] && m[2] !== m[1] ? '–' + m[2] : ''}</td><td>${zoneName(m[3])}</td><td class="r"><b>${pctTxt(m[4])}</b>${m[5] ? ' <span class="dim">×' + m[5] + '</span>' : ''}</td></tr>`).join('')}
       </tbody></table></div>`);
   }
   if (f.n && f.n.length && !f.k) {
@@ -1415,6 +1423,101 @@ new MutationObserver(() => document.querySelectorAll('.wmap').forEach(enhanceMap
 // Position d'un clic sur une carte zoomée, en % de la carte.
 function mapPct(w, e) { const r = (w.querySelector('.wz') || w).getBoundingClientRect(); return [Math.round((e.clientX - r.left) / r.width * 1000) / 10, Math.round((e.clientY - r.top) / r.height * 1000) / 10]; }
 
+// ------------------------------------------------------------------ encyclopédie des monstres
+const mobLink = (name, slug) => `<a href="#" class="moblink" data-mob="${esc(JSON.stringify([name, slug || '']))}" title="${t('mob_open')}">${esc(name)}</a>`;
+function itemByEn(en) {
+  if (!S._byEn) { S._byEn = {}; for (const [k, m] of Object.entries(S.items)) if (m.n && m.n.en && !S._byEn[m.n.en]) S._byEn[m.n.en] = Number(k); }
+  return S._byEn[en] || null;
+}
+// Rassemble tout ce qu'on sait d'un monstre : sa fiche metabot (si elle existe) + ce que disent les objets qu'il lâche.
+function mobData(name, slug) {
+  const npc = (slug && S.npcs && S.npcs[slug]) || (S.npcs && Object.values(S.npcs).find(n => n.nm === name)) || null;
+  const d = { name, slug, lv: npc && npc.lv, zone: npc && npc.zone, role: npc && npc.role, sp: npc && npc.sp, elite: npc && npc.elite, rare: npc && npc.rare, maps: {}, drops: [] };
+  if (npc && npc.p) for (const [z, pts] of npc.p) d.maps[z] = pts.map(p => ({ x: p[0], y: p[1] }));
+  const seen = new Set();
+  if (npc && npc.dr) for (const [en, , pct, qty, col] of npc.dr) { const id = itemByEn(en); d.drops.push({ en, id, pct, qty, col }); seen.add(en); }
+  for (const [k, f] of Object.entries(S.farm || {})) {
+    for (const m of f.m || []) {
+      if (m[0] !== name) continue;
+      if (!d.lv && m[1]) d.lv = [m[1], m[2]];
+      if (!d.zone) d.zone = m[3];
+      const id = Number(k); const en = S.items[id] && S.items[id].n ? S.items[id].n.en : '';
+      if (!seen.has(en)) { d.drops.push({ en, id, pct: m[4], qty: m[5] || '1' }); seen.add(en); }
+    }
+    if (!Object.keys(d.maps).length || !npc) for (const [, zone, names, pins] of f.p || []) {
+      const ni = names.findIndex(n => n[0] === name && n[1] === 'd'); if (ni < 0) continue;
+      const arr = d.maps[zone] = d.maps[zone] || [];
+      for (const [x, y, i] of pins) if (i === ni && !arr.some(p => p.x === x && p.y === y)) arr.push({ x, y });
+    }
+  }
+  d.drops.sort((a, b) => b.pct - a.pct);
+  return d;
+}
+function qtyAvg(q) { const m = String(q || '1').match(/(\d+)(?:[–-](\d+))?/); return m ? (Number(m[1]) + Number(m[2] || m[1])) / 2 : 1; }
+async function openMob(name, slug) {
+  const mk = await market(viewHouseId());
+  const d = mobData(name, slug);
+  let ov = $('#gps'); if (!ov) { ov = document.createElement('div'); ov.id = 'gps'; document.body.appendChild(ov); }
+  const close = () => { ov.style.display = 'none'; ov.innerHTML = ''; document.body.style.overflow = ''; document.removeEventListener('keydown', esc_); };
+  const esc_ = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', esc_); document.body.style.overflow = 'hidden';
+  const zones = Object.keys(d.maps).sort((a, b) => d.maps[b].length - d.maps[a].length);
+  let cur = zones[0] || null, loop = false;
+  // Valeur moyenne d'un monstre tué : chaque objet × chance × quantité × prix (HDV, sinon prix de vente au PNJ).
+  let perKill = 0;
+  const rows = d.drops.map(x => {
+    const r = x.id && mk && mk.items[x.id]; const ah = r ? r[MKT] : null; const vendor = x.id && S.items[x.id] ? S.items[x.id].sp || 0 : 0;
+    const unit = ah || vendor || 0; const ev = unit * (x.pct / 100) * qtyAvg(x.qty); perKill += ev;
+    return { ...x, ah, vendor, ev };
+  });
+  const render = () => {
+    let mapHtml = `<p class="muted">${t('mob_nomap')}</p>`;
+    if (cur) {
+      const pts = d.maps[cur]; let path = '';
+      if (loop && pts.length > 2) { const tour = routeSolve(routeCluster(pts.map(p => ({ ...p, si: 0, nm: name }))), null); path = tour.concat([tour[0]]).map(p => p.x + ',' + p.y).join(' '); }
+      mapHtml = `${zones.length > 1 ? `<div class="row" style="margin-bottom:8px">${zones.map(z => `<button class="chip ${z === cur ? 'on' : ''}" data-mz="${esc(z)}">${zoneName(z)} <span class="dim">${d.maps[z].length}</span></button>`).join('')}</div>` : ''}
+        <div class="wmap rt-map" style="margin:0"><img src="maps/z_${zoneSlug(cur)}.jpg" alt="" onerror="this.parentNode.classList.add('nomap')"><div class="nomapmsg">${t('ht_nomap')}</div>
+        ${path ? `<svg viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="${path}" fill="none" stroke="#000" stroke-opacity=".75" vector-effect="non-scaling-stroke" class="rl-out"/><polyline points="${path}" fill="none" stroke="#ffd23f" vector-effect="non-scaling-stroke" class="rl-in"/></svg>` : ''}
+        ${pts.map((p, i) => `<span class="pin" style="left:${p.x}%;top:${p.y}%;background:#ff4d4d" data-mg="${i}" title="${esc(name)} (${p.x}, ${p.y}) · ${t('gps_click')}"></span>`).join('')}</div>
+        <div class="row" style="margin-top:8px"><label class="chk"><input type="checkbox" id="mobLoop" ${loop ? 'checked' : ''}> ${t('mob_loop')}</label></div>
+        <p class="note">${t('mob_map_help')}</p>`;
+    }
+    const tag = [d.elite ? `<span class="badge bad">${t('mob_elite')}</span>` : '', d.rare ? `<span class="badge warn">${t('mob_rare')}</span>` : ''].join(' ');
+    ov.innerHTML = `<div class="gps-box"><div class="gps-head"><div class="gps-dest">🐾 <b>${esc(name)}</b> ${tag}
+        <span class="dim">· ${d.lv ? t('lvl_s') + ' ' + d.lv[0] + (d.lv[1] && d.lv[1] !== d.lv[0] ? '–' + d.lv[1] : '') : ''}${d.zone ? ' · ' + zoneName(d.zone) : ''}</span></div>
+        <button class="act big" id="mobClose">✕</button></div>
+      <div class="gps-body"><div class="gps-route rt-mapcol" style="padding:12px">${mapHtml}</div>
+      <div class="gps-side">
+        <h3>${t('mob_card')}</h3>
+        <table class="t mobfacts"><tbody>
+          <tr><td>${t('mob_level')}</td><td>${d.lv ? d.lv[0] + (d.lv[1] !== d.lv[0] ? '–' + d.lv[1] : '') : '?'}</td></tr>
+          <tr><td>${t('ht_zone')}</td><td>${d.zone ? zoneName(d.zone) : '?'}</td></tr>
+          ${d.role ? `<tr><td>${t('mob_role')}</td><td>${esc(d.role === 'Enemy' ? t('mob_enemy') : d.role)}</td></tr>` : ''}
+          ${d.sp ? `<tr><td>${t('mob_spawns')}</td><td>${d.sp}</td></tr>` : ''}
+          <tr><td>${t('mob_value')}</td><td><b>${money(perKill)}</b></td></tr>
+        </tbody></table>
+        <h3>${t('mob_drops')} <span class="dim">(${rows.length})</span></h3>
+        <div class="tablewrap"><table class="t"><thead><tr><th>${t('col_item')}</th><th class="r">${t('ht_rate')}</th><th class="r">${t('mob_price')}</th></tr></thead><tbody>
+        ${rows.map(x => `<tr><td>${x.id ? itemCell(x.id, false) : `<span style="color:${x.col || '#fff'}">${esc(x.en)}</span>`}${x.qty && x.qty !== '1' ? ` <span class="dim">×${esc(x.qty)}</span>` : ''}</td>
+          <td class="r"><b>${pctTxt(x.pct)}</b></td><td class="r">${x.ah ? money(x.ah) : x.vendor ? `<span class="dim">${t('mob_vendor')} ${money(x.vendor)}</span>` : '–'}</td></tr>`).join('')}
+        </tbody></table></div>
+        <p class="note">${t('mob_value_help')}</p>
+        <p class="note">${t('farm_src_note')}</p>
+      </div></div></div>`;
+    ov.style.display = 'flex';
+    $('#mobClose').onclick = close;
+    ov.querySelectorAll('[data-mz]').forEach(b => b.onclick = () => { cur = b.dataset.mz; render(); });
+    if ($('#mobLoop')) $('#mobLoop').onchange = e => { loop = e.target.checked; render(); };
+    ov.querySelectorAll('[data-mg]').forEach(el => el.onclick = e => { e.stopPropagation(); const p = d.maps[cur][+el.dataset.mg]; close(); openGps([null, cur, [[name, 'd']], [[p.x, p.y, 0]]], [p.x, p.y, 0]); });
+    ov.querySelectorAll('a.it').forEach(a => a.addEventListener('click', close));
+  };
+  render();
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('[data-mob]'); if (!a) return;
+  e.preventDefault(); e.stopPropagation(); const [n, s] = JSON.parse(a.dataset.mob); openMob(n, s);
+});
+
 // ------------------------------------------------------------------ cadre
 function setLang(l) { S.lang = l; store('hf_lang', l); document.documentElement.lang = l; renderChrome(); route(); }
 async function renderNav() {
@@ -1472,6 +1575,7 @@ function setupSearch() {
 }
 async function start() {
   [S.items, S.recipes, S.vendor, S.farm, S.craft] = await Promise.all([load('items'), load('recipes'), load('vendor'), load('farm').catch(() => null), load('craft').catch(() => null)]);
+  load('npcs').then(x => { S.npcs = x || {}; }).catch(() => { S.npcs = {}; });
   S.items = S.items || {}; S.recipes = S.recipes || []; S.vendor = S.vendor || [];
   buildSearch();
   $('#lock').style.display = 'none';
