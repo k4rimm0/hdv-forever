@@ -622,6 +622,10 @@ class Collector:
             changed += 1
 
         items = self.v.read("state/items", {}) or {}
+        # Décrit aussi les objets des recettes (résultats et composants), même jamais vus à l'HDV.
+        for rc in ((self.v.read("state/recipes", None) or {}).get("list") or []):
+            all_ids.add(int(rc["o"]))
+            all_ids.update(int(r[0]) for r in rc.get("r") or [])
         self.update_items(items, sorted(all_ids))
         self.fill_icons(items)
         tt = self.update_tooltips(items, self.v.read("state/tt", None) or {})
