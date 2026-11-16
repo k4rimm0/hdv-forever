@@ -52,6 +52,9 @@ jobs:
       - name: Publication
         run: |
           cp site/* public/
+          # numéro de version sur app.js/style.css : le navigateur recharge le site dès qu'il change
+          V=$(sha1sum site/app.js site/style.css | sha1sum | cut -c1-10)
+          sed -i "s/app\.js\"/app.js?v=$V\"/; s/style\.css\"/style.css?v=$V\"/" public/index.html
           touch public/.nojekyll
           cd public
           git init -q
