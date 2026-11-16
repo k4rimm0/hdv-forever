@@ -296,6 +296,66 @@ class Collector:
         return {"lm": lm, "listing": listing}
 
     # ----- objets
+    def update_tooltips(self, items, tt, budget=4000):
+        """Infobulle façon jeu (effets « Utiliser : », stats, niveau requis…) depuis preview_item."""
+        todo = [k for k in items if not k.startswith("_") and k not in tt][:budget]
+        if not todo:
+            return tt
+        if os.environ.get("MOCK_API"):
+            from mockapi import TOOLTIPS
+            for k in todo:
+                tt[k] = TOOLTIPS.get(k, [])
+            return tt
+
+        def d2(x):
+            return loc((x or {}).get("display_string")) if isinstance(x, dict) and x.get("display_string") else None
+
+        def one(k):
+            for ns in ("static-forever", "static-classic1x", "static"):
+                st, d, _ = self.api.get(f"/data/wow/item/{k}", ns)
+                if st == 200 and d:
+                    break
+            else:
+                return k, None
+            p = d.get("preview_item") or {}
+            lines = []
+            def add(text, col=""):
+                if text and (text.get("en") or text.get("fr")):
+                    lines.append([text, col])
+            add(loc((p.get("binding") or {}).get("name")) if p.get("binding") else None)
+            add(loc(p.get("unique_equipped")) if p.get("unique_equipped") else None)
+            inv = (p.get("inventory_type") or {}).get("name")
+            if inv and (p.get("inventory_type") or {}).get("type") not in ("NON_EQUIP",):
+                add(loc(inv))
+            w = p.get("weapon") or {}
+            add(d2(w.get("damage")))
+            add(d2(w.get("attack_speed")))
+            add(d2(w.get("dps")))
+            add(d2((p.get("armor") or {}).get("display")))
+            for s in p.get("stats") or []:
+                add(d2(s.get("display")), "g" if s.get("is_negated") is False and (s.get("type") or {}).get("type", "").endswith("_RATING") else "")
+            for s in p.get("spells") or []:
+                add(loc(s.get("description")), "u")
+            add(d2((p.get("durability") or {})))
+            req = p.get("requirements") or {}
+            add(d2(req.get("level")))
+            add(d2(req.get("skill")))
+            add(d2(req.get("playable_classes")))
+            add(loc(p.get("crafting_reagent")) if p.get("crafting_reagent") else None, "b")
+            add(loc(p.get("description")) if p.get("description") else None, "y")
+            return k, lines
+
+        got = 0
+        with ThreadPoolExecutor(16) as ex:
+            for k, lines in ex.map(one, todo):
+                if lines is None:
+                    tt[k] = []
+                    continue
+                tt[k] = lines
+                got += bool(lines)
+        log(f"infobulles : {len(todo)} objets lus, {got} avec du texte, {sum(1 for k in items if not k.startswith('_') and k not in tt)} restants")
+        return tt
+
     def fill_icons(self, items):
         """Complète les icônes manquantes avec le catalogue de LifeOnAzeroth (une fois par jour au plus)."""
         missing = [k for k, m in items.items() if not k.startswith("_") and not m.get("ic")]
@@ -564,6 +624,9 @@ class Collector:
         items = self.v.read("state/items", {}) or {}
         self.update_items(items, sorted(all_ids))
         self.fill_icons(items)
+        tt = self.update_tooltips(items, self.v.read("state/tt", None) or {})
+        self.v.write("state/tt", tt)
+        self.v.write("d/tt", {k: v for k, v in tt.items() if v})
         self.v.write("state/items", items)
 
         for house in selected:

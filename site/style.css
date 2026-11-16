@@ -120,3 +120,7 @@ button.act{background:#3a2a15;border:1px solid var(--gold);color:var(--gold2);bo
 .tag.warn{border-color:#c88a2a;color:#ffc861}
 .grid.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}@media(max-width:800px){.grid.g3{grid-template-columns:1fr}}
 .panel hr{border:0;border-top:1px solid #3a2e1c;margin:14px 0}
+
+#itt{position:fixed;display:none;z-index:200;max-width:320px;background:rgba(8,10,24,.96);border:1px solid #6b6b8f;border-radius:6px;padding:8px 10px;font-size:13px;line-height:1.4;pointer-events:none;box-shadow:0 4px 16px #000}
+#itt .tt-name{font-weight:700;font-size:14px;margin-bottom:2px}#itt .tt-sell{color:#fff;margin-top:4px}
+.ttpanel div{line-height:1.5}

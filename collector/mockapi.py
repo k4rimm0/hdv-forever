@@ -157,3 +157,9 @@ CRAFT = {
             "p": [[1435, "Swamp of Sorrows", [["Ulthir", "v"]], [[62.0, 42.0, 0]]]]},
     },
 }
+
+TOOLTIPS = {
+    "2684": [[{"en": "Use: Restores 58 health over 21 sec. Must remain seated while eating.", "fr": "Utiliser : Rend 58 points de vie en 21 sec. Vous devez rester assis pendant que vous mangez."}, "u"],
+             [{"en": "Requires Level 5", "fr": "Niveau 5 requis"}, ""]],
+    "118": [[{"en": "Use: Restores 70 to 90 health.", "fr": "Utiliser : Rend 70 à 90 points de vie."}, "u"]],
+}

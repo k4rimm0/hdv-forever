@@ -63,6 +63,7 @@ const T = {
     pr_adv_noskill: 'Entre ton niveau en {p} juste au-dessus pour avoir des conseils adaptés.',
     pr_note: "Niveaux et sources des recettes : metabot.gg (données du jeu et de Classic). Revu toutes les deux semaines. Données de Classic : Forever a pu en changer quelques-unes.", pr_free: 'gratuit (rentable)', _x: "",
     pr_craft_title: 'Fabrication', pr_trainer_long: "S'apprend chez l'entraîneur du métier (en ville).", pr_ah_long: "Prix de la recette à l'HDV :", pr_ah_none: "Recette pas en vente à l'HDV en ce moment.",
+    tt_sell: 'Prix de vente :', tt_none: 'Pas encore de description (chargée au fil des mises à jour).', item_effect: 'Effet',
     ht_title: "Comment l'obtenir", ht_vendors: 'Vendu par', ht_neutral: 'Neutre', ht_limited: 'stock limité', ht_more_vendors: '+{n} autres vendeurs (les plus proches de chez toi peuvent ne pas être listés).',
     ht_vendor_generic: 'Vendu chez les PNJ marchands (fournitures, cuisine…), par exemple en ville.', ht_mobs: 'Monstres qui le lâchent', ht_mob: 'Monstre', ht_zone: 'Zone', ht_rate: 'Taux de drop',
     ht_nodes: 'Ramassé sur', ht_map: 'Carte', ht_nomap: 'Carte en cours de téléchargement, réessaie après la prochaine mise à jour.',
@@ -135,6 +136,7 @@ const T = {
     pr_adv_noskill: 'Enter your {p} skill above for tailored advice.',
     pr_note: 'Skill levels and recipe sources: metabot.gg (game and Classic data). Refreshed every two weeks. Classic data: Forever may have changed a few.', pr_free: 'free (profitable)', _x: '',
     pr_craft_title: 'Crafting', pr_trainer_long: 'Learned from the profession trainer (in cities).', pr_ah_long: 'Recipe price on the AH:', pr_ah_none: 'Recipe not on the AH right now.',
+    tt_sell: 'Sell price:', tt_none: 'No description yet (loaded over the next updates).', item_effect: 'Effect',
     ht_title: 'How to get it', ht_vendors: 'Sold by', ht_neutral: 'Neutral', ht_limited: 'limited stock', ht_more_vendors: '+{n} more vendors (ones near you may not be listed).',
     ht_vendor_generic: 'Sold by merchant NPCs (trade supplies, cooking…), for example in cities.', ht_mobs: 'Mobs that drop it', ht_mob: 'Mob', ht_zone: 'Zone', ht_rate: 'Drop rate',
     ht_nodes: 'Gathered from', ht_map: 'Map', ht_nomap: 'Map is downloading, try again after the next update.',
@@ -527,7 +529,7 @@ async function viewItem(id) {
   const watching = S.watch.some(w => w.id === id);
   app().innerHTML = `
     <div class="hero"><div class="row">
-      <img src="${icon(id)}" style="width:56px;height:56px;border-radius:8px;border:1px solid #000" alt="">
+      <img src="${icon(id)}" data-tt="${id}" style="width:56px;height:56px;border-radius:8px;border:1px solid #000" alt="">
       <div><h1 class="q-${meta.q}" style="font-family:Cinzel,serif">${esc(itemName(id))}</h1>
       <p>${esc(itemAlt(id))} · ${esc(meta.cn[S.lang] || '')} / ${esc(meta.scn[S.lang] || '')} · ${t('item_ilvl')} ${meta.il}${meta.rl ? ' · ' + t('item_req') + ' ' + meta.rl : ''}</p></div>
       <div style="margin-left:auto"><button class="act" id="watchBtn">${watching ? t('watch_on') : t('watch_add')}</button></div></div></div>
@@ -537,11 +539,14 @@ async function viewItem(id) {
       <div class="kpi"><div class="l">${t('col_pd')}</div><div class="v">${num(r[PD], 1)}</div><div class="s">${r[PD] == null ? t('unknown') : t('est')} · ${num(r[QTY])} ${t('col_qty').toLowerCase()}</div></div>
       <div class="kpi"><div class="l">${t('item_vendor_sell')}</div><div class="v">${money(meta.sp || null)}</div><div class="s">${vb ? t('item_vendor_buy') + ' ' + money(vb) : ''}</div></div>
     </div>
+    <div id="effect"></div>
     <div class="panel"><div class="row spread"><h2>${t('item_chart')}</h2><div id="per"></div></div><div class="chart" id="ch"></div><div id="lg"></div></div>
     ${craftPanelHtml(id) ? `<div class="panel"><h2>${t('pr_craft_title')}</h2>${craftPanelHtml(id)}</div>` : ''}
     ${howToHtml(id) ? `<div class="panel"><h2>${t('ht_title')}</h2>${howToHtml(id)}</div>` : ''}
     <div class="panel"><h2>${t('item_houses')}</h2><div id="hs"></div></div>
     <div class="grid g2"><div class="panel"><h2>${t('item_made_by')}</h2><div id="mk"></div></div><div class="panel"><h2>${t('item_used_in')}</h2><div id="us"></div></div></div>`;
+  (S.tt ? Promise.resolve(S.tt) : load('tt').catch(() => null)).then(x => { S.tt = x || {}; const l = ttLines(id); const el = $('#effect');
+    if (el && l.length) el.innerHTML = `<div class="panel ttpanel"><h2>${t('item_effect')}</h2>${l.map(([x, c]) => `<div style="color:${TTCOL[c] || '#fff'}">${esc(x)}</div>`).join('')}</div>`; });
   drawWhereMap(S.farm && S.farm[id], 'wmap');
   S.recipes.filter(rc => rc.o === id).forEach(rc => drawWhereMap(recipeInfo(craftInfo(id, rc.p)), 'rmap_' + rc.id));
   bindWay(app());
@@ -978,6 +983,42 @@ async function viewBestiary() {
   draw();
 }
 
+
+// ------------------------------------------------------------------ infobulle façon jeu
+const QCOL = { POOR: '#9d9d9d', COMMON: '#ffffff', UNCOMMON: '#1eff00', RARE: '#0070dd', EPIC: '#a335ee', LEGENDARY: '#ff8000' };
+const TTCOL = { u: '#1eff00', g: '#1eff00', y: '#ffd100', b: '#71d5ff', '': '#ffffff' };
+function ttLines(id) { const tt = S.tt && S.tt[id]; return (tt || []).map(([txt, c]) => [txt[S.lang] || txt.en, c]); }
+function ttHtml(id) {
+  const m = S.items[id]; if (!m) return '';
+  const lines = ttLines(id);
+  return `<div class="tt-name" style="color:${QCOL[m.q] || '#fff'}">${esc(itemName(id))}</div>
+    ${lines.map(([x, c]) => `<div style="color:${TTCOL[c] || '#fff'}">${esc(x)}</div>`).join('')}
+    ${!lines.length && S.tt ? `<div class="dim">${t('tt_none')}</div>` : ''}
+    ${m.sp ? `<div class="tt-sell">${t('tt_sell')} ${money(m.sp)}</div>` : ''}`;
+}
+function setupTooltips() {
+  if (!window.matchMedia('(hover: hover)').matches) return;
+  const box = document.createElement('div'); box.id = 'itt'; document.body.appendChild(box);
+  let cur = null;
+  const place = e => {
+    const w = box.offsetWidth, h = box.offsetHeight;
+    let x = e.clientX + 16, y = e.clientY + 16;
+    if (x + w > innerWidth - 8) x = e.clientX - w - 16;
+    if (y + h > innerHeight - 8) y = Math.max(8, innerHeight - h - 8);
+    box.style.left = x + 'px'; box.style.top = y + 'px';
+  };
+  document.addEventListener('mouseover', async e => {
+    const a = e.target.closest && e.target.closest('a[href^="#/item/"], [data-tt]');
+    if (!a) { if (cur) { box.style.display = 'none'; cur = null; } return; }
+    const id = Number(a.dataset.tt || a.getAttribute('href').split('/')[2]);
+    if (!id || id === cur) return;
+    cur = id;
+    if (!S.tt) { load('tt').then(x => { S.tt = x || {}; if (cur === id) { box.innerHTML = ttHtml(id); } }).catch(() => { S.tt = {}; }); }
+    box.innerHTML = ttHtml(id); box.style.display = 'block'; place(e);
+  });
+  document.addEventListener('mousemove', e => { if (cur) place(e); });
+}
+
 // ------------------------------------------------------------------ cadre
 function setLang(l) { S.lang = l; store('hf_lang', l); document.documentElement.lang = l; renderChrome(); route(); }
 async function renderNav() {
@@ -1038,7 +1079,7 @@ async function start() {
   S.items = S.items || {}; S.recipes = S.recipes || []; S.vendor = S.vendor || [];
   buildSearch();
   $('#lock').style.display = 'none';
-  renderChrome(); setupSearch(); route();
+  renderChrome(); setupSearch(); setupTooltips(); route();
 }
 async function boot() {
   document.documentElement.lang = S.lang;
