@@ -1368,7 +1368,7 @@ function openRoute(id, mk) {
 // Molette ou boutons +/- pour zoomer, glisser pour se déplacer, double-clic pour zoomer, pincer sur téléphone.
 // Les points gardent leur taille. Le zoom est conservé quand la même carte est redessinée (ex. point évité).
 const ZOOM_MEM = new Map();
-const HD_BASE = 'https://cdn.jsdelivr.net/gh/k4rimm0/hdv-forever@main/maps_hd/';
+const HD_BASE = 'https://raw.githubusercontent.com/k4rimm0/hdv-forever/main/maps_hd/';
 function enhanceMap(w) {
   if (w.querySelector(':scope > .wz')) return;
   const img = w.querySelector(':scope > img'); if (!img) return;
