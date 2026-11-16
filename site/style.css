@@ -59,7 +59,11 @@ tr:hover td{background:#1f160d}
 .q-POOR{color:var(--q0)} .q-COMMON{color:var(--q1)} .q-UNCOMMON{color:var(--q2)} .q-RARE{color:var(--q3)} .q-EPIC{color:var(--q4)} .q-LEGENDARY{color:var(--q5)}
 .up{color:var(--up)} .down{color:var(--down)} .muted{color:var(--muted)} .dim{color:var(--dim)}
 .money{font-variant-numeric:tabular-nums}
-.money .g{color:#ffd24a} .money .s{color:#d7d7d7} .money .c{color:#d8884a}
+.money .g,.money .s,.money .c{color:inherit;white-space:nowrap}
+.coin{display:inline-block;width:.78em;height:.78em;border-radius:50%;margin-left:2px;vertical-align:-.06em;border:1px solid rgba(0,0,0,.6);box-shadow:inset -1px -1px 0 rgba(0,0,0,.25),inset 1px 1px 0 rgba(255,255,255,.45)}
+.coin.g{background:radial-gradient(circle at 35% 30%,#fff3b0,#f2c94c 45%,#b8860b)}
+.coin.s{background:radial-gradient(circle at 35% 30%,#ffffff,#c9ccd1 45%,#7d838c)}
+.coin.c{background:radial-gradient(circle at 35% 30%,#ffd2a8,#c87533 45%,#7a3f14)}
 .badge{display:inline-block;padding:1px 7px;border-radius:6px;font-size:12px;border:1px solid var(--line2);color:var(--muted)}
 .badge.good{border-color:#3f7a3f;color:var(--up)} .badge.warn{border-color:#8a6a2a;color:var(--gold2)} .badge.bad{border-color:#7a3a33;color:var(--down)}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -124,3 +128,4 @@ button.act{background:#3a2a15;border:1px solid var(--gold);color:var(--gold2);bo
 #itt{position:fixed;display:none;z-index:200;max-width:320px;background:rgba(8,10,24,.96);border:1px solid #6b6b8f;border-radius:6px;padding:8px 10px;font-size:13px;line-height:1.4;pointer-events:none;box-shadow:0 4px 16px #000}
 #itt .tt-name{font-weight:700;font-size:14px;margin-bottom:2px}#itt .tt-sell{color:#fff;margin-top:4px}
 .ttpanel div{line-height:1.5}
+.kpi .money .s,.kpi .money .g,.kpi .money .c{font-size:inherit;color:inherit}

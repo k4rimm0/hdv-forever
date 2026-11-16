@@ -49,7 +49,7 @@ const T = {
     alerts: 'alertes', settings_title: 'Réglages', my_houses: 'Mes HDV', my_houses_help: 'Blizzard publie 5 HDV par faction (un par ensemble de règles), sans dire lequel est lequel. Choisis les tiens, ou utilise l’outil ci-dessous pour les retrouver.',
     find_house: 'Retrouver mon HDV', find_help: 'Choisis un objet courant, regarde en jeu son prix le moins cher, et entre-le : les HDV les plus proches s’affichent.',
     price_seen: 'Prix vu en jeu (en pièces de cuivre, ex. 1 po 2 pa = 10200)', logout: 'Se déconnecter', language: 'Langue',
-    gold_s: 'po', silver_s: 'pa', copper_s: 'pc', ago: 'il y a', min_s: 'min', h_s: 'h',
+    gold_w: 'or', silver_w: 'argent', copper_w: 'cuivre', gold_s: 'po', silver_s: 'pa', copper_s: 'pc', ago: 'il y a', min_s: 'min', h_s: 'h',
     cat_ALL: 'Tout le marché', cat_TRADE: 'Artisanat', cat_CONS: 'Consommables', cat_GEAR: 'Équipement', cat_RECIPE: 'Recettes',
     cat_CLOTH: 'Tissu', cat_LEATHER: 'Cuir', cat_ORE: 'Minerai et barres', cat_MEAT: 'Viande et poisson', cat_HERB: 'Herbes',
     cat_ELEM: 'Élémentaire', cat_ENCH: 'Enchantement', cat_POT: 'Potions', cat_ELIX: 'Élixirs', cat_SCROLL: 'Parchemins', cat_FOOD: 'Nourriture', cat_BAND: 'Bandages',
@@ -122,7 +122,7 @@ const T = {
     alerts: 'alerts', settings_title: 'Settings', my_houses: 'My auction houses', my_houses_help: 'Blizzard publishes 5 houses per faction (one per ruleset) without saying which is which. Pick yours, or use the tool below to find them.',
     find_house: 'Find my house', find_help: 'Pick a common item, check its cheapest price in game, and enter it: the closest houses are listed.',
     price_seen: 'Price seen in game (in copper, e.g. 1g 2s = 10200)', logout: 'Log out', language: 'Language',
-    gold_s: 'g', silver_s: 's', copper_s: 'c', ago: '', min_s: 'min', h_s: 'h',
+    gold_w: 'gold', silver_w: 'silver', copper_w: 'copper', gold_s: 'g', silver_s: 's', copper_s: 'c', ago: '', min_s: 'min', h_s: 'h',
     cat_ALL: 'Whole market', cat_TRADE: 'Trade goods', cat_CONS: 'Consumables', cat_GEAR: 'Gear', cat_RECIPE: 'Recipes',
     cat_CLOTH: 'Cloth', cat_LEATHER: 'Leather', cat_ORE: 'Ore & bars', cat_MEAT: 'Meat & fish', cat_HERB: 'Herbs',
     cat_ELEM: 'Elemental', cat_ENCH: 'Enchanting', cat_POT: 'Potions', cat_ELIX: 'Elixirs', cat_SCROLL: 'Scrolls', cat_FOOD: 'Food & drink', cat_BAND: 'Bandages',
@@ -244,17 +244,17 @@ function money(c, opts = {}) {
   const g = Math.floor(c / 10000), s = Math.floor((c % 10000) / 100), cp = c % 100;
   const parts = [];
   if (g) {
-    parts.push(`<span class="g">${g.toLocaleString(S.lang)}${t('gold_s')}</span>`);
-    if (!(opts.short && g >= 100)) parts.push(`<span class="s">${s}${t('silver_s')}</span>`);
+    parts.push(`<span class="g">${g.toLocaleString(S.lang)}<i class="coin g" title="${t('gold_w')}"></i></span>`);
+    if (!(opts.short && g >= 100)) parts.push(`<span class="s">${s}<i class="coin s" title="${t('silver_w')}"></i></span>`);
   } else if (s) {
-    parts.push(`<span class="s">${s}${t('silver_s')}</span>`);
-    if (cp) parts.push(`<span class="c">${cp}${t('copper_s')}</span>`);
+    parts.push(`<span class="s">${s}<i class="coin s" title="${t('silver_w')}"></i></span>`);
+    if (cp) parts.push(`<span class="c">${cp}<i class="coin c" title="${t('copper_w')}"></i></span>`);
   } else {
-    parts.push(`<span class="c">${cp}${t('copper_s')}</span>`);
+    parts.push(`<span class="c">${cp}<i class="coin c" title="${t('copper_w')}"></i></span>`);
   }
   return `<span class="money">${neg ? '−' : ''}${parts.join(' ')}</span>`;
 }
-function gold(c) { return c == null ? '–' : (c / 10000).toLocaleString(S.lang, { maximumFractionDigits: c >= 1e8 ? 0 : 1 }) + ' ' + t('gold_s'); }
+function gold(c) { return c == null ? '–' : `<span class="money"><span class="g">${(c / 10000).toLocaleString(S.lang, { maximumFractionDigits: c >= 1e8 ? 0 : 1 })}<i class="coin g"></i></span></span>`; }
 function num(n, d = 0) { return n == null ? '<span class="dim">–</span>' : Number(n).toLocaleString(S.lang, { maximumFractionDigits: d }); }
 function pctf(v) {
   if (v == null) return '<span class="dim">–</span>';
@@ -325,9 +325,10 @@ function chart(el, series, opts = {}) {
   if (y0 === y1) { y0 *= 0.9; y1 = y1 * 1.1 + 1; }
   const pad = (y1 - y0) * 0.08; y0 = Math.max(0, y0 - pad); y1 += pad;
   const X = x => P.l + (x - x0) / Math.max(1, x1 - x0) * (W - P.l - P.r), Y = y => H - P.b - (y - y0) / (y1 - y0) * (H - P.t - P.b);
-  const fmtY = v => opts.money ? (v >= 10000 ? (v / 10000).toFixed(v >= 1e5 ? 0 : 1) + t('gold_s') : v >= 100 ? (v / 100).toFixed(0) + t('silver_s') : Math.round(v) + t('copper_s')) : v.toFixed(1);
+  const COINC = { g: '#f2c94c', s: '#c9ccd1', c: '#c87533' };
+  const fmtY = v => opts.money ? (v >= 10000 ? [(v / 10000).toFixed(v >= 1e5 ? 0 : 1), 'g'] : v >= 100 ? [(v / 100).toFixed(v < 1000 ? 1 : 0), 's'] : [Math.round(v), 'c']) : [v.toFixed(1), null];
   let g = '';
-  for (let i = 0; i <= 4; i++) { const v = y0 + (y1 - y0) * i / 4; g += `<line x1="${P.l}" x2="${W - P.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#2c2215"/><text x="${P.l - 6}" y="${Y(v) + 4}" fill="#a8987a" font-size="11" text-anchor="end">${fmtY(v)}</text>`; }
+  for (let i = 0; i <= 4; i++) { const v = y0 + (y1 - y0) * i / 4; g += `<line x1="${P.l}" x2="${W - P.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#2c2215"/>${(() => { const [n, k] = fmtY(v); return k ? `<text x="${P.l - 14}" y="${Y(v) + 4}" fill="#a8987a" font-size="11" text-anchor="end">${n}</text><circle cx="${P.l - 8}" cy="${Y(v)}" r="3.5" fill="${COINC[k]}" stroke="#000" stroke-width=".8"/>` : `<text x="${P.l - 6}" y="${Y(v) + 4}" fill="#a8987a" font-size="11" text-anchor="end">${n}</text>`; })()}`; }
   for (let i = 0; i <= 4; i++) { const x = x0 + (x1 - x0) * i / 4; const d = new Date(x * 1000); const lab = (x1 - x0) > 4 * 86400 ? d.toLocaleDateString(S.lang, { day: 'numeric', month: 'short' }) : d.toLocaleString(S.lang, { weekday: 'short', hour: '2-digit' }); g += `<text x="${X(x)}" y="${H - 6}" fill="#a8987a" font-size="11" text-anchor="middle">${lab}</text>`; }
   const lines = series.map((s, i) => {
     let d = '', pen = false;
