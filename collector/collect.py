@@ -688,6 +688,11 @@ class Collector:
         pub_rec = copy.deepcopy(craft["r"])
         problems = validate(pub_farm, pub_rec, self.v.out, log) if not os.environ.get("MOCK_API") else []
         self.v.write("d/farm", pub_farm)
+        if not os.environ.get("MOCK_API"):
+            from farm import collect_wfb
+            wfb = collect_wfb(self.v.read("state/wfb", None), items, requests, log, self.t)
+            self.v.write("state/wfb", wfb)
+            self.v.write("d/wfb", wfb.get("p", {}))
         npcs = self.v.read("state/npcs", None) or {}
         if not os.environ.get("MOCK_API"):
             from farm import collect_npcs

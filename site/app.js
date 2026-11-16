@@ -59,7 +59,7 @@ const T = {
     gd_total: 'Coût total estimé', gd_total_s: 'de {a} à {b}, composants + recettes', gd_steps: 'Étapes', gd_crafts: '{n} fabrications au total', gd_recipes: 'Recettes à acheter', gd_recipes_s: 'déjà compris dans le total',
     gd_range: 'Niveaux', gd_recipe: 'Recette', gd_n: 'Nombre', gd_mats: 'Composants (total)', gd_learn: "Où l'apprendre", gd_at: 'à', gd_shop: 'Liste de courses',
     gd_qty: 'Quantité', gd_unit: "Prix à l'unité", gd_where: 'Où', gd_vendor: 'PNJ (moins cher)', gd_ah: 'HDV', gd_resale: 'Compter la revente des objets fabriqués (moitié du prix HDV)',
-    gd_gap: 'À partir de {s}, aucune recette connue avec des prix à ton HDV : regarde le guide de référence.',
+    gd_gap: 'À partir de {s}, aucune recette connue avec des prix à ton HDV : regarde le guide de référence.', gd_gap2: 'De {s} à {e} : aucune recette ne fait monter à ce niveau avec les prix actuels.', gd_gap_mining: 'Continue en minant (guide du dessus).',
     gd_note: "Les nombres de fabrications sont des moyennes (la chance de gagner un point baisse quand la recette passe au jaune puis au vert). Les prix bougent : recharge la page avant d'acheter.",
     gd_ref: 'Guide de référence (en anglais), pour comparer :',
     rank_journeyman: "palier bloqué : entraîne Compagnon chez ton maître de métier (possible dès 50).",
@@ -174,7 +174,7 @@ const T = {
     gd_total: 'Estimated total cost', gd_total_s: 'from {a} to {b}, reagents + recipes', gd_steps: 'Steps', gd_crafts: '{n} crafts in total', gd_recipes: 'Recipes to buy', gd_recipes_s: 'already in the total',
     gd_range: 'Skill', gd_recipe: 'Recipe', gd_n: 'Count', gd_mats: 'Reagents (total)', gd_learn: 'Where to learn', gd_at: 'at', gd_shop: 'Shopping list',
     gd_qty: 'Quantity', gd_unit: 'Unit price', gd_where: 'Where', gd_vendor: 'vendor (cheaper)', gd_ah: 'AH', gd_resale: 'Count resale of crafted items (half AH price)',
-    gd_gap: 'From {s}, no known recipe with prices at your AH: check the reference guide.',
+    gd_gap: 'From {s}, no known recipe with prices at your AH: check the reference guide.', gd_gap2: 'From {s} to {e}: no recipe gives points at this skill with current prices.', gd_gap_mining: 'Keep mining (guide above).',
     gd_note: 'Craft counts are averages (skill-up chance drops as the recipe turns yellow then green). Prices move: reload before buying.',
     gd_ref: 'Reference guide, to compare:',
     rank_journeyman: 'cap reached: train Journeyman at your trainer (from 50).', rank_expert: 'cap reached: train Expert at your trainer (from 125).',
@@ -357,12 +357,13 @@ document.addEventListener('error', e => {
 function itemCell(id, withAlt = true) {
   const m = S.items[id];
   const alt = withAlt ? itemAlt(id) : '';
+  if (m && m.virt) return `<span class="it"><img loading="lazy" src="${icon(id)}" alt=""><span><span class="q-COMMON">${esc(itemName(id))}</span></span></span>`;
   return `<a class="it" href="#/item/${id}"><img loading="lazy" src="${icon(id)}" alt=""><span><span class="q-${m ? m.q : 'COMMON'}">${esc(itemName(id))}</span>${alt ? `<br><span class="alt">${esc(alt)}</span>` : ''}</span></a>`;
 }
 const norm = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[’']/g, "'");
 let searchIndex = null;
 function buildSearch() {
-  searchIndex = Object.entries(S.items).map(([id, m]) => [Number(id), norm(m.n.fr), norm(m.n.en)]);
+  searchIndex = Object.entries(S.items).filter(([, m]) => !m.virt).map(([id, m]) => [Number(id), norm(m.n.fr), norm(m.n.en)]);
 }
 function search(q, limit = 50) {
   const words = norm(q).split(/\s+/).filter(Boolean);
@@ -727,10 +728,55 @@ function craftCost(rc, items, vs) {
 }
 // ------------------------------------------------------------------ métiers
 const PF_SLUG = p => String(p || '').toLowerCase().replace(/\s+/g, '-');
-function craftInfo(outId, prof) {
+function craftInfoMb(outId, prof) {
   const c = S.craft && S.craft.o && S.craft.o[outId];
   if (!c || !c.length) return null;
   return c.find(e => e.pf === PF_SLUG(prof)) || c[0];
+}
+// Niveaux des recettes : 2e source (wowforeverbuilds, tirée du client de Forever), fusionnée avec metabot.
+// Jaune/vert/gris viennent du client ; le niveau d'apprentissage de metabot sert quand le client ne le donne pas.
+const CI_CACHE = new Map();
+function craftInfo(outId, prof) {
+  const k = prof + '|' + outId; if (CI_CACHE.has(k)) return CI_CACHE.get(k);
+  const ci = craftInfoMb(outId, prof);
+  const w = S._wfb && S._wfb[prof] ? S._wfb[prof].get(outId) : null;
+  let r = ci;
+  if (w && w.sk && w.sk[1] != null) {
+    const y = w.sk[1]; const mbl = ci && ci.sk ? ci.sk[0] : null;
+    const learn = w.sk[0] != null ? w.sk[0] : mbl != null ? Math.min(mbl, y) : y;
+    const tr = w.src === 'Trainer' || !!(ci && ci.tr);
+    const rn = ci && ci.rn ? ci.rn : (!tr && w.src ? w.src.replace(/^[^:]+:\s*/, '') : '');
+    r = Object.assign({}, ci || {}, { sk: [learn, y, w.sk[2], w.sk[3]], tr, rn, wst: w.st, wsrc: w.src });
+    if (!tr && !(ci && ci.rs) && rn) r.rs = 'w:' + rn;
+  } else if (ci && !ci.tr && !ci.rs && !ci.nt) r = Object.assign({}, ci, { tr: true }); // appris d'office
+  CI_CACHE.set(k, r); return r;
+}
+function applyWfb(wfb) {
+  S._wfb = {}; CI_CACHE.clear(); if (!wfb) return;
+  const keep = []; const known = {};
+  for (const [prof, list] of Object.entries(wfb)) {
+    if (!list || list.length < 5) continue;
+    const m = new Map(); for (const w of list) { if (w.o) m.set(w.o, w); m.set(-w.sp, w); } S._wfb[prof] = m;
+  }
+  for (const rc of S.recipes) {
+    const m = S._wfb[rc.p];
+    if (!m) { keep.push(rc); continue; }
+    const w = m.get(rc.o);
+    if (!w || w.st === 'removed') continue; // pas dans Forever (Season of Discovery, Classic seulement) ou retirée
+    keep.push(rc); (known[rc.p] = known[rc.p] || new Set()).add(rc.o);
+  }
+  // Recettes connues seulement par la 2e source (ex. enchantements, sans objet fabriqué).
+  for (const [prof, list] of Object.entries(wfb)) {
+    if (!S._wfb[prof]) continue;
+    for (const w of list) {
+      if (w.st === 'removed' || !w.r || !w.r.length || w.r.some(x => typeof x[0] !== 'number')) continue;
+      const o = w.o || -w.sp; if (known[prof] && known[prof].has(o)) continue;
+      if (!S.items[o]) S.items[o] = { n: { en: w.n, fr: w.n }, q: 'COMMON', ic: /^Enchant/.test(w.n) ? 'trade_engraving' : 'inv_misc_questionmark', cn: { en: '', fr: '' }, scn: { en: '', fr: '' }, il: 0, virt: 1 };
+      keep.push({ id: 'w' + w.sp, p: prof, n: { en: w.n, fr: w.n }, o, oq: 1, r: w.r });
+      (known[prof] = known[prof] || new Set()).add(o);
+    }
+  }
+  S.recipes = keep;
 }
 // Icône de difficulté comme dans la fenêtre de métier du jeu : 3 chevrons orange, 2 jaunes, 1 vert, aucun en gris.
 const DIFF_N = { orange: 3, yellow: 2, green: 1, grey: 0, red: 0 };
@@ -756,7 +802,7 @@ function skillChance(sk, my) {
   if (my >= sk[3]) return 0;
   return Math.max(0, Math.min(1, (sk[3] - my) / (sk[3] - sk[1])));
 }
-function recipeInfo(ci) { return ci && ci.rs && S.craft && S.craft.r ? S.craft.r[ci.rs] || { nm: ci.rn } : null; }
+function recipeInfo(ci) { if (!ci || !ci.rs) return null; const r = S.craft && S.craft.r && S.craft.r[ci.rs]; if (r) return r.id ? r : Object.assign({}, r, { id: itemByEn(r.nm || ci.rn) }); return { nm: ci.rn, id: itemByEn(ci.rn) }; }
 function recipeCell(ci, items) {
   if (!ci) return '<span class="dim">?</span>';
   if (ci.tr) return `<span class="tag">${t('pr_trainer')}</span>`;
@@ -1770,7 +1816,10 @@ function buildGuide(prof, from, to, mk, vs, opts) {
       const v = x.cost / ch + (learned.has(x) ? 0 : x.learn / 20); // le prix de la recette est étalé sur ~20 points
       if (!best || v < best.v) best = { x, v, ch };
     }
-    if (!best) { steps.push({ gap: true, from: s }); break; }
+    if (!best) {
+      let nx = s + 1; while (nx < to && !cands.some(x => skillChance(x.ci.sk, nx) > 0)) nx++;
+      steps.push({ gap: true, from: s, to: nx }); s = nx; continue;
+    }
     const last = steps[steps.length - 1];
     if (last && !last.gap && last.x === best.x) { last.to = s + 1; last.crafts += 1 / best.ch; }
     else steps.push({ x: best.x, from: s, to: s + 1, crafts: 1 / best.ch });
@@ -1790,7 +1839,7 @@ function guideHtml(prof, from, mk, vs, opts) {
   const ranks = (PROF_RANKS[prof] || PROF_RANKS._default).filter(r => r[0] >= from && r[0] < to);
   let total = 0, learnTotal = 0; const shop = {};
   const rowsHtml = steps.map(st => {
-    if (st.gap) return `<tr><td colspan="6" class="dim">${t('gd_gap', { s: st.from })}</td></tr>`;
+    if (st.gap) return `<tr><td colspan="6" class="dim">${st.to < 300 ? t('gd_gap2', { s: st.from, e: st.to }) : t('gd_gap', { s: st.from })}${prof === 'Mining' ? ' ' + t('gd_gap_mining') : ''}</td></tr>`;
     total += st.cost; if (!st.x.ci.tr) learnTotal += st.x.learn;
     st.x.rc.r.forEach(([rid, q]) => { shop[rid] = (shop[rid] || 0) + q * st.n; });
     const rank = ranks.filter(r => r[0] >= st.from && r[0] < st.to).map(r => `<div class="note">⚠ ${t('gd_at')} ${r[0]} : ${t(r[1])}</div>`).join('');
@@ -1885,6 +1934,8 @@ function setupSearch() {
 async function start() {
   [S.items, S.recipes, S.vendor, S.farm, S.craft] = await Promise.all([load('items'), load('recipes'), load('vendor'), load('farm').catch(() => null), load('craft').catch(() => null)]);
   load('npcs').then(x => { S.npcs = x || {}; }).catch(() => { S.npcs = {}; });
+  S.items = S.items || {}; S.recipes = S.recipes || [];
+  applyWfb(await load('wfb').catch(() => null));
   S.items = S.items || {}; S.recipes = S.recipes || []; S.vendor = S.vendor || [];
   buildSearch();
   $('#lock').style.display = 'none';

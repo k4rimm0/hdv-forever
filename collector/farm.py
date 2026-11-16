@@ -466,3 +466,64 @@ def collect_npcs(prev, farm_items, requests_mod, log, now, budget=400, delay=0.5
         time.sleep(delay)
     log(f"monstres : {len(slugs)} connus, {done} pages lues, {fails} échecs, {max(0, len(todo) - budget)} restantes")
     return prev
+
+
+# --------------------------------------------------------------------------- niveaux des recettes (2e source)
+# wowforeverbuilds.com publie, pour chaque métier, toutes les recettes de Forever tirées du client du jeu :
+# niveaux orange/jaune/vert/gris, source (entraîneur ou recette), statut (nouvelle, modifiée, retirée) et composants.
+WFB_PROFS = {"Alchemy": "alchemy", "Blacksmithing": "blacksmithing", "Cooking": "cooking", "Enchanting": "enchanting",
+             "Engineering": "engineering", "First Aid": "first-aid", "Leatherworking": "leatherworking", "Tailoring": "tailoring",
+             "Mining": "mining"}
+_WFB_RX = re.compile(r'<li id="r-(\d+)"[^>]*?data-recipe data-status="([a-z-]*)" data-learn(?:="(\d*)")? data-yellow="(\d*)" '
+                     r'data-green="(\d*)" data-grey="(\d*)"[^>]*>(.*?)</li>', re.S)
+
+
+def parse_wfb(html, by_name):
+    out = []
+    num = lambda x: int(x) if x else None
+    for sp, st, a, b, c, g, body in _WFB_RX.findall(html):
+        nm = re.search(r'class="recipe-name[^"]*"[^>]*>(.*?)</a>', body, flags=re.S)
+        it = re.search(r'item=(\d+)', body)
+        src = re.search(r'text-parchment-400"[^>]*>\s*(?:Â·|·)\s*(.*?)</span>', body)
+        reag_p = re.search(r'text-parchment-300"[^>]*>((?:(?!</p>).)*?×(?:(?!</p>).)*)</p>', body, flags=re.S) \
+            or re.search(r'text-parchment-300"[^>]*>((?:(?!</p>).)*?Ã(?:(?!</p>).)*)</p>', body, flags=re.S)
+        reag, ok = [], True
+        if reag_p:
+            for q, rn in re.findall(r'>(\d+)(?:×|Ã)\s*</span>\s*([^,<]+)', reag_p.group(1)):
+                rid = by_name.get(_text(rn).strip())
+                if rid is None:
+                    ok = False
+                reag.append([rid or _text(rn).strip(), int(q)])
+        if not nm:
+            continue
+        out.append({"sp": int(sp), "st": st, "n": _text(nm.group(1)), "o": int(it.group(1)) if it else None,
+                    "sk": [num(a), num(b), num(c), num(g)], "src": _text(src.group(1)) if src else "",
+                    "r": reag if ok else None})
+    return out
+
+
+def collect_wfb(prev, items, requests_mod, log, now):
+    """Rafraîchi tous les 3 jours. Renvoie {"t": ..., "p": {métier: [recettes]}}."""
+    if prev and now - prev.get("t", 0) < 3 * 86400:
+        return prev
+    by_name = {}
+    for k, m in items.items():
+        en = (m.get("n") or {}).get("en") if isinstance(m, dict) else None
+        if en and not k.startswith("_"):
+            by_name.setdefault(en, int(k))
+    s = requests_mod.Session()
+    s.headers["User-Agent"] = "Mozilla/5.0 (hdv-forever personal tracker)"
+    res = {"t": now, "p": {}}
+    for prof, sl in WFB_PROFS.items():
+        try:
+            r = s.get(f"https://wowforeverbuilds.com/professions/{sl}/recipes", timeout=30)
+            if r.status_code == 200:
+                r.encoding = "utf-8"
+                res["p"][prof] = parse_wfb(r.text, by_name)
+            time.sleep(0.5)
+        except Exception as e:
+            log("wfb", prof, type(e).__name__)
+    if not res["p"] and prev:
+        return prev
+    log("niveaux des recettes (wowforeverbuilds) :", {k: len(v) for k, v in res["p"].items()})
+    return res
