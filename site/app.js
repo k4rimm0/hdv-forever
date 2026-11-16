@@ -73,7 +73,7 @@ const T = {
     pr_my: 'Mon niveau en', pr_mode_gold: "Gagner de l'or", pr_mode_lvl: 'Monter le métier', pr_onlycan: 'Seulement ce que je peux faire', pr_norec: 'Sans recette à acheter (entraîneur)',
     pr_help_gold: "Bénéfice/jour = bénéfice par objet × ventes estimées par jour : c'est ce qui dit si ça vaut le coup. Chaque composant est compté au moins cher entre l'HDV et le PNJ.",
     pr_help_lvl: "Coût par point = coût des composants (moins la moitié de la revente) ÷ chance de gagner un point. Orange = 100 %, jaune puis vert = de moins en moins, gris = 0.",
-    pr_skill: 'Niveau', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
+    pr_skill: 'Niveau', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_tiers_tip: 'Tu peux l\'apprendre à {a}. De {a} à {b} (orange) : chaque fabrication donne 1 point à coup sûr. De {b} à {c} (jaune) : souvent un point. De {c} à {d} (vert) : rarement. À partir de {d} (gris) : plus aucun point.', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
     pr_chance: 'Chance de point', pr_ppp: 'Coût par point', pr_pt: 'point', pr_day: 'jour', pr_at: 'à',
     pr_adv_title: 'Conseils pour toi', pr_adv_lvl: 'Pour monter le moins cher', pr_adv_gold: "Pour faire de l'or", pr_adv_nogold: 'Rien de rentable à ton niveau pour le moment.', pr_adv_next: 'Ce qui se débloque bientôt',
     pr_adv_noskill: 'Entre ton niveau en {p} juste au-dessus pour avoir des conseils adaptés.',
@@ -185,7 +185,7 @@ const T = {
     pr_my: 'My skill in', pr_mode_gold: 'Make gold', pr_mode_lvl: 'Level it', pr_onlycan: 'Only what I can make', pr_norec: 'No recipe to buy (trainer)',
     pr_help_gold: 'Profit/day = profit per item × estimated sales per day. Each reagent is counted at the cheaper of AH and vendor.',
     pr_help_lvl: 'Cost per point = reagent cost (minus half the resale) ÷ chance of a skill-up. Orange = 100%, yellow then green = less and less, grey = 0.',
-    pr_skill: 'Skill', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
+    pr_skill: 'Skill', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_tiers_tip: 'Learnable at {a}. From {a} to {b} (orange): every craft gives a skill point. From {b} to {c} (yellow): usually a point. From {c} to {d} (green): rarely. From {d} (grey): no more points.', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
     pr_chance: 'Skill-up chance', pr_ppp: 'Cost per point', pr_pt: 'point', pr_day: 'day', pr_at: 'at',
     pr_adv_title: 'Advice for you', pr_adv_lvl: 'Cheapest to level', pr_adv_gold: 'To make gold', pr_adv_nogold: 'Nothing profitable at your skill yet.', pr_adv_next: 'Unlocking soon',
     pr_adv_noskill: 'Enter your {p} skill above for tailored advice.',
@@ -811,7 +811,7 @@ async function viewCraft(page) {
     advice(rows, myN);
     const cols = [
       { k: 'n', label: t('col_item'), f: x => itemCell(x.rc.o) + (x.rc.oq > 1 ? ` <span class="dim">×${x.rc.oq}</span>` : ''), v: x => itemName(x.rc.o), cls: 'l' },
-      { k: 'sk', label: t('pr_skill'), f: x => x.ci && x.ci.sk ? `<span class="sk ${skillColor(x.ci.sk, myN)}" title="${t('pr_tiers', { a: x.ci.sk[0], b: x.ci.sk[1], c: x.ci.sk[2], d: x.ci.sk[3] })}">${x.ci.sk[0]}</span> <span class="dim small">${x.ci.sk[1]}/${x.ci.sk[2]}/${x.ci.sk[3]}</span>` : '<span class="dim">?</span>', v: x => x.ci && x.ci.sk ? x.ci.sk[0] : null },
+      { k: 'sk', label: t('pr_skill'), f: x => x.ci && x.ci.sk ? `<span class="sk ${skillColor(x.ci.sk, myN)}" title="${t('pr_tiers_tip', { a: x.ci.sk[0], b: x.ci.sk[1], c: x.ci.sk[2], d: x.ci.sk[3] })}">${x.ci.sk[0]}</span> <span class="small" title="${t('pr_tiers_tip', { a: x.ci.sk[0], b: x.ci.sk[1], c: x.ci.sk[2], d: x.ci.sk[3] })}"><span class="sk yellow">${x.ci.sk[1]}</span>/<span class="sk green">${x.ci.sk[2]}</span>/<span class="sk grey">${x.ci.sk[3]}</span></span>` : '<span class="dim">?</span>', v: x => x.ci && x.ci.sk ? x.ci.sk[0] : null },
       { k: 'rec', label: t('pr_learn'), f: x => `<div class="where">${recipeCell(x.ci, m.items)}</div>`, v: x => x.ci && x.ci.tr ? 0 : 1, cls: 'l' },
       { k: 'cost', label: t('col_cost'), f: x => `<span title="${esc(x.c.parts.join('\n'))}">${x.c.missing ? `<span class="badge bad">${t('incomplete')}</span>` : money(x.c.cost)}</span>`, v: x => x.c.missing ? null : x.c.cost },
     ];
