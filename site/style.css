@@ -106,7 +106,7 @@ button.act{background:#3a2a15;border:1px solid var(--gold);color:var(--gold2);bo
 .wmap img{width:100%;height:100%;display:block}
 .wmap .pin{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;border:1.5px solid #000;box-shadow:0 0 4px #000;cursor:pointer}
 .wmap .pin.big{width:16px;height:16px;margin:-8px 0 0 -8px;border-width:2px}
-.wmap .pin:hover{transform:scale(1.6);z-index:2}
+.wmap .pin:hover{filter:brightness(1.4);z-index:2;outline:2px solid #fff}
 .wmap .nomapmsg{display:none;position:absolute;inset:0;align-items:center;justify-content:center;color:#a99;font-size:14px}
 .wmap.nomap img{visibility:hidden}.wmap.nomap .nomapmsg{display:flex}
 .legend{margin-top:8px}.legend .chip:not(.on){opacity:.45}
@@ -157,5 +157,14 @@ a.vgps{color:inherit;text-decoration:none}a.vgps:hover b{text-decoration:underli
 .rt-mapcol{overflow:auto;padding-bottom:12px}.rt-map{max-width:1100px;margin:0 12px}
 .rt-map svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .rpt{position:absolute;min-width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:9px;border:1.5px solid #000;font:700 10px/15px Inter,sans-serif;color:#000;text-align:center;cursor:pointer;padding:0 2px;box-shadow:0 0 3px #000}
-.rpt:hover{transform:scale(1.3);z-index:3}.rpt.off{background:#555;color:#fff;opacity:.7}
+.rpt:hover{filter:brightness(1.25);outline:2px solid #fff;z-index:3}.rpt.off{background:#555;color:#fff;opacity:.7}
 .pin.start{width:22px;height:22px;margin:-11px 0 0 -11px;background:#ff3b3b;color:#fff;font-size:11px;line-height:18px;text-align:center;border:2px solid #fff;z-index:2}
+
+.wmap{touch-action:none;user-select:none}.wmap .wz{position:absolute;inset:0;transform-origin:0 0;will-change:transform}
+.wmap .wz>img{width:100%;height:100%;display:block;-webkit-user-drag:none}
+.wmap .wz>.pin,.wmap .wz>.rpt,.wmap .wz>.town{transform:scale(calc(1 / var(--z,1)))}
+.wmap.zoomed{cursor:grab}.wmap.dragging{cursor:grabbing}.wmap.pick.zoomed{cursor:crosshair}
+.wz-ctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px;z-index:5}
+.wz-ctl button{width:30px;height:30px;border-radius:6px;border:1px solid #c8a24a;background:rgba(20,14,8,.85);color:#ffd77a;font:700 17px/1 Inter,sans-serif;cursor:pointer}
+.wz-ctl button:hover{background:#3a2a12}
+.rl-out{stroke-width:calc(6px / var(--z,1))}.rl-in{stroke-width:calc(3px / var(--z,1))}

@@ -1149,8 +1149,7 @@ function openGps(mapEntry, pin) {
   $('#gpsPick').onclick = () => { const el = $('#gpsPicker'); el.style.display = el.style.display === 'none' ? '' : 'none'; drawPick(); el.scrollIntoView({ block: 'nearest' }); };
   $('#gpsZone').onchange = drawPick;
   $('#gpsPickMap').onclick = e => {
-    const r = e.currentTarget.getBoundingClientRect(); const z = $('#gpsZone').value;
-    const mx = Math.round((e.clientX - r.left) / r.width * 1000) / 10, my = Math.round((e.clientY - r.top) / r.height * 1000) / 10;
+    const z = $('#gpsZone').value; const [mx, my] = mapPct(e.currentTarget, e);
     // Point de départ = le lieu connu le plus proche (ville, maître de vol, zeppelin) ; sinon la zone elle-même.
     let best = null;
     for (const [n, tx, ty] of GPS_TOWNS[z] || []) { const d = Math.hypot(tx - mx, ty - my); if (!best || d < best.d) best = { n, d }; }
@@ -1289,7 +1288,7 @@ function openRoute(id) {
       body = `<div class="gps-body"><div class="gps-route rt-mapcol">
         <div class="row" style="padding:8px 12px;gap:8px">${ranked.map(([z, c]) => `<button class="chip ${z === cur ? 'on' : ''}" data-rz="${esc(z)}">${zoneName(z)} <span class="dim">${c.length}</span></button>`).join('')}</div>
         <div class="wmap rt-map"><img src="maps/z_${zoneSlug(cur)}.jpg" alt="" onerror="this.parentNode.classList.add('nomap')"><div class="nomapmsg">${t('ht_nomap')}</div>
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="${path.map(p => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#000" stroke-opacity=".75" vector-effect="non-scaling-stroke" style="stroke-width:6px" stroke-linejoin="round"/><polyline points="${path.map(p => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#ffd23f" vector-effect="non-scaling-stroke" style="stroke-width:3px" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="${path.map(p => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#000" stroke-opacity=".75" vector-effect="non-scaling-stroke" class="rl-out" stroke-linejoin="round"/><polyline points="${path.map(p => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#ffd23f" vector-effect="non-scaling-stroke" class="rl-in" stroke-linejoin="round"/></svg>
           ${st ? `<span class="pin start" style="left:${st.x}%;top:${st.y}%" title="${esc(st.name)}">▶</span>` : ''}
           ${tour.map((c, i) => `<span class="rpt" data-rx="${c.x},${c.y}" style="left:${c.x}%;top:${c.y}%;background:${ROUTE_COLORS[[...c.srcs][0] % ROUTE_COLORS.length]}" title="${i + 1}. ${esc(c.nm)} (${c.x}, ${c.y})${c.n > 1 ? ' ×' + c.n : ''} · ${t('rt_click_skip')}">${i + 1}</span>`).join('')}
           ${[...excluded].filter(k => ranked.find(r => r[0] === cur)[1].some(c => c.x + ',' + c.y === k)).map(k => { const [x, y] = k.split(','); return `<span class="rpt off" data-rx="${k}" style="left:${x}%;top:${y}%" title="${t('rt_click_back')}">✕</span>`; }).join('')}
@@ -1317,6 +1316,48 @@ function openRoute(id) {
   };
   render();
 }
+
+
+// ------------------------------------------------------------------ zoom des cartes
+// Molette ou boutons +/- pour zoomer, glisser pour se déplacer, double-clic pour zoomer, pincer sur téléphone.
+// Les points gardent leur taille. Le zoom est conservé quand la même carte est redessinée (ex. point évité).
+const ZOOM_MEM = new Map();
+function enhanceMap(w) {
+  if (w.querySelector(':scope > .wz')) return;
+  const img = w.querySelector(':scope > img'); if (!img) return;
+  const key = img.getAttribute('src') + '|' + (w.id || w.className);
+  const inner = document.createElement('div'); inner.className = 'wz';
+  [...w.childNodes].filter(n => !(n.classList && n.classList.contains('nomapmsg'))).forEach(n => inner.appendChild(n));
+  w.prepend(inner);
+  const ctl = document.createElement('div'); ctl.className = 'wz-ctl';
+  ctl.innerHTML = '<button type="button" data-z="in" title="Zoom +">+</button><button type="button" data-z="out" title="Zoom −">−</button><button type="button" data-z="reset" title="Vue entière">⤢</button>';
+  w.appendChild(ctl);
+  let st = ZOOM_MEM.get(key) || { z: 1, x: 0, y: 0 };
+  const clamp = () => { const W = w.clientWidth, H = w.clientHeight; st.z = Math.min(8, Math.max(1, st.z)); st.x = Math.min(0, Math.max(W - W * st.z, st.x)); st.y = Math.min(0, Math.max(H - H * st.z, st.y)); };
+  const apply = () => { clamp(); inner.style.transform = `translate(${st.x}px,${st.y}px) scale(${st.z})`; w.style.setProperty('--z', st.z); w.classList.toggle('zoomed', st.z > 1.01); ZOOM_MEM.set(key, { ...st }); };
+  const zoomAt = (f, cx, cy) => { const r = w.getBoundingClientRect(); const px = cx - r.left, py = cy - r.top; const nz = Math.min(8, Math.max(1, st.z * f)); st.x = px - (px - st.x) * nz / st.z; st.y = py - (py - st.y) * nz / st.z; st.z = nz; apply(); };
+  w.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.deltaY < 0 ? 1.25 : 0.8, e.clientX, e.clientY); }, { passive: false });
+  w.addEventListener('dblclick', e => { if (e.target.closest('.wz-ctl')) return; e.preventDefault(); zoomAt(2, e.clientX, e.clientY); });
+  ctl.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; e.stopPropagation(); const r = w.getBoundingClientRect();
+    if (b.dataset.z === 'reset') { st = { z: 1, x: 0, y: 0 }; apply(); } else zoomAt(b.dataset.z === 'in' ? 1.6 : 1 / 1.6, r.left + r.width / 2, r.top + r.height / 2); });
+  // Glisser pour se déplacer ; un glissement n'est pas un clic (ne déclenche ni point ni « je suis ici »).
+  let drag = null, moved = false; const pts = new Map(); let pinch = null;
+  w.addEventListener('pointerdown', e => { if (e.target.closest('.wz-ctl')) return; pts.set(e.pointerId, [e.clientX, e.clientY]);
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), z: st.z }; drag = null; }
+    else { drag = { x: e.clientX, y: e.clientY, sx: st.x, sy: st.y }; moved = false; } });
+  w.addEventListener('pointermove', e => { if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, [e.clientX, e.clientY]);
+    if (pinch && pts.size === 2) { const [a, b] = [...pts.values()]; const d = Math.hypot(a[0] - b[0], a[1] - b[1]); zoomAt((pinch.z * d / pinch.d) / st.z, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2); moved = true; return; }
+    if (!drag || st.z <= 1.01) return; const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (Math.abs(dx) + Math.abs(dy) > 4) { moved = true; w.classList.add('dragging'); }
+    st.x = drag.sx + dx; st.y = drag.sy + dy; apply(); });
+  const up = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; drag = null; w.classList.remove('dragging'); };
+  w.addEventListener('pointerup', up); w.addEventListener('pointercancel', up); w.addEventListener('pointerleave', up);
+  w.addEventListener('click', e => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+  apply();
+}
+new MutationObserver(() => document.querySelectorAll('.wmap').forEach(enhanceMap)).observe(document.body, { childList: true, subtree: true });
+// Position d'un clic sur une carte zoomée, en % de la carte.
+function mapPct(w, e) { const r = (w.querySelector('.wz') || w).getBoundingClientRect(); return [Math.round((e.clientX - r.left) / r.width * 1000) / 10, Math.round((e.clientY - r.top) / r.height * 1000) / 10]; }
 
 // ------------------------------------------------------------------ cadre
 function setLang(l) { S.lang = l; store('hf_lang', l); document.documentElement.lang = l; renderChrome(); route(); }
