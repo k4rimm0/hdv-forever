@@ -1368,6 +1368,7 @@ function openRoute(id, mk) {
 // Molette ou boutons +/- pour zoomer, glisser pour se déplacer, double-clic pour zoomer, pincer sur téléphone.
 // Les points gardent leur taille. Le zoom est conservé quand la même carte est redessinée (ex. point évité).
 const ZOOM_MEM = new Map();
+const HD_BASE = 'https://cdn.jsdelivr.net/gh/k4rimm0/hdv-forever@main/maps_hd/';
 function enhanceMap(w) {
   if (w.querySelector(':scope > .wz')) return;
   const img = w.querySelector(':scope > img'); if (!img) return;
@@ -1380,7 +1381,7 @@ function enhanceMap(w) {
   w.appendChild(ctl);
   let st = ZOOM_MEM.get(key) || { z: 1, x: 0, y: 0 };
   const clamp = () => { const W = w.clientWidth, H = w.clientHeight; st.z = Math.min(8, Math.max(1, st.z)); st.x = Math.min(0, Math.max(W - W * st.z, st.x)); st.y = Math.min(0, Math.max(H - H * st.z, st.y)); };
-  const apply = () => { clamp(); inner.style.transform = `translate(${st.x}px,${st.y}px) scale(${st.z})`; w.style.setProperty('--z', st.z); w.classList.toggle('zoomed', st.z > 1.01); ZOOM_MEM.set(key, { ...st }); };
+  let apply = () => { clamp(); inner.style.transform = `translate(${st.x}px,${st.y}px) scale(${st.z})`; w.style.setProperty('--z', st.z); w.classList.toggle('zoomed', st.z > 1.01); ZOOM_MEM.set(key, { ...st }); };
   const zoomAt = (f, cx, cy) => { const r = w.getBoundingClientRect(); const px = cx - r.left, py = cy - r.top; const nz = Math.min(8, Math.max(1, st.z * f)); st.x = px - (px - st.x) * nz / st.z; st.y = py - (py - st.y) * nz / st.z; st.z = nz; apply(); };
   w.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.deltaY < 0 ? 1.25 : 0.8, e.clientX, e.clientY); }, { passive: false });
   w.addEventListener('dblclick', e => { if (e.target.closest('.wz-ctl')) return; e.preventDefault(); zoomAt(2, e.clientX, e.clientY); });
@@ -1399,6 +1400,15 @@ function enhanceMap(w) {
   const up = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; drag = null; w.classList.remove('dragging'); };
   w.addEventListener('pointerup', up); w.addEventListener('pointercancel', up); w.addEventListener('pointerleave', up);
   w.addEventListener('click', e => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+  // Carte HD (4x) chargée seulement quand on zoome ; si elle n'existe pas pour cette zone, on garde l'actuelle.
+  const m = (img.getAttribute('src') || '').match(/maps\/(z_[a-z0-9-]+)\.jpg/);
+  let hdTried = false;
+  const tryHd = () => {
+    if (hdTried || !m || st.z < 1.3) return; hdTried = true;
+    const hd = new Image(); hd.onload = () => { img.src = hd.src; w.classList.add('hd'); };
+    hd.src = HD_BASE + m[1] + '.jpg';
+  };
+  const apply0 = apply; apply = () => { apply0(); tryHd(); };
   apply();
 }
 new MutationObserver(() => document.querySelectorAll('.wmap').forEach(enhanceMap)).observe(document.body, { childList: true, subtree: true });
