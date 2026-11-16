@@ -70,6 +70,18 @@ const T = {
     ht_vendor_generic: 'Vendu chez les PNJ marchands (fournitures, cuisine…), par exemple en ville.', ht_mobs: 'Monstres qui le lâchent', ht_mob: 'Monstre', ht_zone: 'Zone', ht_rate: 'Taux de drop',
     ht_nodes: 'Ramassé sur', ht_map: 'Carte', ht_nomap: 'Carte en cours de téléchargement, réessaie après la prochaine mise à jour.',
     ht_map_help: 'Survole un point pour voir le nom, clique dessus pour le GPS (itinéraire depuis là où tu es). Clique sur la légende pour masquer ou afficher une source.',
+    rt_btn: 'Route de farm', rt_title: 'Route de farm', rt_none: "Pas de points de récolte connus pour cette ressource.",
+    rt_summary: 'Ta route', rt_points: '{n} arrêts dans {z}, en boucle.', rt_skipped: '{n} point(s) évité(s)',
+    rt_gain: 'Optimisée : {p} % plus courte que de passer les points dans le désordre.', rt_start: 'Départ conseillé : <b>{s}</b> (le ▶ sur la carte).', rt_go_start: "M'y amener (GPS)",
+    rt_click_skip: 'clic = éviter ce point', rt_click_back: 'clic = remettre ce point', rt_maybe: 'ajouter aussi {l} (sources pas sûres)',
+    rt_skill_warn: 'Retirés de la route, ta compétence est trop basse pour :',
+    rt_no_town: "Pas de ville Horde dans cette zone : commence au point 1 (le plus proche de l'entrée que tu prends).",
+    rt_help: "Suis les numéros dans l'ordre, la boucle te ramène au départ. Clique sur un point dangereux ou inaccessible (camp d'élites, falaise) pour l'éviter : la route se recalcule.",
+    rt_limits: "Les points sont les endroits où la ressource peut apparaître (données de Classic) : tous ne sont pas occupés en même temps. La route relie les points en ligne droite, sans voir le relief.",
+    scarce_lichen: 'Matériau « Scarce » : pas de plante à cueillir, il tombe en bonus en cueillant Terrestrine, Mage royal et Églantine (dès 15 en herboristerie).',
+    scarce_rosecap: 'Matériau « Scarce » : tombe en bonus sur Sang-royal, Pâlerette et Dorépine (et peut-être d’autres).',
+    scarce_pyrite: 'Matériau « Scarce » : tombe en bonus en minant les filons de cuivre, d’étain et de fer.',
+    scarce_bauxite: 'Matériau « Scarce » : tombe en bonus en minant les filons d’or et de mithril.',
     gps_pick: 'Je suis ici (sur la carte)', gps_pick_title: 'Où es-tu ?', gps_pick_zone: 'Zone', gps_pick_help: 'Clique sur la carte là où tu es. Les petits points blancs sont les villes et maîtres de vol connus.',
     gps_pick_near: 'Départ pris depuis <b>{n}</b>, le lieu connu le plus proche de ton point.', gps_pick_zone_only: 'Pas de ville proche : départ depuis le centre de {z}.',
     gps_title: 'GPS : y aller', gps_click: 'clique pour le GPS', gps_way_help: '← clique pour copier /way (addon TomTom)', gps_from: 'Je suis à', gps_speed: 'Je me déplace', gps_foot: 'à pied', gps_m60: 'monture (60 %)', gps_m100: 'monture rapide (100 %)',
@@ -152,6 +164,18 @@ const T = {
     ht_vendor_generic: 'Sold by merchant NPCs (trade supplies, cooking…), for example in cities.', ht_mobs: 'Mobs that drop it', ht_mob: 'Mob', ht_zone: 'Zone', ht_rate: 'Drop rate',
     ht_nodes: 'Gathered from', ht_map: 'Map', ht_nomap: 'Map is downloading, try again after the next update.',
     ht_map_help: 'Hover a dot to see the name, click it for the GPS (route from where you are). Click the legend to hide or show a source.',
+    rt_btn: 'Farm route', rt_title: 'Farm route', rt_none: 'No known gathering points for this resource.',
+    rt_summary: 'Your route', rt_points: '{n} stops in {z}, as a loop.', rt_skipped: '{n} point(s) skipped',
+    rt_gain: 'Optimised: {p}% shorter than visiting the points in any order.', rt_start: 'Suggested start: <b>{s}</b> (the ▶ on the map).', rt_go_start: 'Take me there (GPS)',
+    rt_click_skip: 'click = skip this point', rt_click_back: 'click = put this point back', rt_maybe: 'also add {l} (unsure sources)',
+    rt_skill_warn: 'Removed from the route, your skill is too low for:',
+    rt_no_town: 'No Horde town in this zone: start at point 1.',
+    rt_help: 'Follow the numbers in order; the loop brings you back to the start. Click a dangerous or unreachable point (elite camp, cliff) to skip it: the route updates.',
+    rt_limits: 'Points are places where the resource can spawn (Classic data): not all are up at once. The route joins points in straight lines and does not see terrain.',
+    scarce_lichen: 'Scarce material: no plant of its own, it drops as a bonus when picking Earthroot, Mageroyal and Briarthorn (from 15 Herbalism).',
+    scarce_rosecap: 'Scarce material: bonus drop from Kingsblood, Fadeleaf and Goldthorn (maybe more).',
+    scarce_pyrite: 'Scarce material: bonus drop when mining Copper, Tin and Iron veins.',
+    scarce_bauxite: 'Scarce material: bonus drop when mining Gold and Mithril veins.',
     gps_pick: 'I am here (on the map)', gps_pick_title: 'Where are you?', gps_pick_zone: 'Zone', gps_pick_help: 'Click the map where you are. Small white dots are known towns and flight masters.',
     gps_pick_near: 'Starting from <b>{n}</b>, the known place closest to your point.', gps_pick_zone_only: 'No town nearby: starting from the middle of {z}.',
     gps_title: 'GPS: get there', gps_click: 'click for GPS', gps_way_help: '← click to copy /way (TomTom addon)', gps_from: 'I am at', gps_speed: 'Travel by', gps_foot: 'on foot', gps_m60: 'mount (60%)', gps_m100: 'fast mount (100%)',
@@ -551,7 +575,7 @@ async function viewItem(id) {
       <img src="${icon(id)}" data-tt="${id}" style="width:56px;height:56px;border-radius:8px;border:1px solid #000" alt="">
       <div><h1 class="q-${meta.q}" style="font-family:Cinzel,serif">${esc(itemName(id))}</h1>
       <p>${esc(itemAlt(id))} · ${esc(meta.cn[S.lang] || '')} / ${esc(meta.scn[S.lang] || '')} · ${t('item_ilvl')} ${meta.il}${meta.rl ? ' · ' + t('item_req') + ' ' + meta.rl : ''}</p></div>
-      <div style="margin-left:auto"><button class="act" id="watchBtn">${watching ? t('watch_on') : t('watch_add')}</button></div></div></div>
+      <div style="margin-left:auto;display:flex;gap:8px">${routeAvailable(id) ? `<button class="act" id="routeBtn">🗺️ ${t('rt_btn')}</button>` : ''}<button class="act" id="watchBtn">${watching ? t('watch_on') : t('watch_add')}</button></div></div></div>
     <div class="grid g4">
       <div class="kpi"><div class="l">${t('col_min')}</div><div class="v">${money(r[MIN])}</div><div class="s">${houseLabel(houseById(hid))}</div></div>
       <div class="kpi"><div class="l">${t('col_mkt')}</div><div class="v">${money(r[MKT])}</div><div class="s">${t('col_d1')} ${pctf(r[C1])} · ${t('col_d7')} ${pctf(r[C7])} · ${t('col_d30')} ${pctf(r[C30])}</div></div>
@@ -569,6 +593,7 @@ async function viewItem(id) {
   drawWhereMap(S.farm && S.farm[id], 'wmap');
   S.recipes.filter(rc => rc.o === id).forEach(rc => drawWhereMap(recipeInfo(craftInfo(id, rc.p)), 'rmap_' + rc.id));
   bindWay(app());
+  if ($('#routeBtn')) $('#routeBtn').onclick = () => openRoute(id);
   $('#watchBtn').onclick = () => {
     if (S.watch.some(w => w.id === id)) S.watch = S.watch.filter(w => w.id !== id); else S.watch.push({ id, buy: null, sell: null });
     store('hf_watch', JSON.stringify(S.watch)); viewItem(id); renderNav();
@@ -1137,6 +1162,160 @@ function openGps(mapEntry, pin) {
   };
   $('#gpsFrom').onkeydown = e => { if (e.key === 'Enter') go(); };
   go();
+}
+
+// ------------------------------------------------------------------ routes de farm
+// Matériaux « Scarce » de Forever : pas de point de récolte, ils tombent en bonus sur d'autres nœuds.
+// Sources : wow-professions.com, expcarry.com, conquestcapped.com, warcraft.wiki.gg (novembre 2026).
+const SCARCE = {
+  'Frilled Lichen': { src: [2449, 785, 2450], maybe: [3820, 2453], note: 'scarce_lichen' },
+  'Rosecap': { src: [3356, 3818, 3821], maybe: [], note: 'scarce_rosecap' },
+  'Pyrite': { src: [2770, 2771, 2772], maybe: [], note: 'scarce_pyrite' },
+  'Bauxite': { src: [2776, 3858], maybe: [], note: 'scarce_bauxite' },
+};
+const ROUTE_SKIP = /Crate|Chest|Strongbox|Trunk|\bBox\b|Cache|Barrel|Footlocker|Coffer/i;
+const ROUTE_COLORS = ['#ffd23f', '#4dd2ff', '#7dff6b', '#ff8cf0', '#ff9a3c', '#b18cff'];
+const MAP_ASPECT = 1002 / 668;
+const rdist = (a, b) => Math.hypot((a.x - b.x) * MAP_ASPECT, a.y - b.y);
+
+function routeSources(id) {
+  const en = (S.items[id] && S.items[id].n && S.items[id].n.en) || '';
+  const sc = SCARCE[en];
+  if (sc) return { ids: sc.src, maybe: sc.maybe, note: sc.note };
+  return { ids: [id], maybe: [], note: null };
+}
+// Points par zone pour une liste de sources.
+function routePoints(ids) {
+  const zones = {};
+  ids.forEach((sid, si) => {
+    const f = S.farm && S.farm[sid]; if (!f || !f.p) return;
+    // Si la ressource a des nœuds de récolte quelque part, on ne garde que les nœuds (pas les monstres qui
+    // en lâchent par hasard). Sinon, on suit les apparitions des monstres qui la lâchent souvent (≥ 10 %).
+    const hasNodes = f.p.some(m => m[2].some(n => n[1] === 'o' && !ROUTE_SKIP.test(n[0])));
+    const goodMobs = new Set((f.m || []).filter(m => m[4] >= 10).map(m => m[0]));
+    for (const [, zone, names, pins] of f.p) {
+      for (const [x, y, ni] of pins) {
+        const [nm, kind] = names[ni];
+        if (ROUTE_SKIP.test(nm)) continue;
+        if (hasNodes ? kind !== 'o' : !(kind === 'd' && goodMobs.has(nm))) continue;
+        (zones[zone] = zones[zone] || []).push({ x, y, src: sid, si, nm });
+      }
+    }
+  });
+  return zones;
+}
+// Regroupe les points très proches (un seul passage pour plusieurs points voisins).
+function routeCluster(pts, r = 1.6) {
+  const out = [];
+  for (const p of pts) {
+    const c = out.find(q => rdist(q, p) < r);
+    if (c) { c.n++; c.x = (c.x * (c.n - 1) + p.x) / c.n; c.y = (c.y * (c.n - 1) + p.y) / c.n; c.srcs.add(p.si); }
+    else out.push({ x: p.x, y: p.y, n: 1, srcs: new Set([p.si]), nm: p.nm });
+  }
+  out.forEach(c => { c.x = Math.round(c.x * 10) / 10; c.y = Math.round(c.y * 10) / 10; });
+  return out;
+}
+function tourLen(t) { let s = 0; for (let i = 0; i < t.length; i++) s += rdist(t[i], t[(i + 1) % t.length]); return s; }
+// Boucle la plus courte : plus proche voisin depuis le départ, puis 2-opt (supprime les croisements), puis or-opt.
+function routeSolve(pts, start) {
+  if (pts.length < 2) return pts.slice();
+  let cur = start ? pts.reduce((b, p) => rdist(p, start) < rdist(b, start) ? p : b, pts[0]) : pts[0];
+  const left = new Set(pts); const tour = [];
+  while (left.size) { tour.push(cur); left.delete(cur); let nx = null, nd = Infinity; for (const p of left) { const d = rdist(cur, p); if (d < nd) { nd = d; nx = p; } } cur = nx; if (!cur) break; }
+  const n = tour.length; let improved = true, guard = 0;
+  while (improved && guard++ < 60) {
+    improved = false;
+    for (let i = 0; i < n - 1; i++) for (let k = i + 2; k < n; k++) {
+      const a = tour[i], b = tour[i + 1], c = tour[k], d = tour[(k + 1) % n];
+      if (a === d) continue;
+      if (rdist(a, c) + rdist(b, d) < rdist(a, b) + rdist(c, d) - 1e-9) {
+        for (let lo = i + 1, hi = k; lo < hi; lo++, hi--) [tour[lo], tour[hi]] = [tour[hi], tour[lo]];
+        improved = true;
+      }
+    }
+    // or-opt : déplacer un point ailleurs si ça raccourcit
+    for (let i = 0; i < tour.length && tour.length > 3; i++) {
+      const p = tour[i], prev = tour[(i - 1 + tour.length) % tour.length], next = tour[(i + 1) % tour.length];
+      const gain = rdist(prev, p) + rdist(p, next) - rdist(prev, next);
+      let best = null, bestCost = gain - 1e-9;
+      for (let j = 0; j < tour.length; j++) {
+        const u = tour[j], v = tour[(j + 1) % tour.length]; if (u === p || v === p) continue;
+        const cost = rdist(u, p) + rdist(p, v) - rdist(u, v); if (cost < bestCost) { bestCost = cost; best = j; }
+      }
+      if (best != null) { const u = tour[best]; tour.splice(i, 1); tour.splice(tour.indexOf(u) + 1, 0, p); improved = true; }
+    }
+  }
+  if (start) { const s = tour.reduce((b, p) => rdist(p, start) < rdist(b, start) ? p : b, tour[0]); const k = tour.indexOf(s); return tour.slice(k).concat(tour.slice(0, k)); }
+  return tour;
+}
+// Villes Alliance : jamais proposées comme départ d'une route (le site est réglé pour la Horde).
+const ALLIANCE_TOWNS = new Set(['Colline des Sentinelles', 'Sombre-Comté', 'Comté-du-Lac', 'Thelsamar', "Comté-de-l'Or", 'Port de Menethil', 'Auberdine',
+  'Astranaar', 'Pointe de Nijel', 'Île de Theramore', 'Bastion de Plume-de-lune', 'Pointe Talrendis', 'Clairière de Serre-Branche', 'Camp de Vent-Glacial', 'Donjon de Garde-Néant']);
+// Départ : la ville / le maître de vol Horde ou neutre le plus proche du centre des points.
+function zoneStart(zone, pts) {
+  const towns = ((typeof GPS_TOWNS !== 'undefined' && GPS_TOWNS[zone]) || []).filter(w => !ALLIANCE_TOWNS.has(w[0]));
+  if (!towns.length) return null;
+  const c = pts && pts.length ? { x: pts.reduce((s, p) => s + p.x, 0) / pts.length, y: pts.reduce((s, p) => s + p.y, 0) / pts.length } : { x: 50, y: 50 };
+  const tw = towns.reduce((b, w) => rdist({ x: w[1], y: w[2] }, c) < rdist({ x: b[1], y: b[2] }, c) ? w : b, towns[0]);
+  return { name: tw[0], x: tw[1], y: tw[2] };
+}
+function routeAvailable(id) { const rs = routeSources(id); return Object.keys(routePoints(rs.ids.concat(rs.maybe))).length > 0; }
+function openRoute(id) {
+  const rs = routeSources(id);
+  let useMaybe = false, cur = null; const excluded = new Set();
+  let ov = $('#gps'); if (!ov) { ov = document.createElement('div'); ov.id = 'gps'; document.body.appendChild(ov); }
+  const close = () => { ov.style.display = 'none'; ov.innerHTML = ''; document.body.style.overflow = ''; document.removeEventListener('keydown', esc_); };
+  const esc_ = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', esc_); document.body.style.overflow = 'hidden';
+  const render = () => {
+    const all = useMaybe ? rs.ids.concat(rs.maybe) : rs.ids;
+    // On retire les sources que ta compétence ne permet pas encore de récolter.
+    const tooHigh = all.filter(s => { const fi = farmInfo(s); return fi && fi.tooHigh; });
+    const ids = all.filter(s => !tooHigh.includes(s));
+    const zones = routePoints(ids);
+    const ranked = Object.entries(zones).map(([z, pts]) => [z, routeCluster(pts)]).sort((a, b) => b[1].length - a[1].length);
+    if (!cur || !zones[cur]) cur = ranked.length ? ranked[0][0] : null;
+    const srcNames = ids.map(s => itemName(s));
+    const warn = tooHigh.map(s => { const fi = farmInfo(s); return itemName(s) + ' (' + t('sk_' + fi.kind) + ' ' + fi.skill + ')'; });
+    let body = '';
+    if (!cur) body = `<p class="muted" style="padding:16px">${t('rt_none')}</p>`;
+    else {
+      const clusters = ranked.find(r => r[0] === cur)[1].filter(c => !excluded.has(c.x + ',' + c.y));
+      const st = zoneStart(cur, clusters);
+      const startPt = st ? { x: st.x, y: st.y } : null;
+      const tour = routeSolve(clusters, startPt);
+      const naive = tourLen(clusters), opt = tourLen(tour);
+      const path = startPt ? [startPt].concat(tour, [startPt]) : tour.concat(tour.length ? [tour[0]] : []);
+      body = `<div class="gps-body"><div class="gps-route rt-mapcol">
+        <div class="row" style="padding:8px 12px;gap:8px">${ranked.map(([z, c]) => `<button class="chip ${z === cur ? 'on' : ''}" data-rz="${esc(z)}">${zoneName(z)} <span class="dim">${c.length}</span></button>`).join('')}</div>
+        <div class="wmap rt-map"><img src="maps/z_${zoneSlug(cur)}.jpg" alt="" onerror="this.parentNode.classList.add('nomap')"><div class="nomapmsg">${t('ht_nomap')}</div>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="${path.map(p => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#000" stroke-opacity=".75" vector-effect="non-scaling-stroke" style="stroke-width:6px" stroke-linejoin="round"/><polyline points="${path.map(p => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#ffd23f" vector-effect="non-scaling-stroke" style="stroke-width:3px" stroke-linejoin="round"/></svg>
+          ${st ? `<span class="pin start" style="left:${st.x}%;top:${st.y}%" title="${esc(st.name)}">▶</span>` : ''}
+          ${tour.map((c, i) => `<span class="rpt" data-rx="${c.x},${c.y}" style="left:${c.x}%;top:${c.y}%;background:${ROUTE_COLORS[[...c.srcs][0] % ROUTE_COLORS.length]}" title="${i + 1}. ${esc(c.nm)} (${c.x}, ${c.y})${c.n > 1 ? ' ×' + c.n : ''} · ${t('rt_click_skip')}">${i + 1}</span>`).join('')}
+          ${[...excluded].filter(k => ranked.find(r => r[0] === cur)[1].some(c => c.x + ',' + c.y === k)).map(k => { const [x, y] = k.split(','); return `<span class="rpt off" data-rx="${k}" style="left:${x}%;top:${y}%" title="${t('rt_click_back')}">✕</span>`; }).join('')}
+        </div></div>
+        <div class="gps-side">
+          <h3>${t('rt_summary')}</h3>
+          <p>${t('rt_points', { n: tour.length, z: zoneName(cur) })}${excluded.size ? ' · ' + t('rt_skipped', { n: excluded.size }) : ''}</p>
+          <p>${t('rt_gain', { p: naive > 0 ? Math.round((1 - opt / naive) * 100) : 0 })}</p>
+          ${st ? `<p>${t('rt_start', { s: esc(st.name) })} <button class="act" id="rtGps">🧭 ${t('rt_go_start')}</button></p>` : `<p class="note">${t('rt_no_town')}</p>`}
+          <div class="row legend">${ids.map((s, i) => `<span class="chip on"><span class="dot" style="background:${ROUTE_COLORS[i % ROUTE_COLORS.length]}"></span>${esc(srcNames[i])}</span>`).join('')}</div>
+          ${warn.length ? `<p class="note">⚠ ${t('rt_skill_warn')} ${warn.map(esc).join(', ')}</p>` : ''}
+          <p class="note">${t('rt_help')}</p>
+          <p class="note">${t('rt_limits')}</p>
+        </div></div>`;
+    }
+    ov.innerHTML = `<div class="gps-box">
+      <div class="gps-head"><div class="gps-dest">🗺️ <b>${t('rt_title')} : ${esc(itemName(id))}</b>${rs.note ? `<br><span class="small dim">${t(rs.note)}</span>` : ''}</div>
+        ${rs.maybe.length ? `<label class="chk"><input type="checkbox" id="rtMaybe" ${useMaybe ? 'checked' : ''}> ${t('rt_maybe', { l: rs.maybe.map(itemName).join(', ') })}</label>` : ''}
+        <button class="act big" id="rtClose">✕</button></div>${body}</div>`;
+    ov.style.display = 'flex';
+    $('#rtClose').onclick = close; if ($('#rtMaybe')) $('#rtMaybe').onchange = e => { useMaybe = e.target.checked; render(); };
+    ov.querySelectorAll('[data-rz]').forEach(b => b.onclick = () => { cur = b.dataset.rz; excluded.clear(); render(); });
+    ov.querySelectorAll('[data-rx]').forEach(el => el.onclick = () => { const k = el.dataset.rx; excluded.has(k) ? excluded.delete(k) : excluded.add(k); render(); });
+    if ($('#rtGps')) $('#rtGps').onclick = () => { const st = zoneStart(cur, routeCluster(routePoints(useMaybe ? rs.ids.concat(rs.maybe) : rs.ids)[cur])); close(); openGps([null, cur, [[st.name, 'v']], [[st.x, st.y, 0]]], [st.x, st.y, 0]); };
+  };
+  render();
 }
 
 // ------------------------------------------------------------------ cadre
