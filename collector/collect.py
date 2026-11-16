@@ -541,6 +541,23 @@ class Collector:
             self.v.write(f"d/m_{house['id']}", {"t": self.t, "items": {str(k): v for k, v in market.items()}})
             self.update_indexes(house["id"], items, idx_points)
 
+        farm = self.v.read("state/farm", None)
+        stale = not farm or self.t - farm.get("t", 0) > 7 * 86400
+        if stale and not os.environ.get("MOCK_API"):
+            import requests
+            from farm import collect as farm_collect
+            got = farm_collect(items, requests, log)
+            if got:
+                farm = {"t": self.t, "items": got}
+            else:  # échec : on garde l'ancien et on réessaie dans un jour
+                farm = {"t": self.t - 6 * 86400, "items": (farm or {}).get("items", {})}
+        elif stale:
+            from mockapi import FARM
+            farm = {"t": self.t, "items": FARM}
+        farm = farm or {"t": 0, "items": {}}
+        self.v.write("state/farm", farm)
+        self.v.write("d/farm", farm["items"])
+
         recipes = self.update_recipes(self.v.read("state/recipes", None))
         self.v.write("state/recipes", recipes)
         custom = json.load(open(os.path.join(ROOT, "data", "recipes_custom.json")))

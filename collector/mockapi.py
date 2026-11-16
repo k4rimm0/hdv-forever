@@ -121,3 +121,19 @@ class MockAPI:
                          "crafted_quantity": {"value": 1},
                          "reagents": [{"reagent": {"id": a}, "quantity": q} for a, q in data[3]]}, None
         return 404, None, None
+
+# Sources de farm simulées (même format que farm.summarize).
+FARM = {
+    "2589": {"m": [["Defias Looter", 13, 14, "Westfall", 39.0, "1–3"], ["Kolkar Wrangler", 12, 13, "The Barrens", 39.0, "1–3"]], "n": []},
+    "2592": {"m": [["Mosshide Fenrunner", 22, 23, "Wetlands", 25.0, "1–2"], ["Windshear Digger", 21, 22, "Stonetalon Mountains", 25.0, "1–2"]], "n": []},
+    "4306": {"m": [["Bloodscalp Scout", 34, 35, "Stranglethorn Vale", 30.0, "1–2"]], "n": []},
+    "2318": {"m": [], "n": [], "s": [1, 28, "Gesharahan", "The Barrens", 82.0, 1]},
+    "2319": {"m": [], "n": [], "s": [16, 36, "Skum", "Wailing Caverns", 99.0, 60]},
+    "2770": {"m": [], "n": [["Copper Vein", ["The Barrens", "Durotar"], 4, 100.0]], "k": ["mining", 1]},
+    "2771": {"m": [], "n": [["Tin Vein", ["Ashenvale", "Wetlands"], 4, 100.0]], "k": ["mining", 65]},
+    "2447": {"m": [], "n": [["Peacebloom", ["Teldrassil", "Tirisfal Glades"], 4, 100.0]], "k": ["herb", 1]},
+    "765": {"m": [], "n": [["Silverleaf", ["Tirisfal Glades", "Teldrassil"], 4, 100.0]], "k": ["herb", 1]},
+    "2450": {"m": [], "n": [["Briarthorn", ["Westfall", "Silverpine Forest"], 4, 100.0]], "k": ["herb", 70]},
+    "2673": {"m": [["Coyote", 10, 11, "Westfall", 54.0, ""], ["Coyote Packleader", 11, 12, "Westfall", 51.0, ""]], "n": []},
+    "3685": {"m": [["Highland Razormaw", 27, 28, "Wetlands", 72.0, ""]], "n": []},
+}

@@ -53,6 +53,10 @@ const T = {
     cat_ALL: 'Tout le marché', cat_TRADE: 'Artisanat', cat_CONS: 'Consommables', cat_GEAR: 'Équipement', cat_RECIPE: 'Recettes',
     cat_CLOTH: 'Tissu', cat_LEATHER: 'Cuir', cat_ORE: 'Minerai et barres', cat_MEAT: 'Viande et poisson', cat_HERB: 'Herbes',
     cat_ELEM: 'Élémentaire', cat_ENCH: 'Enchantement', cat_POT: 'Potions', cat_ELIX: 'Élixirs', cat_SCROLL: 'Parchemins', cat_FOOD: 'Nourriture', cat_BAND: 'Bandages',
+    col_where: 'Où / comment', col_skill: 'Compétence', where_title: 'Où le trouver',
+    sk_herb: 'Herboristerie', sk_mining: 'Minage', sk_skin: 'Dépeçage', sk_fish: 'Pêche', beasts: 'bêtes niv.',
+    lvl_s: 'niv.', of_catches: 'des prises', farm_new: 'Nouveau dans Forever : source pas encore connue.',
+    my_skills: 'Mes métiers de récolte', too_high: 'trop haut pour toi', farm_src_note: 'Monstres et taux de drop : metabot.gg (données de Classic, Forever a pu en changer). Compétences : valeurs de Classic. Noms des monstres en anglais.',
     sales_note: 'Ventes estimées : une annonce qui disparaît alors qu’il lui restait du temps est comptée comme vendue. C’est une estimation (une annonce annulée disparaît aussi).',
   },
   en: {
@@ -104,6 +108,10 @@ const T = {
     cat_ALL: 'Whole market', cat_TRADE: 'Trade goods', cat_CONS: 'Consumables', cat_GEAR: 'Gear', cat_RECIPE: 'Recipes',
     cat_CLOTH: 'Cloth', cat_LEATHER: 'Leather', cat_ORE: 'Ore & bars', cat_MEAT: 'Meat & fish', cat_HERB: 'Herbs',
     cat_ELEM: 'Elemental', cat_ENCH: 'Enchanting', cat_POT: 'Potions', cat_ELIX: 'Elixirs', cat_SCROLL: 'Scrolls', cat_FOOD: 'Food & drink', cat_BAND: 'Bandages',
+    col_where: 'Where / how', col_skill: 'Skill', where_title: 'Where to get it',
+    sk_herb: 'Herbalism', sk_mining: 'Mining', sk_skin: 'Skinning', sk_fish: 'Fishing', beasts: 'beasts lvl',
+    lvl_s: 'lvl', of_catches: 'of catches', farm_new: 'New in Forever: source not known yet.',
+    my_skills: 'My gathering skills', too_high: 'too high for you', farm_src_note: 'Mobs and drop rates: metabot.gg (Classic data, Forever may differ). Skills: Classic values.',
     sales_note: 'Estimated sales: an auction that disappears while it still had time left is counted as sold. It is an estimate (a cancelled auction disappears too).',
   }
 };
@@ -327,6 +335,41 @@ function sourceOf(id) {
     default: return 'mobs_misc';
   }
 }
+const ZONE_FR = {
+  'Elwynn Forest': "Forêt d'Elwynn", 'Westfall': "Marche de l'Ouest", 'Redridge Mountains': 'Les Carmines', 'Duskwood': 'Bois de la Pénombre',
+  'Stranglethorn Vale': 'Vallée de Strangleronce', 'Wetlands': 'Les Paluns', 'Arathi Highlands': "Hautes-terres d'Arathi",
+  'Hillsbrad Foothills': 'Contreforts de Hautebrande', 'Alterac Mountains': "Montagnes d'Alterac", 'Silverpine Forest': 'Forêt des Pins-Argentés',
+  'Tirisfal Glades': 'Clairières de Tirisfal', 'Western Plaguelands': "Maleterres de l'Ouest", 'Eastern Plaguelands': "Maleterres de l'Est",
+  'The Hinterlands': 'Les Hinterlands', 'Badlands': 'Terres ingrates', 'Searing Gorge': 'Gorge des Vents brûlants', 'Burning Steppes': 'Steppes ardentes',
+  'Swamp of Sorrows': 'Marais des Chagrins', 'Blasted Lands': 'Terres foudroyées', 'Deadwind Pass': 'Défilé de Deuillevent', 'The Barrens': 'Les Tarides',
+  'Darkshore': 'Sombrivage', 'Ashenvale': 'Orneval', 'Stonetalon Mountains': 'Les Serres-Rocheuses', 'Desolace': 'Désolace',
+  'Thousand Needles': 'Mille pointes', 'Dustwallow Marsh': "Marécage d'Âprefange", 'Feralas': 'Féralas', "Un'Goro Crater": "Cratère d'Un'Goro",
+  'Felwood': 'Gangrebois', 'Winterspring': "Berceau-de-l'Hiver", 'Moonglade': 'Reflet-de-Lune', 'Stormwind City': 'Hurlevent',
+};
+const zoneName = z => esc(S.lang === 'fr' ? (ZONE_FR[z] || z) : z);
+const pctTxt = v => v == null ? '' : (v >= 10 ? Math.round(v) : v.toLocaleString(S.lang, { maximumFractionDigits: 1 })) + ' %';
+function mySkills() { try { return JSON.parse(store('hf_skills') || '{}'); } catch (e) { return {}; } }
+function farmInfo(id) {
+  const f = S.farm && S.farm[id];
+  if (!f) return null;
+  const parts = []; let skill = null, kind = null;
+  if (f.k) {
+    kind = f.k[0] === 'herb' ? 'herb' : 'mining'; skill = f.k[1];
+    const n = f.n && f.n[0];
+    parts.push(`<b>${t('sk_' + kind)} ${skill}</b>${n ? ' · ' + n[1].map(zoneName).join(', ') + (n[2] ? ' +' + n[2] : '') : ''}`);
+  } else if (f.s) {
+    kind = 'skin'; skill = f.s[5];
+    parts.push(`<b>${t('sk_skin')} ${skill}+</b> · ${t('beasts')} ${f.s[0]}–${f.s[1]}`);
+  }
+  if (f.f) parts.push(`<b>${t('sk_fish')}</b> · ${zoneName(f.f[0])} (${pctTxt(f.f[1])} ${t('of_catches')})`);
+  if (!f.k && !f.f && f.n && f.n.length) parts.push(f.n.slice(0, 2).map(n => `${esc(n[0])} · ${n[1].map(zoneName).join(', ')} (${pctTxt(n[3])})`).join('<br>'));
+  if (!f.k && f.m && f.m.length) parts.push(f.m.slice(0, 2).map(m => `${esc(m[0])} <span class="dim">(${t('lvl_s')} ${m[1]}${m[2] !== m[1] ? '–' + m[2] : ''})</span> · ${zoneName(m[3])} · <b>${pctTxt(m[4])}</b>${m[5] ? ' ×' + m[5] : ''}`).join('<br>'));
+  if (f.new && !parts.length) parts.push(`<span class="dim">${t('farm_new')}</span>`);
+  if (!parts.length) return null;
+  const myv = kind ? mySkills()[kind] : null;
+  const tooHigh = skill != null && myv != null && myv !== '' && Number(myv) < skill;
+  return { html: parts.join('<br>'), skill, kind, tooHigh };
+}
 function vendorSet() { const s = new Map(); for (const v of S.vendor || []) s.set(v.id, v); return s; }
 function vendorBuyPrice(id, vs) {
   const v = vs.get(id); if (!v) return null;
@@ -452,6 +495,7 @@ async function viewItem(id) {
       <div class="kpi"><div class="l">${t('item_vendor_sell')}</div><div class="v">${money(meta.sp || null)}</div><div class="s">${vb ? t('item_vendor_buy') + ' ' + money(vb) : ''}</div></div>
     </div>
     <div class="panel"><div class="row spread"><h2>${t('item_chart')}</h2><div id="per"></div></div><div class="chart" id="ch"></div><div id="lg"></div></div>
+    ${farmInfo(id) ? `<div class="panel"><h2>${t('where_title')}</h2><div class="where">${farmInfo(id).html}</div><p class="note">${t('farm_src_note')}</p></div>` : ''}
     <div class="panel"><h2>${t('item_houses')}</h2><div id="hs"></div></div>
     <div class="grid g2"><div class="panel"><h2>${t('item_made_by')}</h2><div id="mk"></div></div><div class="panel"><h2>${t('item_used_in')}</h2><div id="us"></div></div></div>`;
   $('#watchBtn').onclick = () => {
@@ -489,16 +533,19 @@ async function viewFarm() {
   app().innerHTML = `<div class="hero"><h1>${t('farm_title')}</h1><p>${t('farm_sub')}</p></div>
     <div class="panel"><div class="row"><label>${t('my_level')} <input type="number" id="lvl" min="1" max="60" value="${lvl}"></label>
       <label>${t('range')} ± <input type="number" id="band" min="1" max="30" value="${band}"></label><div class="row" id="srcs"></div></div>
+      <div class="row" style="margin-top:8px"><span class="muted">${t('my_skills')} :</span>${['herb', 'mining', 'skin'].map(k => `<label>${t('sk_' + k)} <input type="number" class="sk" data-k="${k}" min="0" max="300" value="${mySkills()[k] ?? ''}"></label>`).join('')}</div>
       <p class="help">${t('farm_help')}</p></div>
     <div class="panel focus"><h2>${t('focus')}</h2><div id="top"></div></div>
-    <div class="panel"><div id="list"></div><p class="note">${t('sales_note')}</p></div>`;
+    <div class="panel"><div id="list"></div><p class="note">${t('sales_note')}</p><p class="note">${t('farm_src_note')}</p></div>`;
+  app().querySelectorAll('input.sk').forEach(inp => inp.oninput = () => { const m = mySkills(); m[inp.dataset.k] = inp.value === '' ? '' : Number(inp.value); store('hf_skills', JSON.stringify(m)); draw(); });
   const sources = ['all', 'mobs_humanoid', 'mobs_beast', 'skinning', 'herbalism', 'mining', 'fishing', 'mobs_elemental', 'disenchant', 'mobs_misc'];
   function draw() {
     $('#srcs').innerHTML = sources.map(s => `<button class="chip small ${s === src ? 'on' : ''}" data-s="${s}">${t('src_' + s)}</button>`).join('');
     $('#srcs').querySelectorAll('button').forEach(b => b.onclick = () => { src = b.dataset.s; store('hf_src', src); draw(); });
+    const vs = vendorSet();
     const rows = Object.entries(m.items).map(([id, r]) => [Number(id), r]).filter(([id, r]) => {
       const meta = S.items[id]; const so = sourceOf(id);
-      if (!meta || !so || !r[MKT]) return false;
+      if (!meta || !so || !r[MKT] || vs.has(id)) return false;
       if (src !== 'all' && so !== src) return false;
       return meta.il >= lvl - band && meta.il <= lvl + Math.ceil(band / 2);
     });
@@ -510,6 +557,7 @@ async function viewFarm() {
       { k: 'mkt', label: t('col_mkt'), f: r => money(r[1][MKT]) + (S.items[r[0]].sp > r[1][MKT] ? ` <span class="badge warn" title="${esc(t('vendor_note'))}">PNJ</span>` : ''), v: r => r[1][MKT] },
       { k: 'pd', label: t('col_pd'), f: r => num(r[1][PD]), v: r => r[1][PD] },
       { k: 'flow', label: t('col_flow'), f: r => money(flow(r), { short: true }), v: r => flow(r) },
+      { k: 'where', label: t('col_where'), f: r => { const fi = farmInfo(r[0]); return fi ? `<div class="where">${fi.html}${fi.tooHigh ? ` <span class="badge bad">${t('too_high')}</span>` : ''}</div>` : '<span class="dim">–</span>'; }, cls: 'l' },
       { m: false, k: 'qty', label: t('col_qty'), f: r => num(r[1][QTY]), v: r => r[1][QTY] },
       { m: false, k: 'd7', label: t('col_d7'), f: r => pctf(r[1][C7]), v: r => r[1][C7] },
     ];
@@ -735,7 +783,7 @@ function setupSearch() {
   };
 }
 async function start() {
-  [S.items, S.recipes, S.vendor] = await Promise.all([load('items'), load('recipes'), load('vendor')]);
+  [S.items, S.recipes, S.vendor, S.farm] = await Promise.all([load('items'), load('recipes'), load('vendor'), load('farm').catch(() => null)]);
   S.items = S.items || {}; S.recipes = S.recipes || []; S.vendor = S.vendor || [];
   buildSearch();
   $('#lock').style.display = 'none';
