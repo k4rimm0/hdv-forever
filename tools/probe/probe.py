@@ -44,3 +44,17 @@ for u in urls:
     except Exception as e:
         print("ERR", u, e)
     time.sleep(0.5)
+
+# Archive chiffrée pour l'analyse (clé publique : seul le détenteur de la clé privée peut lire).
+import io, tarfile, base64
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+buf = io.BytesIO()
+with tarfile.open(fileobj=buf, mode="w:gz") as tf:
+    tf.add(out, arcname="probe")
+pub = serialization.load_pem_public_key(open(os.path.join(os.path.dirname(__file__), "pub.pem"), "rb").read())
+key = os.urandom(32); iv = os.urandom(12)
+ek = pub.encrypt(key, padding.OAEP(mgf=padding.MGF1(hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
+open("probe.enc", "wb").write(len(ek).to_bytes(2, "big") + ek + iv + AESGCM(key).encrypt(iv, buf.getvalue(), None))
+print("probe.enc", os.path.getsize("probe.enc"))
