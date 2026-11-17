@@ -184,7 +184,7 @@ def summarize(name, desc, tables, where=None):
             if r["elite"] or r["pct"] is None or r["name"] in seen or DUNGEONS.search(zone) or not r["zones"]:
                 continue
             seen.add(r["name"])
-            mobs.append([r["name"], r["lmin"], r["lmax"], r["zones"][0], r["pct"], r["qty"], r.get("npc", "")])
+            mobs.append([r["name"], r["lmin"], r["lmax"], r["zones"][0], r["pct"], r["qty"], r.get("npc", ""), r["zones"][:6]])
     mobs.sort(key=lambda x: -x[4])
     nodes = []
     for r in tables.get("L", []):
@@ -194,7 +194,7 @@ def summarize(name, desc, tables, where=None):
     nodes = nodes[:3]
     sk = re.search(r"skinned from level (\d+)–(\d+) creatures; (.+?) in (.+?) gives it most often \(([\d.]+)%\)", desc)
     fi = re.search(r"caught by fishing in (?:\d+ zones?, most often in )?(.+?) \(([\d.]+)% of catches\)", desc)
-    out = {"m": mobs[:8], "n": nodes}
+    out = {"m": mobs[:40], "n": nodes}
     if where:
         out.update(where)
     if sk:
