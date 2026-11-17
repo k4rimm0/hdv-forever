@@ -642,19 +642,19 @@ class Collector:
             self.update_indexes(house["id"], items, idx_points)
 
         farm = self.v.read("state/farm", None)
-        stale = not farm or self.t - farm.get("t", 0) > 7 * 86400 or farm.get("v", 1) < 4
+        stale = not farm or self.t - farm.get("t", 0) > 7 * 86400 or farm.get("v", 1) < 5
         if stale and not os.environ.get("MOCK_API"):
             import requests
             from farm import collect as farm_collect
             got = farm_collect(items, requests, log, extra_ids=self.vendor_ids())
             if got:
                 # Les objets dont la page n'a pas pu être lue gardent leurs anciennes données.
-                farm = {"t": self.t, "v": 4, "items": {**(farm or {}).get("items", {}), **got}}
+                farm = {"t": self.t, "v": 5, "items": {**(farm or {}).get("items", {}), **got}}
             else:  # échec : on garde l'ancien et on réessaie dans un jour
                 farm = {"t": self.t - 6 * 86400, "items": (farm or {}).get("items", {})}
         elif stale:
             from mockapi import FARM
-            farm = {"t": self.t, "v": 4, "items": FARM}
+            farm = {"t": self.t, "v": 5, "items": FARM}
         farm = farm or {"t": 0, "items": {}}
         self.v.write("state/farm", farm)
         self.v.write("d/farm", farm["items"])
