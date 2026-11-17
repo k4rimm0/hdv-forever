@@ -167,3 +167,5 @@ TOOLTIPS = {
 NPCS = {"coyote-packleader-833": {"t": 0, "nm": "Coyote Packleader", "lv": [11, 12], "role": "Enemy", "zone": "Westfall", "sp": 22,
   "p": [["Westfall", [[46.4, 20.5], [47.5, 14.8], [62.3, 42.0], [55, 30], [58, 35]]]],
   "dr": [["Coyote Meat", "coyote-meat", 51.0, "1", "#FFFFFF"], ["Fractured Canine", "fractured-canine", 47.0, "1", "#9D9D9D"], ["Linen Cloth", "linen-cloth", 12.0, "1-2", "#FFFFFF"]]}}
+
+GEAR = {"t": 0, "items": [], "det": {}, "qu": {}}

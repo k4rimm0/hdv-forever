@@ -694,6 +694,18 @@ class Collector:
             wfb = collect_wfb(self.v.read("state/wfb", None), items, requests, log, self.t)
             self.v.write("state/wfb", wfb)
             self.v.write("d/wfb", wfb.get("p", {}))
+        # Équipement : base d'objets complète + « comment l'obtenir » (page Équipement du site).
+        from gear import collect_gear, publish as gear_publish
+        if not os.environ.get("MOCK_API"):
+            gst = collect_gear(self.v.read("state/gear", None), requests, log, self.t,
+                               budget=int(os.environ.get("GEAR_BUDGET", "500")))
+        else:
+            from mockapi import GEAR
+            gst = self.v.read("state/gear", None) or GEAR
+        self.v.write("state/gear", gst)
+        g1, g2 = gear_publish(gst)
+        self.v.write("d/gear", g1)
+        self.v.write("d/geardet", g2)
         npcs = self.v.read("state/npcs", None) or {}
         if not os.environ.get("MOCK_API"):
             from farm import collect_npcs
