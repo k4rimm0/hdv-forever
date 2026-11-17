@@ -19,7 +19,7 @@ open(f"{out}/items_raw.json", "w").write(r.text)
 lst = parse_items(r.json())
 print("items", len(lst))
 # Échantillon : objets niveau 1-30 qualité >= 2 + quelques 60, pour tester les détails et les quêtes.
-pick = [it for it in lst if max(it[5] or 1, it[4] - 7) <= 34 and it[3] >= 1]
+pick = [it for it in lst if max(it[5] or 1, it[4] - 9) >= 50 and it[3] >= 2]
 st = {"t": int(time.time()), "items": pick, "det": {}, "qu": {}}
 st = collect_gear(st, requests, print, int(time.time()), budget=6000, delay=0.15)
 st["items"] = lst
