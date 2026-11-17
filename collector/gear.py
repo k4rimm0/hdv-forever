@@ -108,6 +108,7 @@ def collect_gear(prev, requests_mod, log, now, budget=500, delay=0.35):
                 log("équipement : items.json statut", r.status_code)
         except Exception as e:
             log("équipement : items.json", type(e).__name__)
+    collect_sets(st, s, log, now)
     items = st.get("items") or []
     # Détails : d'abord les objets jamais lus, du plus haut niveau de qualité au plus bas, puis les plus anciens.
     order = sorted(items, key=lambda it: (it[0] in st["det"], st["det"].get(it[0], [0])[0], -it[3], it[5]))
@@ -151,8 +152,46 @@ def collect_gear(prev, requests_mod, log, now, budget=500, delay=0.35):
     return st
 
 
+def parse_set(html):
+    """Page de panoplie metabot -> [nom, [objets (slugs)], [[nombre de pièces, texte du bonus], ...]]."""
+    name = re.search(r'<title>(.*?) – WoW Forever', html)
+    pieces = []
+    for slug_ in re.findall(r'_pieceHead"><a [^>]*href="/en/wow-forever/items/([\w-]+)"', html):
+        if slug_ not in pieces:
+            pieces.append(slug_)
+    bonus = [[int(n), _text(txt)] for n, txt in
+             re.findall(r'_bonusCount">\((\d)\) Set</span><span class="[^"]*_bonusText">(.*?)</span>', html, flags=re.S)]
+    return [_text(name.group(1)) if name else "", pieces, bonus]
+
+
+def collect_sets(st, s, log, now, delay=0.3):
+    """Panoplies (170 environ), rafraîchies une fois par semaine."""
+    if st.get("sets") and now - st.get("sets_t", 0) < 7 * 86400:
+        return
+    try:
+        r = s.get(f"{BASE}/item-sets", timeout=30)
+        slugs = []
+        for x in re.findall(r"/en/wow-forever/item-sets/([a-z0-9-]+)", r.text):
+            if x not in slugs:
+                slugs.append(x)
+        sets = {}
+        for x in slugs:
+            time.sleep(delay)
+            rs = s.get(f"{BASE}/item-sets/{x}", timeout=30)
+            if rs.status_code == 200:
+                ps = parse_set(rs.text)
+                if ps[1] and ps[2]:
+                    sets[x] = ps
+        if sets:
+            st["sets"] = sets
+            st["sets_t"] = now
+        log("équipement : panoplies", len(sets))
+    except Exception as e:
+        log("équipement : panoplies", type(e).__name__)
+
+
 def publish(st):
     """Données publiées pour le site : objets + détails + quêtes (sans les dates)."""
     det = {k: v[1] for k, v in st.get("det", {}).items() if "err" not in v[1]}
     qu = {k: v[1] for k, v in st.get("qu", {}).items()}
-    return {"t": st.get("t", 0), "items": st.get("items", [])}, {"det": det, "qu": qu}
+    return {"t": st.get("t", 0), "items": st.get("items", [])}, {"det": det, "qu": qu, "sets": st.get("sets", {})}
