@@ -73,7 +73,7 @@ const T = {
     pr_my: 'Mon niveau en', pr_mode_gold: "Gagner de l'or", pr_mode_lvl: 'Monter le métier', pr_onlycan: 'Seulement ce que je peux faire', pr_norec: 'Sans recette à acheter (entraîneur)',
     pr_help_gold: "Bénéfice/jour = bénéfice par objet × ventes estimées par jour : c'est ce qui dit si ça vaut le coup. Chaque composant est compté au moins cher entre l'HDV et le PNJ.",
     pr_help_lvl: "Coût par point = coût des composants (moins la moitié de la revente) ÷ chance de gagner un point. Orange = 100 %, jaune puis vert = de moins en moins, gris = 0.",
-    pr_skill: 'Niveau', fs_label: 'Je farme :', fs_h: 'côté Horde', fs_a: 'côté Alliance', fs_all: 'partout', zs_h: 'Territoire Horde', zs_a: "Territoire Alliance (gardes hostiles si tu es Horde)", zs_c: 'Zone contestée (les deux factions)', fs_hidden: '{n} autre(s) monstre(s) seulement en territoire adverse, masqué(s). Choisis « partout » pour les voir.', fs_none: "Aucun monstre connu de ce côté : voici ceux du territoire adverse. Attention aux gardes.", fs_enemy: "{z} est en territoire adverse : gardes et joueurs ennemis. Regarde les autres zones au-dessus si possible.", rk_title: 'Paliers à débloquer', rk_pass: 'Pour dépasser {c}', rk_n_j: 'Compagnon', rk_n_e: 'Expert', rk_n_a: 'Artisan', rk_skill: 'dès {s} de compétence', rk_lvl: 'perso niveau {l}', rk_missing: '(il te manque {n} niveau(x))', rk_mylvl: 'Niveau de ton perso :', rk_train_j: "à apprendre chez l'entraîneur du métier (en ville)", rk_train_e: "à apprendre chez l'entraîneur du métier", rk_train_a: "à apprendre chez un maître artisan (entraîneur spécial, souvent hors des capitales)", rk_cook_e: "lire le livre « The Expert Cookbook » (1 po), vendu par Wulan au village de Shadowprey, Désolace (Horde, étage du bâtiment le plus à l'est) ou Shandrina à Orneval (Alliance), il s'échange donc regarde aussi l'HDV", rk_cook_a: "quête « Clamlette Surprise » de Dirge Quikcleave, à l'auberge de Gadgetzan (Tanaris) : il faut 12 Œufs géants (rocs autour de Gadgetzan), 10 Chairs de palourde relevée et 20 Gruyère d'Alterac (aubergiste)", rk_fa_e: "lire le livre « Expert First Aid - Under Wraps » (1 po), vendu au marécage d'Âprefange (Brackenwall, Horde) ou dans les Hautes-terres d'Arathi (Alliance)", rk_fa_a: "quête « Triage » à Trépas-d'Orgrim / Hammerfall (Hautes-terres d'Arathi, Horde) ou à Theramore (Alliance)", rk_fish_e: "lire le livre « Expert Fishing - The Bass and You » (1 po), vendu par le vieux Heming à Baie-du-Butin", rk_fish_a: "quête « Nat Pagle, Angler Extreme » au marécage d'Âprefange (4 poissons rares à ramener)", gg_help_Herbalism: "Ramasse la plante indiquée pour ton niveau : tant qu'elle est orange, chaque cueillette donne un point. Clique sur « Route » pour un trajet de farm optimisé.", gg_help_Mining: "Mine le filon indiqué pour ton niveau (orange = un point à chaque fois). Fondre les minerais en barres fait aussi monter le Minage : voir plus bas. Clique sur « Route » pour un trajet optimisé.", gg_help_Skinning: "Le dépeçage dépend du niveau des bêtes : pour monter, dépèce les bêtes les plus hautes que tu peux. Formule : jusqu'au niveau 20, compétence = (niveau − 10) × 10 ; au-dessus, niveau × 5. Astuce : dépèce tout ce que tu tues en montant de niveau.", gg_help_Fishing: "La pêche monte un point par prise, de plus en plus lentement. Pêche dans des zones de ton niveau de pêche, avec un appât (+25 ou +50) si tu rates trop de prises.", gg_what: 'Quoi récolter', gg_rare: 'rare, à prendre si tu le croises :', gg_where: 'Où', gg_value: 'Valeur HDV', gg_nozone: 'zones inconnues', gg_note: "Niveaux requis de Classic : Forever a pu en changer quelques-uns. Une plante/un filon reste orange jusqu'à +25, jaune jusqu'à +50, vert jusqu'à +100 au-dessus du niveau requis. Paliers : Compagnon à 75, Expert à 150 et Artisan à 225 chez l'entraîneur.", gg_mobs: 'Bêtes à dépecer', gg_beasts: 'niveau {a} à {b}', gg_skin_note: "Paliers chez l'entraîneur de dépeçage : Compagnon (75), Expert (150), Artisan (225). Le cuir récupéré se vend bien à l'HDV.", gg_tip: 'Conseil', fish_1: "Apprends la pêche chez l'entraîneur (Orgrimmar). N'importe quelle eau de départ suffit.", fish_75: "Achète un appât (Appât brillant, +25) si tu rates des prises.", fish_150: "À 150 : quête « Commence par la fin » (livre Expert) chez le vieux Heming à Baie-du-Butin, Strangleronce.", fish_225: "À 225 : quête Artisan de Nat Pagle au marécage d'Âprefange (il faut rapporter 4 poissons rares).", gg_fish_note: "Zones conseillées de Classic. Une canne à pêche plus forte (+20 ou +25) aide beaucoup à partir de 150.", gg_smelt: 'Fonte (fait aussi monter le Minage)', rah_loading: 'Recherche dans tes 3 HDV…', rah_bop: "<b>Liée quand ramassée</b> : cette recette ne peut jamais être vendue à l'HDV, il faut la looter toi-même (voir ci-dessous).", rah_noid: "Jamais vue en vente dans aucun de tes 3 HDV (Horde, Alliance, neutre) depuis que le site les relève. C'est souvent une recette « liée quand ramassée » : elle ne peut pas être vendue, il faut la looter soi-même.", rah_found: 'En vente en ce moment :', rah_none_all: "Pas en vente en ce moment, ni à l'HDV Horde, ni à l'Alliance, ni au neutre (Blackwater).", rah_last: 'Dernier prix vu :', rah_ally: 'il faut un perso Alliance', rah_neutral: 'accessible aux deux factions (Baie-du-Butin, Gadgetzan, Everlook)', rah_alert: "🔔 M'avertir quand elle est en vente", rah_alert_on: '🔕 Alerte activée (cliquer pour retirer)', rah_notif: '{n} est en vente à l\'HDV !', rah_badge_on: 'en vente !', rah_badge_wait: 'pas encore en vente', rah_nosrc: "Aucune source connue dans nos données (souvent une recette qui tombe au hasard sur les monstres d'une tranche de niveau, ou une récompense de quête). Fiche complète :", cd_open: 'Voir le prix de chaque composant', cd_mat: 'Composant', cd_qty: 'Quantité', cd_unit: "Prix à l'unité", cd_src: 'Où l\'acheter', cd_total: 'Total', cd_vendor: 'PNJ', cd_ah: 'HDV', cd_none: 'aucun prix connu', cd_sum: 'Coût pour une fabrication', cd_makes: 'donne {n} objets', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_tiers_tip: 'Tu peux l\'apprendre à {a}. De {a} à {b} (orange) : chaque fabrication donne 1 point à coup sûr. De {b} à {c} (jaune) : souvent un point. De {c} à {d} (vert) : rarement. À partir de {d} (gris) : plus aucun point.', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
+    pr_skill: 'Niveau', nav_gear: '🛡️ Équipement', ge_title: 'Équipement : les stuffs par classe et par niveau', ge_sub: "Le meilleur stuff pour ta classe, ta spécialisation et ton niveau, avec où trouver chaque pièce (quête, donjon, vendeur, craft, HDV) et ce que ça coûte. Les priorités de stats viennent des guides de WoW Forever (Icy Veins, Mobalytics, Warcraft Tavern) : tank, dégâts et soins ne cherchent pas du tout les mêmes objets.", ge_filters: 'Filtres', ge_class: 'Classe', ge_spec: 'Spécialisation', ge_all_specs: 'Toutes', ge_level: 'Niveau', ge_faction: 'Faction', ge_budget: 'Budget', ge_b_all: 'Sans limite', ge_b_free: 'Gratuit', ge_dung: 'Butin de donjon', ge_craft: 'Objets craftés', ge_raid: 'Butin de raid', ge_unk: 'Objets de source inconnue', ge_src_note: "Sources connues pour {k} objets sur {n} (le reste arrive au fil des mises à jour).", ge_nodata: "La base d'équipement n'est pas encore récupérée : elle arrive à la prochaine mise à jour du site (toutes les heures).", ge_free: 'Gratuit', ge_see: 'Voir le détail →', ge_back: 'Tous les stuffs', ge_totals: 'Stats totales', ge_prio: 'Priorité de stats', ge_prio_src: "Priorités tirées des guides WoW Forever : Icy Veins (niveau 60) et Mobalytics (leveling), recoupées avec Warcraft Tavern.", ge_caps: "Au niveau 60 le toucher sert jusqu'à {h} % et l'expertise jusqu'à {e} % (au-delà, presque plus rien) : le stuff en tient compte.", ge_total_cost: 'Coût total', ge_slot: 'Emplacement', ge_item: 'Objet', ge_how: "Comment l'obtenir", ge_cost: 'Coût', ge_none: 'Rien de mieux trouvé', ge_alts: 'Autres choix', ge_dps: 'DPS', ge_h_q: 'Quête', ge_h_d: 'Donjon', ge_h_w: 'Butin (rare)', ge_h_v: 'Vendeur', ge_h_c: 'Craft', ge_h_ah: 'HDV', ge_h_unk: 'Source inconnue', ge_h_pending: 'Source en cours de récupération', ge_quest: 'Quête', ge_req: 'niv. requis', ge_start: 'départ', ge_both: 'les deux factions', ge_more_mobs: '+ {n} autres monstres', ge_ah: 'HDV :', ge_method: "Comment c'est calculé : chaque objet reçoit un score selon la priorité de stats de la spé (en leveling d'abord la survie et le confort, au niveau 60 les priorités des guides de raid), on garde le meilleur par emplacement parmi ce que ta classe peut porter à ce niveau. Les objets de quête et de boss de donjon sont comptés gratuits, les autres au prix du vendeur ou de l'HDV.", fs_label: 'Je farme :', fs_h: 'côté Horde', fs_a: 'côté Alliance', fs_all: 'partout', zs_h: 'Territoire Horde', zs_a: "Territoire Alliance (gardes hostiles si tu es Horde)", zs_c: 'Zone contestée (les deux factions)', fs_hidden: '{n} autre(s) monstre(s) seulement en territoire adverse, masqué(s). Choisis « partout » pour les voir.', fs_none: "Aucun monstre connu de ce côté : voici ceux du territoire adverse. Attention aux gardes.", fs_enemy: "{z} est en territoire adverse : gardes et joueurs ennemis. Regarde les autres zones au-dessus si possible.", rk_title: 'Paliers à débloquer', rk_pass: 'Pour dépasser {c}', rk_n_j: 'Compagnon', rk_n_e: 'Expert', rk_n_a: 'Artisan', rk_skill: 'dès {s} de compétence', rk_lvl: 'perso niveau {l}', rk_missing: '(il te manque {n} niveau(x))', rk_mylvl: 'Niveau de ton perso :', rk_train_j: "à apprendre chez l'entraîneur du métier (en ville)", rk_train_e: "à apprendre chez l'entraîneur du métier", rk_train_a: "à apprendre chez un maître artisan (entraîneur spécial, souvent hors des capitales)", rk_cook_e: "lire le livre « The Expert Cookbook » (1 po), vendu par Wulan au village de Shadowprey, Désolace (Horde, étage du bâtiment le plus à l'est) ou Shandrina à Orneval (Alliance), il s'échange donc regarde aussi l'HDV", rk_cook_a: "quête « Clamlette Surprise » de Dirge Quikcleave, à l'auberge de Gadgetzan (Tanaris) : il faut 12 Œufs géants (rocs autour de Gadgetzan), 10 Chairs de palourde relevée et 20 Gruyère d'Alterac (aubergiste)", rk_fa_e: "lire le livre « Expert First Aid - Under Wraps » (1 po), vendu au marécage d'Âprefange (Brackenwall, Horde) ou dans les Hautes-terres d'Arathi (Alliance)", rk_fa_a: "quête « Triage » à Trépas-d'Orgrim / Hammerfall (Hautes-terres d'Arathi, Horde) ou à Theramore (Alliance)", rk_fish_e: "lire le livre « Expert Fishing - The Bass and You » (1 po), vendu par le vieux Heming à Baie-du-Butin", rk_fish_a: "quête « Nat Pagle, Angler Extreme » au marécage d'Âprefange (4 poissons rares à ramener)", gg_help_Herbalism: "Ramasse la plante indiquée pour ton niveau : tant qu'elle est orange, chaque cueillette donne un point. Clique sur « Route » pour un trajet de farm optimisé.", gg_help_Mining: "Mine le filon indiqué pour ton niveau (orange = un point à chaque fois). Fondre les minerais en barres fait aussi monter le Minage : voir plus bas. Clique sur « Route » pour un trajet optimisé.", gg_help_Skinning: "Le dépeçage dépend du niveau des bêtes : pour monter, dépèce les bêtes les plus hautes que tu peux. Formule : jusqu'au niveau 20, compétence = (niveau − 10) × 10 ; au-dessus, niveau × 5. Astuce : dépèce tout ce que tu tues en montant de niveau.", gg_help_Fishing: "La pêche monte un point par prise, de plus en plus lentement. Pêche dans des zones de ton niveau de pêche, avec un appât (+25 ou +50) si tu rates trop de prises.", gg_what: 'Quoi récolter', gg_rare: 'rare, à prendre si tu le croises :', gg_where: 'Où', gg_value: 'Valeur HDV', gg_nozone: 'zones inconnues', gg_note: "Niveaux requis de Classic : Forever a pu en changer quelques-uns. Une plante/un filon reste orange jusqu'à +25, jaune jusqu'à +50, vert jusqu'à +100 au-dessus du niveau requis. Paliers : Compagnon à 75, Expert à 150 et Artisan à 225 chez l'entraîneur.", gg_mobs: 'Bêtes à dépecer', gg_beasts: 'niveau {a} à {b}', gg_skin_note: "Paliers chez l'entraîneur de dépeçage : Compagnon (75), Expert (150), Artisan (225). Le cuir récupéré se vend bien à l'HDV.", gg_tip: 'Conseil', fish_1: "Apprends la pêche chez l'entraîneur (Orgrimmar). N'importe quelle eau de départ suffit.", fish_75: "Achète un appât (Appât brillant, +25) si tu rates des prises.", fish_150: "À 150 : quête « Commence par la fin » (livre Expert) chez le vieux Heming à Baie-du-Butin, Strangleronce.", fish_225: "À 225 : quête Artisan de Nat Pagle au marécage d'Âprefange (il faut rapporter 4 poissons rares).", gg_fish_note: "Zones conseillées de Classic. Une canne à pêche plus forte (+20 ou +25) aide beaucoup à partir de 150.", gg_smelt: 'Fonte (fait aussi monter le Minage)', rah_loading: 'Recherche dans tes 3 HDV…', rah_bop: "<b>Liée quand ramassée</b> : cette recette ne peut jamais être vendue à l'HDV, il faut la looter toi-même (voir ci-dessous).", rah_noid: "Jamais vue en vente dans aucun de tes 3 HDV (Horde, Alliance, neutre) depuis que le site les relève. C'est souvent une recette « liée quand ramassée » : elle ne peut pas être vendue, il faut la looter soi-même.", rah_found: 'En vente en ce moment :', rah_none_all: "Pas en vente en ce moment, ni à l'HDV Horde, ni à l'Alliance, ni au neutre (Blackwater).", rah_last: 'Dernier prix vu :', rah_ally: 'il faut un perso Alliance', rah_neutral: 'accessible aux deux factions (Baie-du-Butin, Gadgetzan, Everlook)', rah_alert: "🔔 M'avertir quand elle est en vente", rah_alert_on: '🔕 Alerte activée (cliquer pour retirer)', rah_notif: '{n} est en vente à l\'HDV !', rah_badge_on: 'en vente !', rah_badge_wait: 'pas encore en vente', rah_nosrc: "Aucune source connue dans nos données (souvent une recette qui tombe au hasard sur les monstres d'une tranche de niveau, ou une récompense de quête). Fiche complète :", cd_open: 'Voir le prix de chaque composant', cd_mat: 'Composant', cd_qty: 'Quantité', cd_unit: "Prix à l'unité", cd_src: 'Où l\'acheter', cd_total: 'Total', cd_vendor: 'PNJ', cd_ah: 'HDV', cd_none: 'aucun prix connu', cd_sum: 'Coût pour une fabrication', cd_makes: 'donne {n} objets', pr_tiers: 'apprise à {a}, jaune à {b}, vert à {c}, gris à {d}', pr_tiers_tip: 'Tu peux l\'apprendre à {a}. De {a} à {b} (orange) : chaque fabrication donne 1 point à coup sûr. De {b} à {c} (jaune) : souvent un point. De {c} à {d} (vert) : rarement. À partir de {d} (gris) : plus aucun point.', pr_learn: 'Comment apprendre', pr_trainer: 'Entraîneur', pr_recipe: 'Recette', pr_drop: 'drop', pr_ah: 'HDV :',
     pr_chance: 'Chance de point', pr_ppp: 'Coût par point', pr_pt: 'point', pr_day: 'jour', pr_at: 'à',
     pr_adv_title: 'Conseils pour toi', pr_adv_lvl: 'Pour monter le moins cher', pr_adv_gold: "Pour faire de l'or", pr_adv_nogold: 'Rien de rentable à ton niveau pour le moment.', pr_adv_next: 'Ce qui se débloque bientôt',
     pr_adv_noskill: 'Entre ton niveau en {p} juste au-dessus pour avoir des conseils adaptés.',
@@ -185,7 +185,7 @@ const T = {
     pr_my: 'My skill in', pr_mode_gold: 'Make gold', pr_mode_lvl: 'Level it', pr_onlycan: 'Only what I can make', pr_norec: 'No recipe to buy (trainer)',
     pr_help_gold: 'Profit/day = profit per item × estimated sales per day. Each reagent is counted at the cheaper of AH and vendor.',
     pr_help_lvl: 'Cost per point = reagent cost (minus half the resale) ÷ chance of a skill-up. Orange = 100%, yellow then green = less and less, grey = 0.',
-    pr_skill: 'Skill', fs_label: 'I farm:', fs_h: 'Horde side', fs_a: 'Alliance side', fs_all: 'anywhere', zs_h: 'Horde territory', zs_a: 'Alliance territory (hostile guards if you are Horde)', zs_c: 'Contested zone (both factions)', fs_hidden: '{n} other mob(s) only in enemy territory, hidden. Choose “anywhere” to see them.', fs_none: 'No known mob on your side: here are the enemy-territory ones. Watch out for guards.', fs_enemy: '{z} is enemy territory: guards and enemy players. Check the other zones above if you can.', rk_title: 'Ranks to unlock', rk_pass: 'To go past {c}', rk_n_j: 'Journeyman', rk_n_e: 'Expert', rk_n_a: 'Artisan', rk_skill: 'from skill {s}', rk_lvl: 'character level {l}', rk_missing: '({n} level(s) missing)', rk_mylvl: 'Your character level:', rk_train_j: 'learned from the profession trainer (in cities)', rk_train_e: 'learned from the profession trainer', rk_train_a: 'learned from an artisan trainer (special trainer, often outside capitals)', rk_cook_e: 'read “The Expert Cookbook” (1g), sold by Wulan in Shadowprey Village, Desolace (Horde) or Shandrina in Ashenvale (Alliance); it is tradable, so check the AH too', rk_cook_a: 'quest “Clamlette Surprise” from Dirge Quikcleave, Gadgetzan inn (Tanaris): needs 12 Giant Eggs (rocs around Gadgetzan), 10 Zesty Clam Meat and 20 Alterac Swiss (innkeeper)', rk_fa_e: 'read “Expert First Aid - Under Wraps” (1g), sold in Dustwallow Marsh (Brackenwall, Horde) or Arathi Highlands (Alliance)', rk_fa_a: 'quest “Triage” in Hammerfall (Arathi Highlands, Horde) or Theramore (Alliance)', rk_fish_e: 'read “Expert Fishing - The Bass and You” (1g), sold by Old Man Heming in Booty Bay', rk_fish_a: 'quest “Nat Pagle, Angler Extreme” in Dustwallow Marsh (bring back 4 rare fish)', gg_help_Herbalism: 'Pick the plant shown for your skill: while it is orange every pick gives a point. Click "Route" for an optimized farm path.', gg_help_Mining: 'Mine the vein shown for your skill (orange = a point every time). Smelting ore into bars also raises Mining: see below. Click "Route" for an optimized path.', gg_help_Skinning: 'Skinning depends on beast level: skin the highest beasts you can. Formula: up to level 20, skill = (level − 10) × 10; above, level × 5. Tip: skin everything you kill while leveling.', gg_help_Fishing: 'Fishing gives a point per catch, slower and slower. Fish in zones matching your fishing skill, with a lure (+25 or +50) if you miss too many catches.', gg_what: 'What to gather', gg_rare: 'rare, take it if you see one:', gg_where: 'Where', gg_value: 'AH value', gg_nozone: 'unknown zones', gg_note: 'Classic skill requirements: Forever may have changed a few. A plant/vein stays orange until +25, yellow until +50, green until +100 above the requirement. Ranks: Journeyman at 75, Expert at 150, Artisan at 225 from the trainer.', gg_mobs: 'Beasts to skin', gg_beasts: 'level {a} to {b}', gg_skin_note: 'Skinning trainer ranks: Journeyman (75), Expert (150), Artisan (225). Leather sells well on the AH.', gg_tip: 'Tip', fish_1: 'Learn fishing from the trainer (Orgrimmar). Any starting water works.', fish_75: 'Buy a lure (Shiny Bauble, +25) if you miss catches.', fish_150: 'At 150: quest "Expert Fishing" (book) from Old Man Heming in Booty Bay, Stranglethorn.', fish_225: "At 225: Nat Pagle's Artisan quest in Dustwallow Marsh (bring back 4 rare fish).", gg_fish_note: 'Classic recommended zones. A better fishing pole (+20 or +25) helps a lot from 150.', gg_smelt: 'Smelting (also raises Mining)', rah_loading: 'Checking your 3 auction houses…', rah_bop: '<b>Binds when picked up</b>: this recipe can never be sold on the AH, you must loot it yourself (see below).', rah_noid: 'Never seen on sale in any of your 3 auction houses since the site started reading them. It is often a "binds when picked up" recipe: it cannot be sold, you have to loot it yourself.', rah_found: 'On sale right now:', rah_none_all: 'Not on sale right now, neither on the Horde, Alliance nor neutral (Blackwater) AH.', rah_last: 'Last price seen:', rah_ally: 'needs an Alliance character', rah_neutral: 'open to both factions (Booty Bay, Gadgetzan, Everlook)', rah_alert: '🔔 Notify me when it is on sale', rah_alert_on: '🔕 Alert on (click to remove)', rah_notif: '{n} is on the AH!', rah_badge_on: 'on sale!', rah_badge_wait: 'not on sale yet', rah_nosrc: 'No known source in our data (often a random world drop from mobs of a level range, or a quest reward). Full page:', cd_open: 'Show the price of each material', cd_mat: 'Material', cd_qty: 'Qty', cd_unit: 'Unit price', cd_src: 'Where to buy', cd_total: 'Total', cd_vendor: 'Vendor', cd_ah: 'AH', cd_none: 'no known price', cd_sum: 'Cost for one craft', cd_makes: 'makes {n} items', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_tiers_tip: 'Learnable at {a}. From {a} to {b} (orange): every craft gives a skill point. From {b} to {c} (yellow): usually a point. From {c} to {d} (green): rarely. From {d} (grey): no more points.', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
+    pr_skill: 'Skill', nav_gear: '🛡️ Gear', ge_title: 'Gear: sets by class and level', ge_sub: 'The best set for your class, spec and level, with where to get each piece (quest, dungeon, vendor, crafting, AH) and what it costs. Stat priorities come from WoW Forever guides (Icy Veins, Mobalytics, Warcraft Tavern): tanks, damage dealers and healers want very different items.', ge_filters: 'Filters', ge_class: 'Class', ge_spec: 'Spec', ge_all_specs: 'All', ge_level: 'Level', ge_faction: 'Faction', ge_budget: 'Budget', ge_b_all: 'No limit', ge_b_free: 'Free', ge_dung: 'Dungeon loot', ge_craft: 'Crafted items', ge_raid: 'Raid loot', ge_unk: 'Items with unknown source', ge_src_note: 'Sources known for {k} of {n} items (the rest comes with the next updates).', ge_nodata: 'The gear database has not been fetched yet: it arrives with the next site update (hourly).', ge_free: 'Free', ge_see: 'See details →', ge_back: 'All sets', ge_totals: 'Total stats', ge_prio: 'Stat priority', ge_prio_src: 'Priorities from WoW Forever guides: Icy Veins (level 60) and Mobalytics (leveling), cross-checked with Warcraft Tavern.', ge_caps: 'At level 60, hit is useful up to {h}% and expertise up to {e}%: the set accounts for it.', ge_total_cost: 'Total cost', ge_slot: 'Slot', ge_item: 'Item', ge_how: 'How to get it', ge_cost: 'Cost', ge_none: 'Nothing better found', ge_alts: 'Other choices', ge_dps: 'DPS', ge_h_q: 'Quest', ge_h_d: 'Dungeon', ge_h_w: 'Drop (rare)', ge_h_v: 'Vendor', ge_h_c: 'Crafted', ge_h_ah: 'AH', ge_h_unk: 'Unknown source', ge_h_pending: 'Source being fetched', ge_quest: 'Quest', ge_req: 'req. level', ge_start: 'start', ge_both: 'both factions', ge_more_mobs: '+ {n} more mobs', ge_ah: 'AH:', ge_method: 'How it works: each item gets a score from the spec stat priority (survival and comfort while leveling, raid guide priorities at 60); we keep the best one per slot among what your class can wear at that level. Quest and dungeon boss items count as free, others at vendor or AH price.', fs_label: 'I farm:', fs_h: 'Horde side', fs_a: 'Alliance side', fs_all: 'anywhere', zs_h: 'Horde territory', zs_a: 'Alliance territory (hostile guards if you are Horde)', zs_c: 'Contested zone (both factions)', fs_hidden: '{n} other mob(s) only in enemy territory, hidden. Choose “anywhere” to see them.', fs_none: 'No known mob on your side: here are the enemy-territory ones. Watch out for guards.', fs_enemy: '{z} is enemy territory: guards and enemy players. Check the other zones above if you can.', rk_title: 'Ranks to unlock', rk_pass: 'To go past {c}', rk_n_j: 'Journeyman', rk_n_e: 'Expert', rk_n_a: 'Artisan', rk_skill: 'from skill {s}', rk_lvl: 'character level {l}', rk_missing: '({n} level(s) missing)', rk_mylvl: 'Your character level:', rk_train_j: 'learned from the profession trainer (in cities)', rk_train_e: 'learned from the profession trainer', rk_train_a: 'learned from an artisan trainer (special trainer, often outside capitals)', rk_cook_e: 'read “The Expert Cookbook” (1g), sold by Wulan in Shadowprey Village, Desolace (Horde) or Shandrina in Ashenvale (Alliance); it is tradable, so check the AH too', rk_cook_a: 'quest “Clamlette Surprise” from Dirge Quikcleave, Gadgetzan inn (Tanaris): needs 12 Giant Eggs (rocs around Gadgetzan), 10 Zesty Clam Meat and 20 Alterac Swiss (innkeeper)', rk_fa_e: 'read “Expert First Aid - Under Wraps” (1g), sold in Dustwallow Marsh (Brackenwall, Horde) or Arathi Highlands (Alliance)', rk_fa_a: 'quest “Triage” in Hammerfall (Arathi Highlands, Horde) or Theramore (Alliance)', rk_fish_e: 'read “Expert Fishing - The Bass and You” (1g), sold by Old Man Heming in Booty Bay', rk_fish_a: 'quest “Nat Pagle, Angler Extreme” in Dustwallow Marsh (bring back 4 rare fish)', gg_help_Herbalism: 'Pick the plant shown for your skill: while it is orange every pick gives a point. Click "Route" for an optimized farm path.', gg_help_Mining: 'Mine the vein shown for your skill (orange = a point every time). Smelting ore into bars also raises Mining: see below. Click "Route" for an optimized path.', gg_help_Skinning: 'Skinning depends on beast level: skin the highest beasts you can. Formula: up to level 20, skill = (level − 10) × 10; above, level × 5. Tip: skin everything you kill while leveling.', gg_help_Fishing: 'Fishing gives a point per catch, slower and slower. Fish in zones matching your fishing skill, with a lure (+25 or +50) if you miss too many catches.', gg_what: 'What to gather', gg_rare: 'rare, take it if you see one:', gg_where: 'Where', gg_value: 'AH value', gg_nozone: 'unknown zones', gg_note: 'Classic skill requirements: Forever may have changed a few. A plant/vein stays orange until +25, yellow until +50, green until +100 above the requirement. Ranks: Journeyman at 75, Expert at 150, Artisan at 225 from the trainer.', gg_mobs: 'Beasts to skin', gg_beasts: 'level {a} to {b}', gg_skin_note: 'Skinning trainer ranks: Journeyman (75), Expert (150), Artisan (225). Leather sells well on the AH.', gg_tip: 'Tip', fish_1: 'Learn fishing from the trainer (Orgrimmar). Any starting water works.', fish_75: 'Buy a lure (Shiny Bauble, +25) if you miss catches.', fish_150: 'At 150: quest "Expert Fishing" (book) from Old Man Heming in Booty Bay, Stranglethorn.', fish_225: "At 225: Nat Pagle's Artisan quest in Dustwallow Marsh (bring back 4 rare fish).", gg_fish_note: 'Classic recommended zones. A better fishing pole (+20 or +25) helps a lot from 150.', gg_smelt: 'Smelting (also raises Mining)', rah_loading: 'Checking your 3 auction houses…', rah_bop: '<b>Binds when picked up</b>: this recipe can never be sold on the AH, you must loot it yourself (see below).', rah_noid: 'Never seen on sale in any of your 3 auction houses since the site started reading them. It is often a "binds when picked up" recipe: it cannot be sold, you have to loot it yourself.', rah_found: 'On sale right now:', rah_none_all: 'Not on sale right now, neither on the Horde, Alliance nor neutral (Blackwater) AH.', rah_last: 'Last price seen:', rah_ally: 'needs an Alliance character', rah_neutral: 'open to both factions (Booty Bay, Gadgetzan, Everlook)', rah_alert: '🔔 Notify me when it is on sale', rah_alert_on: '🔕 Alert on (click to remove)', rah_notif: '{n} is on the AH!', rah_badge_on: 'on sale!', rah_badge_wait: 'not on sale yet', rah_nosrc: 'No known source in our data (often a random world drop from mobs of a level range, or a quest reward). Full page:', cd_open: 'Show the price of each material', cd_mat: 'Material', cd_qty: 'Qty', cd_unit: 'Unit price', cd_src: 'Where to buy', cd_total: 'Total', cd_vendor: 'Vendor', cd_ah: 'AH', cd_none: 'no known price', cd_sum: 'Cost for one craft', cd_makes: 'makes {n} items', pr_tiers: 'learn at {a}, yellow {b}, green {c}, grey {d}', pr_tiers_tip: 'Learnable at {a}. From {a} to {b} (orange): every craft gives a skill point. From {b} to {c} (yellow): usually a point. From {c} to {d} (green): rarely. From {d} (grey): no more points.', pr_learn: 'How to learn', pr_trainer: 'Trainer', pr_recipe: 'Recipe', pr_drop: 'drop', pr_ah: 'AH:',
     pr_chance: 'Skill-up chance', pr_ppp: 'Cost per point', pr_pt: 'point', pr_day: 'day', pr_at: 'at',
     pr_adv_title: 'Advice for you', pr_adv_lvl: 'Cheapest to level', pr_adv_gold: 'To make gold', pr_adv_nogold: 'Nothing profitable at your skill yet.', pr_adv_next: 'Unlocking soon',
     pr_adv_noskill: 'Enter your {p} skill above for tailored advice.',
@@ -1932,7 +1932,7 @@ function setLang(l) { S.lang = l; store('hf_lang', l); document.documentElement.
 async function renderNav() {
   const cur = (location.hash.split('/')[1] || '').split('?')[0];
   const n = await alertsCount();
-  $('#nav').innerHTML = [['', 'nav_market'], ['best', 'nav_best'], ['farm', 'nav_farm'], ['craft', 'nav_craft'], ['guide', 'nav_guide'], ['vendor', 'nav_vendor'], ['gaps', 'nav_gaps'], ['watch', 'nav_watch'], ['settings', 'nav_settings']]
+  $('#nav').innerHTML = [['gear', 'nav_gear'], ['', 'nav_market'], ['best', 'nav_best'], ['farm', 'nav_farm'], ['craft', 'nav_craft'], ['guide', 'nav_guide'], ['vendor', 'nav_vendor'], ['gaps', 'nav_gaps'], ['watch', 'nav_watch'], ['settings', 'nav_settings']]
     .map(([k, l]) => `<a href="#/${k}" class="${cur === k ? 'on' : ''}">${t(l)}${k === 'watch' && n ? ` <span class="badge warn">${n}</span>` : ''}</a>`).join('');
 }
 function renderHousebar() {
@@ -1956,6 +1956,489 @@ setInterval(async () => {
     else if (nm) S.cache.set('meta', Promise.resolve(nm));
   } catch (e) {}
 }, 600000);
+// ===================== ÉQUIPEMENT (stuffs par classe, spé et niveau) =====================
+// Poids de stats : tirés des guides WoW Forever (Icy Veins pour le niveau 60, Mobalytics pour le leveling),
+// recoupés avec Warcraft Tavern et l'addon GearQuest. Voir research/sources.md dans le dépôt.
+// Unités : 1 point de la stat de base de la spé (PA pour les physiques, PdS pour les lanceurs, Puissance de soins
+// pour les soigneurs, Endurance pour les tanks). Les stats en % (crit, toucher...) sont comptées par 1 %.
+// lev = poids pendant le leveling, end = poids au niveau 60 ; entre 50 et 60 on passe progressivement de l'un à l'autre.
+const G_ARMOR = { cloth: 16, leather: 17, mail: 18, plate: 19 };
+const G_CLASSES = {
+  warrior: { fr: 'Guerrier', en: 'Warrior', col: '#C69B6D', arm: [['mail', 1], ['plate', 40]], w: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14], sh: 1, dw: 20 },
+  paladin: { fr: 'Paladin', en: 'Paladin', col: '#F48CBA', arm: [['mail', 1], ['plate', 40]], w: [1, 2, 3, 4, 5, 6, 7], sh: 1, relic: 1 },
+  hunter: { fr: 'Chasseur', en: 'Hunter', col: '#AAD372', arm: [['leather', 1], ['mail', 40]], w: [0, 1, 2, 3, 4, 7, 8, 9, 10, 11, 12, 14], dw: 20 },
+  rogue: { fr: 'Voleur', en: 'Rogue', col: '#FFF468', arm: [['leather', 1]], w: [0, 1, 3, 5, 9, 10, 11, 12, 14], dw: 10 },
+  priest: { fr: 'Prêtre', en: 'Priest', col: '#FFFFFF', arm: [['cloth', 1]], w: [0, 5, 8, 13] },
+  shaman: { fr: 'Chaman', en: 'Shaman', col: '#0070DD', arm: [['leather', 1], ['mail', 40]], w: [0, 3, 4, 5, 6, 8, 9], sh: 1, relic: 1 },
+  mage: { fr: 'Mage', en: 'Mage', col: '#3FC7EB', arm: [['cloth', 1]], w: [0, 1, 8, 13] },
+  warlock: { fr: 'Démoniste', en: 'Warlock', col: '#8788EE', arm: [['cloth', 1]], w: [0, 1, 8, 13] },
+  druid: { fr: 'Druide', en: 'Druid', col: '#FF7C0A', arm: [['leather', 1]], w: [0, 5, 6, 8, 9], relic: 1 },
+};
+// Conversion des valeurs de metabot (exprimées en « rating » du niveau 60) en %.
+const G_PCT = { 'crit-rating': ['crit', 14], 'hit-rating': ['hit', 10], 'haste-rating': ['haste', 10], 'expertise-rating': ['exp', 10],
+  'dodge-rating': ['dodge', 12], 'parry-rating': ['parry', 15], 'block-rating': ['block', 5] };
+const G_FLAT = { strength: 'str', agility: 'agi', stamina: 'sta', intellect: 'int', spirit: 'spi', 'attack-power': 'ap',
+  'ranged-attack-power': 'rap', 'spell-power': 'sp', 'spell-damage': 'sd', healing: 'heal', 'mana-regen': 'mp5', 'health-regen': 'hp5',
+  'defense-rating': 'def', 'block-value': 'bv', 'bonus-armor': 'armor', 'spell-penetration': 'spen',
+  'shadow-damage-done': 'shadow', 'fire-damage-done': 'fire', 'frost-damage-done': 'frost', 'arcane-damage-done': 'arcane',
+  'nature-damage-done': 'nature', 'holy-damage-done': 'holy' };
+// Politique d'armes : two = arme à deux mains, dw = deux armes (ambidextrie), sh = arme + bouclier, cast = bâton ou arme + main gauche.
+const P = (o) => o;
+const G_SPECS = {
+  warrior: {
+    arms: P({ fr: 'Armes', en: 'Arms', role: 'dps', pol: 'two', cap: { hit: 8, exp: 6.5 },
+      lev: { str: 2, agi: 1.8, sta: 1.6, spi: 2, int: 0.1, ap: 1, crit: 20, hit: 14, exp: 14, haste: 10, armor: 0.01, th: 16, mh: 10, oh: 4, rg: 0.3 },
+      end: { str: 2.2, agi: 1.2, sta: 0.25, spi: 0.05, ap: 1, crit: 24, hit: 28, exp: 26, haste: 14, armor: 0.005, th: 18, mh: 12, oh: 5, rg: 0.3 } }),
+    fury: P({ fr: 'Fureur', en: 'Fury', role: 'dps', pol: 'dw', cap: { hit: 8, exp: 6.5 },
+      lev: { str: 2, agi: 1.8, sta: 1.6, spi: 2, int: 0.1, ap: 1, crit: 20, hit: 14, exp: 14, haste: 12, armor: 0.01, th: 16, mh: 14, oh: 8, rg: 0.3 },
+      end: { str: 2.2, agi: 1.2, sta: 0.25, spi: 0.05, ap: 1, crit: 24, hit: 26, exp: 24, haste: 16, armor: 0.005, th: 16, mh: 16, oh: 9, rg: 0.3 } }),
+    prot: P({ fr: 'Protection (tank)', en: 'Protection (tank)', role: 'tank', pol: 'sh', cap: { hit: 8, exp: 6.5 },
+      lev: { sta: 1, agi: 0.9, str: 0.6, spi: 0.4, armor: 0.035, def: 0.9, dodge: 12, parry: 10, block: 6, bv: 0.2, hit: 8, exp: 8, crit: 3, ap: 0.25, mh: 2, th: 1.5, oh: 0.5, rg: 0.1 },
+      end: { sta: 1, agi: 0.85, str: 0.45, armor: 0.05, def: 0.7, dodge: 13, parry: 11, block: 6, bv: 0.2, hit: 10, exp: 11, crit: 4, ap: 0.2, mh: 2, th: 1.5, oh: 0.5, rg: 0.1 } }),
+  },
+  paladin: {
+    holy: P({ fr: 'Sacré (soins)', en: 'Holy (healer)', role: 'heal', pol: 'cast',
+      lev: { heal: 1, sp: 1, int: 0.6, spi: 0.5, mp5: 1.3, sta: 0.25, crit: 9, str: 0.05 },
+      end: { heal: 1, sp: 1, int: 0.6, spi: 0.45, mp5: 1.3, sta: 0.1, crit: 9 } }),
+    prot: P({ fr: 'Protection (tank)', en: 'Protection (tank)', role: 'tank', pol: 'sh', cap: { hit: 8, exp: 6.5 },
+      lev: { sta: 1, def: 0.9, sp: 0.55, sd: 0.4, holy: 0.4, int: 0.45, str: 0.5, agi: 0.45, spi: 0.3, armor: 0.04, dodge: 10, parry: 9, block: 6, bv: 0.25, hit: 8, exp: 7, crit: 3, mp5: 0.6, mh: 1.5, th: 1, oh: 0.3 },
+      end: { sta: 1, def: 0.95, sp: 0.55, sd: 0.45, holy: 0.45, int: 0.4, str: 0.4, agi: 0.4, spi: 0.1, armor: 0.05, dodge: 10, parry: 9, block: 6, bv: 0.25, hit: 9, exp: 8, crit: 3, mp5: 0.5, mh: 1.5, th: 1, oh: 0.3 } }),
+    ret: P({ fr: 'Vindicte', en: 'Retribution', role: 'dps', pol: 'two', cap: { hit: 8, exp: 6.5 }, int40: 1,
+      lev: { str: 1.8, sta: 2, spi: 2, int: 1.4, sp: 1.4, sd: 1.2, holy: 1.2, ap: 0.9, heal: 0.3, agi: 0.7, crit: 18, hit: 16, exp: 10, mp5: 2, th: 16, mh: 9, oh: 3 },
+      end: { str: 2.2, sp: 1.1, sd: 1, holy: 1, ap: 1, agi: 0.9, int: 0.5, sta: 0.2, spi: 0.1, crit: 20, hit: 26, exp: 22, mp5: 0.8, th: 18, mh: 10, oh: 3 } }),
+  },
+  hunter: {
+    bm: P({ fr: 'Maîtrise des bêtes', en: 'Beast Mastery', role: 'dps', pol: 'dw', cap: { hit: 8 },
+      lev: { agi: 2.4, ap: 1, rap: 1, str: 0.05, sta: 0.9, spi: 0.7, int: 0.35, crit: 18, hit: 12, haste: 12, mp5: 0.5, armor: 0.005, rg: 18, th: 0.8, mh: 0.6, oh: 0.3 },
+      end: { agi: 2.4, ap: 1, rap: 1, sta: 0.2, spi: 0.1, int: 0.3, crit: 28, hit: 26, haste: 14, mp5: 0.5, armor: 0.003, rg: 20, th: 0.8, mh: 0.6, oh: 0.3 } }),
+    mm: P({ fr: 'Précision', en: 'Marksmanship', role: 'dps', pol: 'dw', cap: { hit: 8 },
+      lev: { agi: 2.4, ap: 1, rap: 1, str: 0.05, sta: 0.9, spi: 0.45, int: 0.9, crit: 18, hit: 12, haste: 12, mp5: 0.5, armor: 0.005, rg: 18, th: 0.8, mh: 0.6, oh: 0.3 },
+      end: { agi: 2.4, ap: 1, rap: 1, sta: 0.2, spi: 0.1, int: 1.2, crit: 28, hit: 26, haste: 14, mp5: 0.5, armor: 0.003, rg: 20, th: 0.8, mh: 0.6, oh: 0.3 } }),
+    sv: P({ fr: 'Survie (mêlée)', en: 'Survival (melee)', role: 'dps', pol: 'dw', cap: { hit: 8, exp: 6.5 },
+      lev: { agi: 1.9, str: 1, ap: 1, rap: 0.3, int: 0.45, sta: 0.8, spi: 0.5, crit: 20, hit: 14, exp: 10, haste: 10, armor: 0.005, th: 13, mh: 14, oh: 8, rg: 3 },
+      end: { agi: 1.9, str: 1, ap: 1, rap: 0.3, int: 0.4, sta: 0.2, spi: 0.1, crit: 26, hit: 26, exp: 18, haste: 12, armor: 0.003, th: 13, mh: 15, oh: 9, rg: 3 } }),
+  },
+  rogue: {
+    assa: P({ fr: 'Assassinat (dagues)', en: 'Assassination (daggers)', role: 'dps', pol: 'dw', cats: [0], cap: { hit: 8, exp: 6.5 },
+      lev: { agi: 1.85, str: 1, ap: 1, sta: 0.7, crit: 16, hit: 18, exp: 18, haste: 12, armor: 0.005, mh: 14, oh: 8, th: 0, rg: 0.3 },
+      end: { agi: 1.85, str: 1, ap: 1, sta: 0.15, crit: 20, hit: 28, exp: 30, haste: 14, armor: 0.003, mh: 16, oh: 9, th: 0, rg: 0.3 } }),
+    combat: P({ fr: 'Combat', en: 'Combat', role: 'dps', pol: 'dw', cap: { hit: 8, exp: 6.5 },
+      lev: { agi: 1.85, str: 1, ap: 1, sta: 0.7, crit: 16, hit: 18, exp: 18, haste: 12, armor: 0.005, mh: 15, oh: 8, th: 0, rg: 0.3 },
+      end: { agi: 1.85, str: 1, ap: 1, sta: 0.15, crit: 20, hit: 28, exp: 30, haste: 14, armor: 0.003, mh: 17, oh: 9, th: 0, rg: 0.3 } }),
+    sub: P({ fr: 'Finesse', en: 'Subtlety', role: 'dps', pol: 'dw', cap: { hit: 8, exp: 6.5 },
+      lev: { agi: 1.85, str: 1, ap: 1, sta: 0.7, crit: 16, hit: 18, exp: 18, haste: 10, armor: 0.005, mh: 16, oh: 7, th: 0, rg: 0.3 },
+      end: { agi: 1.8, str: 1, ap: 1, sta: 0.15, crit: 18, hit: 28, exp: 30, haste: 10, armor: 0.003, mh: 18, oh: 8, th: 0, rg: 0.3 } }),
+  },
+  priest: {
+    disc: P({ fr: 'Discipline (soins)', en: 'Discipline (healer)', role: 'heal', pol: 'cast',
+      lev: { heal: 1, sp: 1, mp5: 1.6, spi: 0.6, int: 0.5, sta: 0.25, crit: 8, rg: 0.5 },
+      end: { heal: 1, sp: 1, mp5: 1.8, spi: 0.55, int: 0.5, sta: 0.1, crit: 8, rg: 0.1 } }),
+    holy: P({ fr: 'Sacré (soins)', en: 'Holy (healer)', role: 'heal', pol: 'cast',
+      lev: { heal: 1, sp: 1, mp5: 1.6, spi: 0.6, int: 0.5, sta: 0.25, crit: 8, rg: 0.5 },
+      end: { heal: 1, sp: 1, mp5: 1.8, spi: 0.55, int: 0.5, sta: 0.1, crit: 8, rg: 0.1 } }),
+    shadow: P({ fr: 'Ombre', en: 'Shadow', role: 'cast', pol: 'cast', cap: { hit: 12 },
+      lev: { sp: 1, sd: 1, shadow: 1, spi: 0.55, int: 0.45, sta: 0.3, crit: 7, hit: 6, haste: 4, mp5: 0.6, spen: 0.1, rg: 4 },
+      end: { sp: 1, sd: 1, shadow: 1, spi: 0.25, int: 0.35, sta: 0.1, crit: 11, hit: 14, haste: 7, mp5: 0.6, spen: 0.4, rg: 0.5 } }),
+  },
+  shaman: {
+    ele: P({ fr: 'Élémentaire', en: 'Elemental', role: 'cast', pol: 'cast', cap: { hit: 17 },
+      lev: { sp: 1, sd: 1, nature: 0.9, fire: 0.35, frost: 0.25, int: 0.45, spi: 0.3, sta: 0.35, mp5: 1, crit: 9, hit: 6, haste: 6 },
+      end: { sp: 1, sd: 1, nature: 0.9, fire: 0.3, frost: 0.2, int: 0.4, spi: 0.1, sta: 0.1, mp5: 1, crit: 12, hit: 14, haste: 8 } }),
+    enh: P({ fr: 'Amélioration', en: 'Enhancement', role: 'dps', pol: 'two', cap: { hit: 8, exp: 6.5 },
+      lev: { str: 2, ap: 1, int: 1.5, sp: 1, sd: 1, nature: 0.5, fire: 0.3, frost: 0.3, agi: 1, spi: 0.5, sta: 0.7, crit: 20, hit: 10, exp: 10, mp5: 0.5, th: 16, mh: 10, oh: 0.5 },
+      end: { str: 2, ap: 1, int: 1.7, sp: 1, sd: 1, nature: 0.5, fire: 0.3, frost: 0.3, agi: 1, spi: 0.1, sta: 0.15, crit: 18, hit: 24, exp: 20, mp5: 0.5, th: 18, mh: 10, oh: 0.5 } }),
+    resto: P({ fr: 'Restauration (soins)', en: 'Restoration (healer)', role: 'heal', pol: 'cast',
+      lev: { heal: 1, sp: 1, crit: 13, int: 0.5, spi: 0.35, mp5: 1.2, sta: 0.25 },
+      end: { heal: 1, sp: 1, crit: 13, int: 0.5, spi: 0.35, mp5: 1.2, sta: 0.1 } }),
+  },
+  mage: {
+    arcane: P({ fr: 'Arcanes', en: 'Arcane', role: 'cast', pol: 'cast', cap: { hit: 11 },
+      lev: { sp: 1, sd: 1, arcane: 1, fire: 0.1, frost: 0.1, int: 0.45, spi: 0.4, sta: 0.3, crit: 9, hit: 8, haste: 7, mp5: 0.8, rg: 4 },
+      end: { sp: 1, sd: 1, arcane: 1, fire: 0.1, frost: 0.1, int: 0.4, spi: 0.15, sta: 0.1, crit: 12, hit: 15, haste: 9, mp5: 0.6, rg: 0.5 } }),
+    fire: P({ fr: 'Feu', en: 'Fire', role: 'cast', pol: 'cast', cap: { hit: 11 },
+      lev: { sp: 1, sd: 1, fire: 1, frost: 0.1, arcane: 0.1, int: 0.45, spi: 0.4, sta: 0.3, crit: 9, hit: 8, haste: 7, mp5: 0.8, rg: 4 },
+      end: { sp: 1, sd: 1, fire: 1, frost: 0.05, arcane: 0.05, int: 0.4, spi: 0.15, sta: 0.1, crit: 12, hit: 15, haste: 9, mp5: 0.6, rg: 0.5 } }),
+    frost: P({ fr: 'Givre', en: 'Frost', role: 'cast', pol: 'cast', cap: { hit: 11 },
+      lev: { sp: 1, sd: 1, frost: 1, fire: 0.15, arcane: 0.1, int: 0.45, spi: 0.4, sta: 0.3, crit: 9, hit: 8, haste: 7, mp5: 0.8, rg: 4 },
+      end: { sp: 1, sd: 1, frost: 1, fire: 0.1, arcane: 0.05, int: 0.4, spi: 0.15, sta: 0.1, crit: 12, hit: 15, haste: 9, mp5: 0.6, rg: 0.5 } }),
+  },
+  warlock: {
+    affli: P({ fr: 'Affliction', en: 'Affliction', role: 'cast', pol: 'cast', cap: { hit: 12 },
+      lev: { sp: 1, sd: 1, shadow: 1, fire: 0.15, hit: 9, int: 0.45, sta: 0.45, crit: 8, spi: 0.3, haste: 4, mp5: 0.6, rg: 4 },
+      end: { sp: 1, sd: 1, shadow: 1, fire: 0.15, hit: 15, crit: 11, haste: 8, int: 0.35, sta: 0.15, spi: 0.1, mp5: 0.5, rg: 0.5 } }),
+    demo: P({ fr: 'Démonologie', en: 'Demonology', role: 'cast', pol: 'cast', cap: { hit: 12 },
+      lev: { sp: 1, sd: 1, shadow: 0.8, fire: 0.5, hit: 9, int: 0.45, sta: 0.5, crit: 8, spi: 0.3, haste: 4, mp5: 0.6, rg: 4 },
+      end: { sp: 1, sd: 1, shadow: 0.8, fire: 0.5, hit: 15, crit: 11, haste: 8, int: 0.35, sta: 0.15, spi: 0.1, mp5: 0.5, rg: 0.5 } }),
+    destro: P({ fr: 'Destruction', en: 'Destruction', role: 'cast', pol: 'cast', cap: { hit: 12 },
+      lev: { sp: 1, sd: 1, fire: 1, shadow: 0.45, hit: 9, int: 0.45, sta: 0.45, crit: 8, spi: 0.3, haste: 6, mp5: 0.6, rg: 4 },
+      end: { sp: 1, sd: 1, fire: 1, shadow: 0.45, hit: 15, haste: 11, crit: 9, int: 0.35, sta: 0.15, spi: 0.1, mp5: 0.5, rg: 0.5 } }),
+  },
+  druid: {
+    balance: P({ fr: 'Équilibre', en: 'Balance', role: 'cast', pol: 'cast', cap: { hit: 17 },
+      lev: { sp: 1, sd: 1, nature: 0.6, arcane: 0.6, int: 0.45, spi: 0.35, sta: 0.35, crit: 10, hit: 8, haste: 6, mp5: 0.8 },
+      end: { sp: 1, sd: 1, nature: 0.6, arcane: 0.6, int: 0.4, spi: 0.1, sta: 0.1, crit: 13, hit: 15, haste: 8, mp5: 0.8 } }),
+    cat: P({ fr: 'Farouche (chat)', en: 'Feral (cat)', role: 'dps', pol: 'two', cap: { hit: 8, exp: 6.5 },
+      lev: { str: 2, agi: 2, ap: 1, sta: 0.8, spi: 0.6, int: 0.1, crit: 21, hit: 14, exp: 14, haste: 6, armor: 0.005, th: 14, mh: 14, oh: 0 },
+      end: { str: 2, agi: 2, ap: 1, sta: 0.2, spi: 0.05, int: 0.05, crit: 22, hit: 24, exp: 26, haste: 6, armor: 0.003, th: 14, mh: 14, oh: 0 } }),
+    bear: P({ fr: 'Farouche (ours, tank)', en: 'Feral (bear, tank)', role: 'tank', pol: 'two', cap: { hit: 8, exp: 6.5 },
+      lev: { sta: 1, agi: 1, str: 0.55, armor: 0.08, def: 0.5, dodge: 12, exp: 10, hit: 8, crit: 3, ap: 0.25, spi: 0.3, th: 3, mh: 3, oh: 0 },
+      end: { sta: 1, agi: 1, str: 0.5, armor: 0.09, def: 0.5, dodge: 12, exp: 12, hit: 9, crit: 3, ap: 0.2, th: 3, mh: 3, oh: 0 } }),
+    resto: P({ fr: 'Restauration (soins)', en: 'Restoration (healer)', role: 'heal', pol: 'cast',
+      lev: { heal: 1, sp: 1, int: 0.55, spi: 0.45, mp5: 1.4, crit: 8, sta: 0.25 },
+      end: { heal: 1, sp: 1, int: 0.55, spi: 0.45, mp5: 1.4, crit: 8, sta: 0.1 } }),
+  },
+};
+const G_SLOTS = ['head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'waist', 'legs', 'feet', 'finger1', 'finger2', 'trinket1', 'trinket2', 'mh', 'oh', 'ranged'];
+const G_SLOT_FR = { head: 'Tête', neck: 'Cou', shoulder: 'Épaules', back: 'Dos', chest: 'Torse', wrist: 'Poignets', hands: 'Mains', waist: 'Taille', legs: 'Jambes', feet: 'Pieds', finger1: 'Doigt', finger2: 'Doigt', trinket1: 'Bijou', trinket2: 'Bijou', mh: 'Main droite', oh: 'Main gauche', ranged: 'Distance' };
+const G_SLOT_EN = { head: 'Head', neck: 'Neck', shoulder: 'Shoulders', back: 'Back', chest: 'Chest', wrist: 'Wrists', hands: 'Hands', waist: 'Waist', legs: 'Legs', feet: 'Feet', finger1: 'Finger', finger2: 'Finger', trinket1: 'Trinket', trinket2: 'Trinket', mh: 'Main hand', oh: 'Off hand', ranged: 'Ranged' };
+const G_STAT_FR = { str: 'Force', agi: 'Agilité', sta: 'Endurance', int: 'Intelligence', spi: 'Esprit', ap: 'Puissance d\'attaque', rap: 'PA à distance',
+  sp: 'Puissance des sorts', sd: 'Dégâts des sorts', heal: 'Puissance de soins', mp5: 'Mana/5 s', hp5: 'Vie/5 s', crit: 'Critique', hit: 'Toucher', haste: 'Hâte',
+  exp: 'Expertise', dodge: 'Esquive', parry: 'Parade', block: 'Blocage', bv: 'Valeur de blocage', def: 'Défense', armor: 'Armure', spen: 'Pénétration des sorts',
+  shadow: 'Dégâts d\'ombre', fire: 'Dégâts de feu', frost: 'Dégâts de givre', arcane: 'Dégâts des arcanes', nature: 'Dégâts de nature', holy: 'Dégâts du sacré' };
+const G_STAT_EN = { str: 'Strength', agi: 'Agility', sta: 'Stamina', int: 'Intellect', spi: 'Spirit', ap: 'Attack Power', rap: 'Ranged AP', sp: 'Spell Power',
+  sd: 'Spell Damage', heal: 'Healing', mp5: 'Mp5', hp5: 'Hp5', crit: 'Crit', hit: 'Hit', haste: 'Haste', exp: 'Expertise', dodge: 'Dodge', parry: 'Parry', block: 'Block',
+  bv: 'Block Value', def: 'Defense', armor: 'Armor', spen: 'Spell Pen.', shadow: 'Shadow dmg', fire: 'Fire dmg', frost: 'Frost dmg', arcane: 'Arcane dmg', nature: 'Nature dmg', holy: 'Holy dmg' };
+const G_PCTKEYS = new Set(['crit', 'hit', 'haste', 'exp', 'dodge', 'parry', 'block']);
+const statLbl = k => (S.lang === 'fr' ? G_STAT_FR : G_STAT_EN)[k] || k;
+const slotLbl = k => (S.lang === 'fr' ? G_SLOT_FR : G_SLOT_EN)[k] || k;
+const G_RAID = /Molten Core|Blackwing|Ahn'Qiraj|Naxxramas|Onyxia|Zul'Gurub|Ruins of Ahn/;
+const G_PVP = /^(Private|Corporal|Sergeant|Master Sergeant|Sergeant Major|Knight|Knight-Lieutenant|Knight-Captain|Knight-Champion|Lieutenant Commander|Commander|Marshal|Field Marshal|Grand Marshal|Scout|Grunt|Senior Sergeant|First Sergeant|Stone Guard|Blood Guard|Legionnaire|Centurion|Champion|Lieutenant General|General|Warlord|High Warlord)'s /;
+const G_JUNK = /^(Monster|Test|OLD|Deprecated|\[|QA|zzz|Gnome Head|Cosmic)/i;
+
+// Objet metabot -> {slug, n, ic, q, il, rl, slot, cat, dps, armor, st:{clé: valeur}, cls, src, f}
+function gearPrep(raw) {
+  return raw.map(r => {
+    const st = {};
+    for (const [k, v] of Object.entries(r[10] || {})) {
+      if (G_PCT[k]) st[G_PCT[k][0]] = (st[G_PCT[k][0]] || 0) + v / G_PCT[k][1];
+      else if (G_FLAT[k]) st[G_FLAT[k]] = (st[G_FLAT[k]] || 0) + v;
+    }
+    // Niveau réel : certains objets n'ont pas de niveau requis (craft, quête, et même des objets de raid comme
+    // Quick Strike Ring). On prend au moins le niveau d'objet − 7, ce qui correspond au niveau où on peut l'avoir.
+    const rl = Math.max(r[5] || 1, r[3] >= 2 || !r[5] ? r[4] - 7 : 1, 1);
+    return { slug: r[0], n: r[1], ic: r[2], q: r[3], il: r[4], rl, rl0: rl !== (r[5] || 1), slot: r[6], cat: r[7], dps: r[8], armor: r[9], st, cls: r[11] || [], src: r[12], f: r[13] };
+  }).filter(it => !G_JUNK.test(it.n) && !G_PVP.test(it.n));
+}
+function gearWeights(cls, spec, L) {
+  const sp = G_SPECS[cls][spec]; const t = Math.max(0, Math.min(1, (L - 50) / 10)); const w = {};
+  for (const k of new Set([...Object.keys(sp.lev), ...Object.keys(sp.end)])) w[k] = (sp.lev[k] || 0) * (1 - t) + (sp.end[k] || 0) * t;
+  if (sp.int40 && L < 40) w.int *= 0.4;   // Vindicte : l'Intelligence ne donne de la puissance des sorts qu'avec Champion of the Light (40+)
+  return w;
+}
+function gearStatScore(it, w) {
+  let s = (w.armor || 0) * (it.armor || 0);
+  for (const [k, v] of Object.entries(it.st)) s += (w[k] || 0) * v;
+  return s;
+}
+// Ce que la classe peut porter à ce niveau.
+function gearArmorMax(cls, L) { let m = 16; for (const [a, lv] of G_CLASSES[cls].arm) if (L >= lv) m = G_ARMOR[a]; return m; }
+function gearUsable(it, cls, L) {
+  if (it.rl > L) return false;
+  if (it.cls.length && !it.cls.includes(cls)) return false;
+  const c = G_CLASSES[cls];
+  if (it.cat >= 16 && it.cat <= 19) return it.cat <= gearArmorMax(cls, L);
+  if (it.cat === 20) return !!c.sh;
+  if (it.cat === 26) return !!c.relic && it.cls.length > 0;
+  if (it.cat <= 14) { if (!c.w.includes(it.cat)) return false; if (it.cat === 7 && L < 20) return false; return true; }
+  return true;   // cou, anneaux, bijoux, capes, main gauche tenue
+}
+// Coût et disponibilité d'un objet pour la faction choisie.
+function gearAvail(it, ctx) {
+  const d = ctx.det[it.slug]; const fac = ctx.fac; const out = { ok: true, free: false, cost: null, how: [], raid: false, rare: false };
+  const id = itemByEn(it.n); out.id = id;
+  const ah = id && ctx.mk && ctx.mk.items[id] ? ctx.mk.items[id][MKT] : null;
+  if (d) {
+    if (d.q && d.q.length) {
+      const qs = d.q.map(q => [q, ctx.qu[q[0]]]);
+      const okq = qs.filter(([q, info]) => !info || !info[0] || info[0] === fac);
+      if (okq.length) { out.free = true; out.how.push('q'); out.quests = okq; }
+      else if (!d.b && !d.v && !ah) out.ok = false;
+    }
+    if (d.b && d.b.length) {
+      const z = d.b.map(b => b[2]).join(' ');
+      if (G_RAID.test(z)) out.raid = true;
+      const boss = d.b.some(b => b[3]) || /drops from/.test(d.t || '');
+      if (boss || (d.b[0][1] || 0) >= 8) { out.free = true; out.how.push('d'); }
+      else { out.rare = true; out.how.push('w'); }
+    }
+    if (d.v && d.v.length) {
+      const vs = d.v.filter(v => !v[1] || v[1] === fac);
+      if (vs.length) { out.vendor = vs; const p = vs.map(v => v[6]).filter(x => x != null); out.vprice = p.length ? Math.min(...p) : null; out.how.push('v'); }
+      else if (!out.how.length && !ah) out.ok = false;
+    }
+    if (d.c) out.how.push('c');
+    if (d.bop) out.bop = true;
+  } else if (it.src === 'q') { out.free = true; out.how.push('q'); out.unk = true; }
+  else if (it.src === 'd') { out.how.push('w'); out.unk = true; }
+  else if (it.src === 'v') { out.how.push('v'); out.unk = true; }
+  else if (it.src === 'c') out.how.push('c');
+  if (it.il >= 66 && it.rl >= 60) out.raid = true;
+  if (ah) { out.ah = ah; out.how.push('ah'); }
+  // Coût : gratuit si quête ou boss de donjon, sinon le moins cher entre le vendeur et l'HDV.
+  if (out.free) out.cost = 0;
+  else { const c = [out.vprice, out.ah].filter(x => x != null); out.cost = c.length ? Math.min(...c) : null; }
+  return out;
+}
+function gearOpts() {
+  let o = {}; try { o = JSON.parse(store('hf_gear') || '{}') || {}; } catch (e) {}
+  return Object.assign({ cls: 'hunter', spec: 'bm', lvl: charLevel() || 20, fac: farmSide() === 'a' ? 'a' : 'h', budget: -1, raid: 0, dung: 1, craft: 1, unk: 0 }, o);
+}
+function gearSave(o) { store('hf_gear', JSON.stringify(o)); }
+// Construit le meilleur stuff. Renvoie {slots:{slot:{it, sc, av, alts}}, total, cost, stats}.
+function gearBuild(items, ctx, cls, spec, L, budget) {
+  const sp = G_SPECS[cls][spec]; const c = G_CLASSES[cls];
+  let w = gearWeights(cls, spec, L);
+  const avail = new Map();
+  const pool = items.filter(it => gearUsable(it, cls, L)).filter(it => {
+    if (sp.cats && it.cat <= 9 && !sp.cats.includes(it.cat)) return false;
+    const av = gearAvail(it, ctx); avail.set(it, av);
+    if (!av.ok) return false;
+    if (av.raid && !ctx.raid) return false;
+    if (!av.how.length && !ctx.unk) return false;   // source inconnue (objet pas encore trouvé en jeu) : on ne le propose pas
+    // Butin aléatoire rare (monstres du monde, faible taux) : seulement s'il est en vente à l'HDV.
+    if (!ctx.unk && av.how.every(h => h === 'w') ) return false;
+    if (!ctx.dung && av.how.length === 1 && av.how[0] === 'd' && !av.ah) return false;
+    if (!ctx.craft && av.how.length === 1 && av.how[0] === 'c' && !av.ah) return false;
+    return true;
+  });
+  const dwOk = c.dw && L >= c.dw && sp.pol === 'dw';
+  const build = (w) => {
+    const sc = (it, role) => gearStatScore(it, w) + (role ? (w[role] || 0) * (it.dps || 0) : 0);
+    const cand = {};
+    const add = (slot, it, s) => { (cand[slot] = cand[slot] || []).push({ it, sc: s, av: avail.get(it) }); };
+    for (const it of pool) {
+      switch (it.slot) {
+        case 'finger': add('finger', it, sc(it)); break;
+        case 'trinket': add('trinket', it, sc(it)); break;
+        case 'two-hand': add('th', it, sc(it, 'th')); break;
+        case 'main-hand': add('mh', it, sc(it, 'mh')); break;
+        case 'one-hand': add('mh', it, sc(it, 'mh')); if (dwOk) add('ohw', it, sc(it, 'oh')); break;
+        case 'off-hand': if (it.cat === 20) add('shield', it, sc(it)); else if (dwOk) add('ohw', it, sc(it, 'oh')); break;
+        case 'held-in-off-hand': add('frill', it, sc(it)); break;
+        case 'ranged': case 'thrown': add('ranged', it, sc(it, 'rg')); break;
+        case 'relic': add('ranged', it, sc(it)); break;
+        default: add(it.slot, it, sc(it));
+      }
+    }
+    for (const k in cand) cand[k] = cand[k].filter(e => e.sc > 0).sort((a, b) => b.sc - a.sc);
+    return cand;
+  };
+  const choose = (cand) => {
+    const pick = {}; const used = new Set();
+    const fits = e => budget < 0 || (e.av.cost != null && e.av.cost === 0) || (e.av.cost != null && e.av.cost <= budget);
+    const firstFree = (list, excl) => (list || []).find(e => !excl.has(e.it.n) && (budget < 0 ? true : e.av.cost === 0));
+    const first = (list, excl) => (list || []).find(e => !excl.has(e.it.n) && fits(e));
+    // 1. stuff de départ : budget < 0 = sans limite, sinon on part des objets gratuits.
+    const get = (list) => budget < 0 ? first(list, used) : firstFree(list, used);
+    for (const s of ['head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'waist', 'legs', 'feet']) pick[s] = get(cand[s]);
+    pick.finger1 = get(cand.finger); if (pick.finger1) used.add(pick.finger1.it.n);
+    pick.finger2 = get(cand.finger); used.clear();
+    pick.trinket1 = get(cand.trinket); if (pick.trinket1) used.add(pick.trinket1.it.n);
+    pick.trinket2 = get(cand.trinket); used.clear();
+    pick.ranged = get(cand.ranged);
+    weaponPick(pick, cand, get);
+    // 2. budget : on dépense dans les meilleures améliorations par pièce d'or.
+    if (budget > 0) {
+      let left = budget;
+      for (let guard = 0; guard < 60; guard++) {
+        let best = null;
+        for (const s of G_SLOTS) {
+          if (s === 'oh' && pick.mh && pick.mh.two) continue;
+          const listKey = s.startsWith('finger') ? 'finger' : s.startsWith('trinket') ? 'trinket' : s;
+          if (['mh', 'oh'].includes(s)) continue;
+          const curSc = pick[s] ? pick[s].sc : 0; const curC = pick[s] && pick[s].av.cost ? pick[s].av.cost : 0;
+          const other = s === 'finger1' ? pick.finger2 : s === 'finger2' ? pick.finger1 : s === 'trinket1' ? pick.trinket2 : s === 'trinket2' ? pick.trinket1 : null;
+          for (const e of cand[listKey] || []) {
+            if (e.sc <= curSc) break;
+            if (other && other.it.n === e.it.n) continue;
+            const extra = (e.av.cost || 0) - curC; if (e.av.cost == null || extra > left) continue;
+            const ratio = (e.sc - curSc) / Math.max(extra, 1);
+            if (!best || ratio > best.ratio) best = { s, e, ratio, extra };
+          }
+        }
+        if (!best) break;
+        pick[best.s] = best.e; left -= best.extra;
+      }
+      // Armes (combinaisons) avec ce qui reste.
+      weaponPick(pick, cand, list => (list || []).find(e => e.av.cost === 0 || (e.av.cost != null && e.av.cost <= left)));
+    }
+    return pick;
+  };
+  const weaponPick = (pick, cand, get) => {
+    const th = get(cand.th); const mh = get(cand.mh);
+    let oh = null;
+    if (sp.pol === 'sh') oh = get(cand.shield) || get(cand.frill);
+    else if (dwOk) { const l = (cand.ohw || []).filter(e => !mh || e.it.n !== mh.it.n); oh = get(l); }
+    else if (sp.pol === 'cast' || sp.pol === 'two') oh = get(cand.frill) || (c.sh ? get(cand.shield) : null);
+    const one = (mh ? mh.sc : 0) + (oh ? oh.sc : 0);
+    let twoH = th ? th.sc : -1;
+    if (sp.pol === 'two' && th) twoH *= 1.0; else if (sp.pol === 'sh') twoH = -1;   // tanks : bouclier obligatoire
+    if (th && twoH >= one) { pick.mh = Object.assign({}, th, { two: true }); pick.oh = null; }
+    else { pick.mh = mh || null; pick.oh = oh || null; }
+  };
+  let cand = build(w); let pick = choose(cand);
+  // Plafonds de toucher/expertise : au-delà, la stat ne sert presque plus ; on recalcule avec un poids réduit.
+  if (sp.cap && L >= 50) {
+    const tot = gearTotals(pick); let again = false;
+    for (const k of Object.keys(sp.cap)) if ((tot[k] || 0) > sp.cap[k]) { w = Object.assign({}, w, { [k]: w[k] * sp.cap[k] / tot[k] * 0.5 }); again = true; }
+    if (again) { cand = build(w); pick = choose(cand); }
+  }
+  const out = { slots: {}, cand };
+  let total = 0, cost = 0;
+  for (const s of G_SLOTS) {
+    const e = pick[s]; out.slots[s] = e || null;
+    if (e) { total += e.sc; cost += e.av.cost || 0; }
+  }
+  out.total = total; out.cost = cost; out.stats = gearTotals(pick); out.w = w;
+  return out;
+}
+function gearTotals(pick) {
+  const tot = {};
+  for (const s of G_SLOTS) { const e = pick[s]; if (!e) continue; for (const [k, v] of Object.entries(e.it.st)) tot[k] = (tot[k] || 0) + v; tot.armor = (tot.armor || 0) + (e.it.armor || 0); }
+  return tot;
+}
+function gearIcon(it, size = 36) {
+  return `<img class="gi q${it.q}" src="https://render.worldofwarcraft.com/eu/icons/56/${esc(it.ic)}.jpg" width="${size}" height="${size}" alt="" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='https://metabot.gg/web/wow-forever/icons/${esc(it.ic)}.webp'}">`;
+}
+function gearStatLine(it, max = 4) {
+  const parts = [];
+  if (it.dps) parts.push(`${num(it.dps, 1)} ${t('ge_dps')}`);
+  const keys = Object.entries(it.st).sort((a, b) => b[1] - a[1]);
+  for (const [k, v] of keys.slice(0, max)) parts.push(`+${G_PCTKEYS.has(k) ? num(v, 1) + ' %' : num(v)} ${statLbl(k)}`);
+  if (!keys.length && it.armor) parts.push(`${num(it.armor)} ${statLbl('armor')}`);
+  return parts.join(' · ');
+}
+function gearHowShort(av) {
+  const m = { q: t('ge_h_q'), d: t('ge_h_d'), w: t('ge_h_w'), v: t('ge_h_v'), c: t('ge_h_c'), ah: t('ge_h_ah') };
+  return av.how.map(h => m[h]).filter(Boolean).join(' · ') || t('ge_h_unk');
+}
+const QFAC = f => f === 'h' ? 'Horde' : f === 'a' ? 'Alliance' : t('ge_both');
+function gearHowLong(it, av, ctx) {
+  const d = ctx.det[it.slug]; const L = [];
+  if (av.quests) for (const [q, info] of av.quests) L.push(`📜 ${t('ge_quest')} <b>${esc(q[1])}</b>${info ? ` · ${zoneName(info[3])} · ${QFAC(info[0])}${info[1] ? ` · ${t('ge_req')} ${info[1]}` : ''}${info[4] ? ` · ${t('ge_start')} ${esc(info[4])}${info[5] != null ? ` (${info[5]}, ${info[6]})` : ''}` : ''}` : ''}`);
+  if (d && d.b) for (const b of d.b.slice(0, 3)) L.push(`⚔️ ${esc(b[0])}${b[4] ? ` (${t('lvl_s')} ${b[4]}${b[5] && b[5] !== b[4] ? '–' + b[5] : ''})` : ''} · ${zoneName(b[2].split('/')[0])}${b[1] != null ? ` · <b>${pctTxt(b[1])}</b>` : ''}`);
+  if (d && d.bn > 3) L.push(`<span class="dim">${t('ge_more_mobs', { n: d.bn - 3 })}</span>`);
+  if (av.vendor) for (const v of av.vendor.slice(0, 3)) L.push(`🛒 ${esc(v[0])} · ${zoneName(v[3])}${v[4] != null ? ` (${v[4]}, ${v[5]})` : ''}${v[6] != null ? ` · ${money(v[6])}` : ''}`);
+  if (d && d.c) L.push(`🔨 ${profName(d.c[0])} ${d.c[1]}`);
+  if (av.ah) L.push(`💰 ${t('ge_ah')} ${money(av.ah)}`);
+  if (!L.length) L.push(`<span class="dim">${d && d.t ? esc(d.t) : t('ge_h_pending')}</span>`);
+  return L.join('<br>');
+}
+function gearItemLink(it, av) {
+  const name = `<span class="q-${it.q}">${esc(it.n)}</span>`;
+  return av && av.id ? `<a href="#/item/${av.id}">${name}</a>` : `<a href="https://metabot.gg/en/wow-forever/items/${esc(it.slug)}" target="_blank" rel="noopener">${name} ↗</a>`;
+}
+function gearSpecName(cls, spec) { const s = G_SPECS[cls][spec]; return S.lang === 'fr' ? s.fr : s.en; }
+function gearClassName(cls) { const c = G_CLASSES[cls]; return S.lang === 'fr' ? c.fr : c.en; }
+const G_DOLL_L = ['head', 'neck', 'shoulder', 'back', 'chest', 'wrist'];
+const G_DOLL_R = ['hands', 'waist', 'legs', 'feet', 'finger1', 'finger2', 'trinket1', 'trinket2'];
+const G_DOLL_B = ['mh', 'oh', 'ranged'];
+function gearSlotBox(s, e) {
+  if (!e) return `<div class="gs empty" title="${esc(slotLbl(s))}"><span>${esc(slotLbl(s)).slice(0, 3)}</span></div>`;
+  const it = e.it; const tip = `${it.n} (${t('lvl_s')} ${it.rl})\n${gearStatLine(it, 6).replace(/<[^>]+>/g, '')}\n${gearHowShort(e.av)}${e.av.cost ? ' · ' + (e.av.cost / 10000).toFixed(2) + ' po' : ''}`;
+  return `<div class="gs" title="${esc(tip)}">${gearIcon(it)}</div>`;
+}
+function gearKeyStats(cls, spec, tot) {
+  const sp = G_SPECS[cls][spec]; const w = sp.end;
+  const keys = Object.keys(tot).filter(k => k !== 'armor' && (w[k] || 0) > 0 && tot[k]).sort((a, b) => (w[b] * tot[b]) - (w[a] * tot[a])).slice(0, 5);
+  return keys.map(k => `<div><b>${G_PCTKEYS.has(k) ? num(tot[k], 1) + ' %' : num(tot[k])}</b> <span class="dim">${esc(statLbl(k))}</span></div>`).join('');
+}
+function gearCard(cls, spec, L, r, opts) {
+  const c = G_CLASSES[cls];
+  return `<a class="gcard" href="#/gear/${cls}/${spec}/${L}">
+    <div class="gc-head" style="--cc:${c.col}"><b>${esc(gearSpecName(cls, spec))}</b><span>${esc(gearClassName(cls))} · ${t('lvl_s')} ${L}</span></div>
+    <div class="gc-doll"><div class="gc-col">${G_DOLL_L.map(s => gearSlotBox(s, r.slots[s])).join('')}</div>
+      <div class="gc-mid"><img src="https://render.worldofwarcraft.com/eu/icons/56/classicon_${cls}.jpg" width="44" height="44" alt=""><div class="gc-stats">${gearKeyStats(cls, spec, r.stats)}</div></div>
+      <div class="gc-col">${G_DOLL_R.map(s => gearSlotBox(s, r.slots[s])).join('')}</div></div>
+    <div class="gc-wep">${G_DOLL_B.map(s => s === 'oh' && r.slots.mh && r.slots.mh.two ? '<div class="gs empty two"><span>2M</span></div>' : gearSlotBox(s, r.slots[s])).join('')}</div>
+    <div class="gc-foot"><span>${r.cost ? money(r.cost) : t('ge_free')}</span><span class="dim">${t('ge_see')}</span></div></a>`;
+}
+async function gearData() {
+  if (!S.gear) {
+    const g = await load('gear').catch(() => null);
+    if (!g || !g.items || !g.items.length) return null;
+    S.gear = gearPrep(g.items); S.gearT = g.t;
+  }
+  if (!S.gearDet) { const d = await load('geardet').catch(() => null); S.gearDet = d || { det: {}, qu: {} }; }
+  return S.gear;
+}
+async function gearCtx(o) {
+  const m = await market(viewHouseId()).catch(() => null);
+  return { det: S.gearDet.det || {}, qu: S.gearDet.qu || {}, mk: m, fac: o.fac, raid: o.raid, dung: o.dung, craft: o.craft, unk: o.unk };
+}
+const G_LEVELS = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
+const G_BUDGETS = [[-1, 'ge_b_all'], [0, 'ge_b_free'], [10000, '1 po'], [50000, '5 po'], [200000, '20 po'], [1000000, '100 po']];
+async function viewGear() {
+  const items = await gearData();
+  const o = gearOpts();
+  if (!items) { app().innerHTML = `<div class="hero"><h1>${t('ge_title')}</h1></div><div class="panel">${t('ge_nodata')}</div>`; return; }
+  const ctx = await gearCtx(o);
+  const known = Object.keys(ctx.det).length;
+  const cls = G_CLASSES[o.cls] ? o.cls : 'hunter'; const specs = Object.keys(G_SPECS[cls]);
+  const spec = o.spec === 'all' || specs.includes(o.spec) ? o.spec : specs[0];
+  app().innerHTML = `<div class="hero"><h1>${t('ge_title')}</h1><p>${t('ge_sub')}</p></div>
+    <div class="gwrap"><aside class="panel gfilt">
+      <h3>${t('ge_filters')}</h3>
+      <div class="gf"><span class="small muted">${t('ge_class')}</span><div class="gcls">${Object.keys(G_CLASSES).map(k => `<button class="chip ${k === cls ? 'on' : ''}" data-gc="${k}" title="${esc(gearClassName(k))}"><img src="https://render.worldofwarcraft.com/eu/icons/56/classicon_${k}.jpg" width="22" height="22" alt=""> ${esc(gearClassName(k))}</button>`).join('')}</div></div>
+      <div class="gf"><span class="small muted">${t('ge_spec')}</span><div class="row">${['all', ...specs].map(k => `<button class="chip small ${k === spec ? 'on' : ''}" data-gsp="${k}">${k === 'all' ? t('ge_all_specs') : esc(gearSpecName(cls, k))}</button>`).join('')}</div></div>
+      <div class="gf"><label>${t('ge_level')} <input type="number" id="glvl" min="1" max="60" value="${o.lvl}"></label></div>
+      <div class="gf"><span class="small muted">${t('ge_faction')}</span><div class="row">${['h', 'a'].map(k => `<button class="chip small ${k === o.fac ? 'on' : ''}" data-gfa="${k}">${k === 'h' ? 'Horde' : 'Alliance'}</button>`).join('')}</div></div>
+      <div class="gf"><span class="small muted">${t('ge_budget')}</span><div class="row">${G_BUDGETS.map(([v, l]) => `<button class="chip small ${v === o.budget ? 'on' : ''}" data-gb="${v}">${l.startsWith('ge_') ? t(l) : l}</button>`).join('')}</div></div>
+      <div class="gf"><label class="chk"><input type="checkbox" id="gdung" ${o.dung ? 'checked' : ''}> ${t('ge_dung')}</label>
+        <label class="chk"><input type="checkbox" id="gcraft" ${o.craft ? 'checked' : ''}> ${t('ge_craft')}</label>
+        <label class="chk"><input type="checkbox" id="graid" ${o.raid ? 'checked' : ''}> ${t('ge_raid')}</label>
+        <label class="chk"><input type="checkbox" id="gunk" ${o.unk ? 'checked' : ''}> ${t('ge_unk')}</label></div>
+      <p class="note">${t('ge_src_note', { k: num(known), n: num(items.length) })}</p>
+    </aside><div class="ggrid" id="ggrid"></div></div>`;
+  const draw = () => {
+    const L = Math.max(1, Math.min(60, Number(o.lvl) || 1));
+    const cards = [];
+    if (spec === 'all') for (const s of specs) cards.push([s, L]);
+    else { cards.push([spec, L]); for (const l of G_LEVELS) if (l !== L) cards.push([spec, l]); }
+    $('#ggrid').innerHTML = cards.map(([s, l]) => gearCard(cls, s, l, gearBuild(items, ctx, cls, s, l, o.budget), o)).join('');
+  };
+  const save = () => { gearSave(o); };
+  app().querySelectorAll('[data-gc]').forEach(b => b.onclick = () => { o.cls = b.dataset.gc; o.spec = 'all'; save(); viewGear(); });
+  app().querySelectorAll('[data-gsp]').forEach(b => b.onclick = () => { o.spec = b.dataset.gsp; save(); viewGear(); });
+  app().querySelectorAll('[data-gfa]').forEach(b => b.onclick = () => { o.fac = b.dataset.gfa; save(); viewGear(); });
+  app().querySelectorAll('[data-gb]').forEach(b => b.onclick = () => { o.budget = Number(b.dataset.gb); save(); viewGear(); });
+  $('#glvl').onchange = () => { o.lvl = Number($('#glvl').value) || 1; save(); draw(); };
+  [['gdung', 'dung'], ['gcraft', 'craft'], ['graid', 'raid'], ['gunk', 'unk']].forEach(([id, k]) => $('#' + id).onchange = e => { o[k] = e.target.checked ? 1 : 0; save(); viewGear(); });
+  draw();
+}
+async function viewGearDetail(cls, spec, L) {
+  const items = await gearData();
+  if (!items || !G_SPECS[cls] || !G_SPECS[cls][spec]) { location.hash = '#/gear'; return; }
+  const o = gearOpts(); const ctx = await gearCtx(o);
+  const r = gearBuild(items, ctx, cls, spec, L, o.budget);
+  const c = G_CLASSES[cls]; const sp = G_SPECS[cls][spec];
+  const row = (s) => {
+    const e = r.slots[s];
+    if (!e) { if (s === 'oh' && r.slots.mh && r.slots.mh.two) return ''; return `<tr><td class="l dim">${esc(slotLbl(s))}</td><td colspan="3" class="dim">${t('ge_none')}</td></tr>`; }
+    const listKey = s.startsWith('finger') ? 'finger' : s.startsWith('trinket') ? 'trinket' : s === 'mh' ? (e.two ? 'th' : 'mh') : s === 'oh' ? null : s;
+    const alts = listKey && r.cand[listKey] ? r.cand[listKey].filter(x => x.it !== e.it).slice(0, 3) : [];
+    return `<tr><td class="l">${esc(slotLbl(s))}${e.two ? ' <span class="badge">2M</span>' : ''}</td>
+      <td class="l"><div class="gitem">${gearIcon(e.it, 32)}<div>${gearItemLink(e.it, e.av)} <span class="dim">· ${t('lvl_s')} ${e.it.rl}</span><div class="small">${gearStatLine(e.it, 6)}</div></div></div>
+        ${alts.length ? `<details class="galts"><summary class="small">${t('ge_alts')}</summary>${alts.map(a => `<div class="gitem small">${gearIcon(a.it, 20)}<div>${gearItemLink(a.it, a.av)} <span class="dim">${t('lvl_s')} ${a.it.rl} · ${Math.round(a.sc / Math.max(e.sc, 1) * 100)} % · ${gearHowShort(a.av)}${a.av.cost ? ' · ' + money(a.av.cost) : ''}</span></div></div>`).join('')}</details>` : ''}</td>
+      <td class="l small">${gearHowLong(e.it, e.av, ctx)}</td><td class="r">${e.av.cost ? money(e.av.cost) : `<span class="badge good">${t('ge_free')}</span>`}</td></tr>`;
+  };
+  const tot = r.stats;
+  const w = r.w;
+  const prio = Object.keys(w).filter(k => !['th', 'mh', 'oh', 'rg', 'armor'].includes(k) && w[k] > 0).sort((a, b) => w[b] / (G_PCTKEYS.has(b) ? 15 : 1) - w[a] / (G_PCTKEYS.has(a) ? 15 : 1)).slice(0, 7);
+  app().innerHTML = `<div class="hero"><p><a href="#/gear">← ${t('ge_back')}</a></p><h1 style="color:${c.col}">${esc(gearSpecName(cls, spec))} · ${esc(gearClassName(cls))}</h1>
+      <p>${t('lvl_s')} <input type="number" id="gdl" min="1" max="60" value="${L}" style="width:64px"> · ${o.fac === 'h' ? 'Horde' : 'Alliance'} · ${t('ge_budget')} ${o.budget < 0 ? t('ge_b_all') : o.budget === 0 ? t('ge_b_free') : money(o.budget)}</p></div>
+    <div class="gwrap"><aside class="panel">${gearCard(cls, spec, L, r, o).replace('<a class="gcard"', '<div class="gcard static"').replace(/<\/a>$/, '</div>')}
+      <h3>${t('ge_totals')}</h3><div class="gtot">${Object.keys(tot).filter(k => tot[k] && (k === 'armor' || (w[k] || 0) > 0)).sort((a, b) => (w[b] || 0) * tot[b] - (w[a] || 0) * tot[a]).map(k => `<div><span class="dim">${esc(statLbl(k))}</span><b>${G_PCTKEYS.has(k) ? num(tot[k], 1) + ' %' : num(tot[k])}</b></div>`).join('')}</div>
+      <h3>${t('ge_prio')}</h3><ol class="small">${prio.map(k => `<li>${esc(statLbl(k))}</li>`).join('')}</ol>
+      <p class="note">${t('ge_prio_src')}</p>
+      ${sp.cap && L >= 50 ? `<p class="note">${t('ge_caps', { h: sp.cap.hit, e: sp.cap.exp || '–' })}</p>` : ''}
+      <p><b>${t('ge_total_cost')} :</b> ${r.cost ? money(r.cost) : t('ge_free')}</p></aside>
+    <div class="panel"><div class="tablewrap"><table class="t gtab"><thead><tr><th class="l">${t('ge_slot')}</th><th class="l">${t('ge_item')}</th><th class="l">${t('ge_how')}</th><th class="r">${t('ge_cost')}</th></tr></thead>
+      <tbody>${G_SLOTS.map(row).join('')}</tbody></table></div>
+      <p class="note">${t('ge_method')}</p></div></div>`;
+  $('#gdl').onchange = () => { location.hash = `#/gear/${cls}/${spec}/${Math.max(1, Math.min(60, Number($('#gdl').value) || 1))}`; };
+}
+
 async function route() {
   if (!S.meta) return;
   const h = decodeURIComponent(location.hash.slice(1) || '/');
@@ -1968,6 +2451,8 @@ async function route() {
     else if (h.startsWith('/best')) await viewBestiary();
     else if (h.startsWith('/craft')) await viewCraft('craft');
     else if (h.startsWith('/guide')) await viewCraft('guide');
+    else if (h.startsWith('/gear/')) { const [, , c, sp, l] = h.split('/'); await viewGearDetail(c, sp, Number(l) || 20); }
+    else if (h.startsWith('/gear')) await viewGear();
     else if (h.startsWith('/vendor')) await viewVendor();
     else if (h.startsWith('/gaps')) await viewGaps();
     else if (h.startsWith('/watch')) await viewWatch();

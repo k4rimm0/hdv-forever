@@ -698,7 +698,7 @@ class Collector:
         from gear import collect_gear, publish as gear_publish
         if not os.environ.get("MOCK_API"):
             gst = collect_gear(self.v.read("state/gear", None), requests, log, self.t,
-                               budget=int(os.environ.get("GEAR_BUDGET", "500")))
+                               budget=int(os.environ.get("GEAR_BUDGET", "900")))
         else:
             from mockapi import GEAR
             gst = self.v.read("state/gear", None) or GEAR

@@ -39,9 +39,6 @@ def parse_items(j):
     return out
 
 
-_HOW = re.compile(r"How to get:?</h2>(.*?)(?:Similar|</section>)", re.S)
-
-
 def parse_detail(html):
     """Page objet metabot -> {t: résumé, q: [quêtes], b: [boss/monstres], v: [vendeurs], c: [métier, compétence]}."""
     desc, tables = parse_page(html)
@@ -86,7 +83,7 @@ def parse_quest(html):
     zone = _text(sub.group(1)).split("·")[-1].strip() if sub else ""
     desc = re.search(r'<meta name="description" content="([^"]*)"', html)
     d = _text(desc.group(1)) if desc else ""
-    npc = re.search(r"picked up from (.+?) in .+? at ([\d.]+), ([\d.]+)", d)
+    npc = re.search(r"picked up from (.+?) in .+? at (\d+(?:\.\d+)?), (\d+(?:\.\d+)?)", d)
     f = fac.group(1).strip() if fac else ""
     return [{"Horde": "h", "Alliance": "a"}.get(f, ""), int(req.group(1)) if req else None,
             int(lvl.group(1)) if lvl else None, zone, npc.group(1) if npc else "",
@@ -136,10 +133,13 @@ def collect_gear(prev, requests_mod, log, now, budget=500, delay=0.35):
                 if q[0] in st["qu"] and now - st["qu"][q[0]][0] < 30 * 86400:
                     continue
                 time.sleep(delay)
-                rq = s.get(f"{BASE}/quests/{q[0]}", timeout=30)
-                if rq.status_code == 200:
-                    st["qu"][q[0]] = [now, parse_quest(rq.text)]
-                    qn += 1
+                try:
+                    rq = s.get(f"{BASE}/quests/{q[0]}", timeout=30)
+                    if rq.status_code == 200:
+                        st["qu"][q[0]] = [now, parse_quest(rq.text)]
+                        qn += 1
+                except Exception as e:
+                    log("équipement : quête", q[0], type(e).__name__)
             st["det"][slug_] = [now, det]
             done += 1
         except Exception as e:
