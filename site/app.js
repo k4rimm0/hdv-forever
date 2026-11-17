@@ -1958,7 +1958,7 @@ setInterval(async () => {
 }, 600000);
 // ===================== ÉQUIPEMENT (stuffs par classe, spé et niveau) =====================
 // Poids de stats : tirés des guides WoW Forever (Icy Veins pour le niveau 60, Mobalytics pour le leveling),
-// recoupés avec Warcraft Tavern et l'addon GearQuest. Voir research/sources.md dans le dépôt.
+// recoupés avec Warcraft Tavern et l'addon GearQuest. Voir docs/stuff-sources.md dans le dépôt.
 // Unités : 1 point de la stat de base de la spé (PA pour les physiques, PdS pour les lanceurs, Puissance de soins
 // pour les soigneurs, Endurance pour les tanks). Les stats en % (crit, toucher...) sont comptées par 1 %.
 // lev = poids pendant le leveling, end = poids au niveau 60 ; entre 50 et 60 on passe progressivement de l'un à l'autre.
