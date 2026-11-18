@@ -10,7 +10,7 @@ json.dump(meta, open(f"{out}/meta.json", "w"))
 for h in meta.get("houses", []):
     m = v.read(f"d/m_{h['id']}", None)
     if m: json.dump(m, open(f"{out}/m_{h['id']}.json", "w"))
-for n in ["d/npcs", "d/farm", "d/items", "d/vendor", "d/gear"]:
+for n in ["d/npcs", "d/farm", "d/items", "d/vendor", "d/gear", "d/geardet", "d/recipes", "d/craft", "d/wfb", "d/tt"]:
     x = v.read(n, None)
     if x is not None: json.dump(x, open(f"{out}/{n.split('/')[1]}.json", "w"), ensure_ascii=False)
 from cryptography.hazmat.primitives import serialization, hashes
