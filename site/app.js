@@ -2180,6 +2180,8 @@ function gearAvail(it, ctx) {
   // Quêtes de raid (Zul'Gurub, Ahn'Qiraj...) : metabot les classe dans la zone « Raid ».
   if (out.quests && out.quests.every(([q, info]) => info && (info[3] === 'Raid' || G_RAID.test(info[3]) || info[4] === 'Anachronos'))) out.raid = true;
   if (/^Zandalar /.test(it.n)) out.raid = true;
+  // Objets d'événements saisonniers (Fête du Feu, Sanssaint...) : pas disponibles toute l'année.
+  if (/Festival|Hallow|Winter Veil|Lunar|Noblegarden|Brewfest|Children's Week|Love is in the Air|Harvest Festival/i.test(it.n + ' ' + (out.quests || []).map(([q]) => q[1]).join(' '))) out.ok = false;
   // Quêtes qui demandent un objet de boss de raid (tête d'Onyxia, de Nefarian...).
   if (out.quests && out.quests.every(([q]) => /Onyxia|Nefarian|Ragnaros|C'Thun|Ossirian|Hakkar|Victory for the|Paragons of Power|Path of the Invoker|Kel'Thuzad|Majordomo|Scepter of the Shifting/.test(q[1]))) out.raid = true;
   // JcJ : récompenses de rang d'honneur ou de réputation de champ de bataille.
@@ -2200,6 +2202,7 @@ function gearAvail(it, ctx) {
 }
 function gearOpts() {
   let o = {}; try { o = JSON.parse(store('hf_gear') || '{}') || {}; } catch (e) {}
+  if (o.v !== 2) { delete o.unk; o.v = 2; }   // anciennes préférences : « sources inconnues » repasse à non
   return Object.assign({ cls: 'hunter', spec: 'bm', lvl: charLevel() || 20, fac: farmSide() === 'a' ? 'a' : 'h', budget: -1, raid: 0, dung: 1, craft: 1, unk: 0, pvp: 0 }, o);
 }
 function gearSave(o) { store('hf_gear', JSON.stringify(o)); }
@@ -2423,7 +2426,7 @@ const QFAC = f => f === 'h' ? 'Horde' : f === 'a' ? 'Alliance' : t('ge_both');
 function gearHowLong(it, av, ctx) {
   const d = ctx.det[it.slug]; const L = [];
   if (av.quests) for (const [q, info] of av.quests) L.push(`📜 ${t('ge_quest')} <b>${esc(q[1])}</b>${info ? `${info[3] && info[3] !== 'Dungeon' ? ' · ' + zoneName(info[3]) : ''} · ${QFAC(info[0])}${info[1] ? ` · ${t('ge_req')} ${info[1]}` : ''}${info[4] ? ` · ${t('ge_start')} ${esc(info[4])}${info[5] != null ? ` (${info[5]}, ${info[6]})` : ''}` : ''}` : ''}`);
-  if (d && d.b) for (const b of d.b.slice(0, 3)) L.push(`⚔️ ${esc(b[0])}${b[4] ? ` (${t('lvl_s')} ${b[4]}${b[5] && b[5] !== b[4] ? '–' + b[5] : ''})` : ''} · ${zoneName(b[2].split('/')[0])}${b[1] != null ? ` · <b>${pctTxt(b[1])}</b>` : ''}`);
+  if (d && d.b) for (const b of d.b.slice(0, 3)) L.push(`⚔️ ${esc(b[0])}${b[4] ? ` (${t('lvl_s')} ${b[4]}${b[5] && b[5] !== b[4] ? '–' + b[5] : ''})` : ''} · ${zoneName(b[2].split('/')[0])}${b[1] != null ? ` · <b>${b[1] < 0.1 ? '< 0,1 %' : pctTxt(b[1])}</b>` : ''}`);
   if (d && d.bn > 3) L.push(`<span class="dim">${t('ge_more_mobs', { n: d.bn - 3 })}</span>`);
   if (av.vendor) for (const v of av.vendor.slice(0, 3)) L.push(`🛒 ${esc(v[0])} · ${zoneName(v[3])}${v[4] != null ? ` (${v[4]}, ${v[5]})` : ''}${v[6] != null ? ` · ${money(v[6])}` : ''}`);
   if (d && d.c) L.push(`🔨 ${profName(d.c[0])} ${d.c[1]}`);
