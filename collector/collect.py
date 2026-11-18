@@ -335,6 +335,15 @@ class Collector:
                 npcs[k]["imgw"] = 1
                 if fr:
                     npcs[k]["fr"] = fr
+        # Noms français relevés sur Wowhead (section WoW Forever) pour les monstres absents de l'API.
+        try:
+            nfr = json.load(open(os.path.join(os.path.dirname(__file__), "..", "data", "npc_fr.json"), encoding="utf-8"))
+        except (OSError, ValueError):
+            nfr = {}
+        for k, v in npcs.items():
+            m = _re.search(r"-(\d+)$", k)
+            if m and not v.get("fr") and nfr.get(m.group(1)):
+                v["fr"] = nfr[m.group(1)]
         log("images de monstres :", len(todo), "lues,", sum(1 for v in npcs.values() if v.get("img")), "connues")
 
     def update_tooltips(self, items, tt, budget=4000):
@@ -814,7 +823,12 @@ class Collector:
         if not os.environ.get("MOCK_API"):
             self.npc_images(npcs, budget=int(os.environ.get("NPC_IMG_BUDGET", "500")))
         self.v.write("state/npcs", npcs)
-        self.v.write("d/npcs", {k: {k2: v2 for k2, v2 in v.items() if k2 != "t"} for k, v in npcs.items() if v.get("nm")})
+        pub_npcs = {k: {k2: v2 for k2, v2 in v.items() if k2 != "t"} for k, v in npcs.items() if v.get("nm")}
+        try:  # noms français des monstres sans fiche (connus seulement par leur nom anglais), relevés sur Wowhead
+            pub_npcs["_fr"] = json.load(open(os.path.join(os.path.dirname(__file__), "..", "data", "mob_fr.json"), encoding="utf-8"))
+        except (OSError, ValueError):
+            pass
+        self.v.write("d/npcs", pub_npcs)
         self.v.write("d/checks", {"t": self.t, "problems": problems[:200], "n": len(problems)})
         self.v.write("state/craft", craft)
         self.v.write("d/craft", {"o": {k: v.get("c", []) for k, v in craft["o"].items()},

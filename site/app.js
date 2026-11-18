@@ -1671,7 +1671,9 @@ function mobNpc(name, slug) { return (slug && S.npcs && S.npcs[slug]) || (S.npcs
   });
   document.addEventListener('mouseout', e => { if (tip && e.target.closest && e.target.closest('.moblink')) tip.style.display = 'none'; });
 })();
-const mobLink = (name, slug) => { const n = mobNpc(name, slug); return `${n && n.img ? `<img class="mobthumb" src="${esc(n.img)}" alt="" loading="lazy" onerror="this.remove()">` : ''}<a href="#" class="moblink" data-mob="${esc(JSON.stringify([name, slug || '']))}" title="${t('mob_open')}">${esc(name)}</a>`; };
+// Nom affiché : français si connu (le nom anglais reste dans l'infobulle, utile pour chercher sur les sites anglais).
+const mobName = (name, n) => S.lang !== 'fr' ? name : (n && n.fr) || (S.npcs && S.npcs._fr && S.npcs._fr[name]) || name;
+const mobLink = (name, slug) => { const n = mobNpc(name, slug); const shown = mobName(name, n); return `${n && n.img ? `<img class="mobthumb" src="${esc(n.img)}" alt="" loading="lazy" onerror="this.remove()">` : ''}<a href="#" class="moblink" data-mob="${esc(JSON.stringify([name, slug || '']))}" title="${esc(shown !== name ? name + ' · ' : '')}${t('mob_open')}">${esc(shown)}</a>`; };
 function itemByEn(en) {
   if (!S._byEn) { S._byEn = {}; for (const [k, m] of Object.entries(S.items)) if (m.n && m.n.en && !S._byEn[m.n.en]) S._byEn[m.n.en] = Number(k); }
   return S._byEn[en] || null;
@@ -1731,12 +1733,12 @@ async function openMob(name, slug) {
         <p class="note">${t('mob_map_help')}</p>`;
     }
     const tag = [d.elite ? `<span class="badge bad">${t('mob_elite')}</span>` : '', d.rare ? `<span class="badge warn">${t('mob_rare')}</span>` : ''].join(' ');
-    ov.innerHTML = `<div class="gps-box"><div class="gps-head"><div class="gps-dest">🐾 <b>${esc(name)}</b> ${tag}
+    ov.innerHTML = `<div class="gps-box"><div class="gps-head"><div class="gps-dest">🐾 <b>${esc(mobName(name, mobNpc(name, d.slug)))}</b> ${tag}
         <span class="dim">· ${d.lv ? t('lvl_s') + ' ' + d.lv[0] + (d.lv[1] && d.lv[1] !== d.lv[0] ? '–' + d.lv[1] : '') : ''}${d.zone ? ' · ' + zoneName(d.zone) : ''}</span></div>
         <button class="act big" id="mobClose">✕</button></div>
       <div class="gps-body"><div class="gps-route rt-mapcol" style="padding:12px">${mapHtml}</div>
       <div class="gps-side">
-        ${(() => { const n = mobNpc(name, d.slug); return n && n.img ? `<img class="mobimg" src="${esc(n.img)}" alt="${esc(name)}">${S.lang === 'fr' && n.fr && n.fr !== name ? `<p class="small muted" style="margin:4px 0 0">${esc(n.fr)}</p>` : ''}` : ''; })()}
+        ${(() => { const n = mobNpc(name, d.slug); return n && n.img ? `<img class="mobimg" src="${esc(n.img)}" alt="${esc(name)}">${S.lang === 'fr' && n.fr && n.fr !== name ? `<p class="small muted" style="margin:4px 0 0">${esc(name)}</p>` : ''}` : ''; })()}
         <h3>${t('mob_card')}</h3>
         <table class="t mobfacts"><tbody>
           <tr><td>${t('mob_level')}</td><td>${d.lv ? d.lv[0] + (d.lv[1] !== d.lv[0] ? '–' + d.lv[1] : '') : '?'}</td></tr>
@@ -2454,7 +2456,7 @@ const QFAC = (f, z) => { const x = f || G_QZONE_SIDE[z] || (['h', 'a'].includes(
 function gearHowLong(it, av, ctx) {
   const d = ctx.det[it.slug]; const L = [];
   if (av.quests) for (const [q, info] of av.quests) L.push(`📜 ${t('ge_quest')} <b>${esc(S.lang === 'fr' && info && info[7] ? info[7] : q[1])}</b>${info ? `${info[3] && info[3] !== 'Dungeon' ? ' · ' + zoneName(info[3]) : ''} · ${QFAC(info[0], info[3])}${info[1] ? ` · ${t('ge_req')} ${info[1]}` : ''}${info[4] ? ` · ${t('ge_start')} ${esc(info[4])}${info[5] != null ? ` (${info[5]}, ${info[6]})` : ''}` : ''}` : ''}`);
-  if (d && d.b) for (const b of d.b.slice(0, 3)) L.push(`⚔️ ${esc((() => { const n = S.lang === 'fr' && mobNpc(b[0]); return n && n.fr ? n.fr : b[0]; })())}${b[4] ? ` (${t('lvl_s')} ${b[4]}${b[5] && b[5] !== b[4] ? '–' + b[5] : ''})` : ''} · ${zoneName(b[2].split('/')[0])}${b[1] != null ? ` · <b>${b[1] < 0.1 ? '< 0,1 %' : pctTxt(b[1])}</b>` : ''}`);
+  if (d && d.b) for (const b of d.b.slice(0, 3)) L.push(`⚔️ ${esc((() => { return mobName(b[0], mobNpc(b[0])); })())}${b[4] ? ` (${t('lvl_s')} ${b[4]}${b[5] && b[5] !== b[4] ? '–' + b[5] : ''})` : ''} · ${zoneName(b[2].split('/')[0])}${b[1] != null ? ` · <b>${b[1] < 0.1 ? '< 0,1 %' : pctTxt(b[1])}</b>` : ''}`);
   if (d && d.bn > 3) L.push(`<span class="dim">${t('ge_more_mobs', { n: d.bn - 3 })}</span>`);
   if (av.vendor) for (const v of av.vendor.slice(0, 3)) L.push(`🛒 ${esc(v[0])} · ${zoneName(v[3])}${v[4] != null ? ` (${v[4]}, ${v[5]})` : ''}${v[6] != null ? ` · ${money(v[6])}` : ''}`);
   if (d && d.c) L.push(`🔨 ${profName(d.c[0])} ${d.c[1]}`);
@@ -2863,7 +2865,7 @@ async function viewGold() {
     });
     const val = r => mode === 'reg' ? r.hReg : r.hAll;
     table($('#glist'), [
-      { k: 'mob', label: t('ht_mob'), f: r => `${mobLink(r.n.nm, r.slug)}${S.lang === 'fr' && r.n.fr && r.n.fr !== r.n.nm ? `<div class="small dim">${esc(r.n.fr)}</div>` : ''}`, v: r => r.n.nm, cls: 'l' },
+      { k: 'mob', label: t('ht_mob'), f: r => mobLink(r.n.nm, r.slug), v: r => mobName(r.n.nm, r.n), cls: 'l' },
       { k: 'lv', label: t('lvl_s'), f: r => r.n.lv[0] + (r.n.lv[1] !== r.n.lv[0] ? '–' + r.n.lv[1] : ''), v: r => r.n.lv[1] },
       { k: 'z', label: t('ht_zone'), f: r => `${zoneTag(r.n.zone)} ${zoneName(r.n.zone)}`, v: r => r.n.zone, cls: 'l' },
       { m: false, k: 'sp', label: t('gh_spawns'), f: r => r.n.sp ? num(r.n.sp) + (r.k < kph ? ` <span class="badge warn" title="${esc(t('gh_cap', { n: r.k }))}">${r.k}/h</span>` : '') : '<span class="dim">?</span>', v: r => r.n.sp },
