@@ -427,7 +427,20 @@ class Collector:
         """Noms français officiels (API Blizzard) des objets d'équipement que metabot ne traduit pas
         (nouveaux objets de Forever surtout). Recherche par nom anglais, résultat gardé en cache."""
         cache = self.v.read("state/gearfr", {}) or {}
+        if cache.get("_v") != 2:
+            cache = {"_v": 2}
         rows = g1.get("items", [])
+        # Noms relevés sur Wowhead (section WoW Forever), pour les nouveaux objets absents de l'API.
+        extra = {}
+        try:
+            extra = json.load(open(os.path.join(os.path.dirname(__file__), "..", "data", "gear_fr.json"), encoding="utf-8"))
+        except (OSError, ValueError):
+            pass
+        for r in rows:
+            if extra.get(r[1]) and not (len(r) > 14 and r[14]):
+                while len(r) < 15:
+                    r.append("")
+                r[14] = extra[r[1]]
         todo = []
         for r in rows:
             if len(r) > 14 and r[14]:
@@ -440,8 +453,8 @@ class Collector:
 
         def one(r):
             en = r[1]
-            for ns in ("static-forever", "static-classic1x", "static-classic"):
-                st, d, _ = self.api.get("/data/wow/search/item", ns, params={"name.en_US": en, "orderby": "id", "_pageSize": 20})
+            for ns in ("static-classic1x", "static"):
+                st, d, _ = self.api.get("/data/wow/search/item", ns, params={"name.en_US": en, "_pageSize": 1000})
                 if st != 200 or not d:
                     continue
                 for res in d.get("results", []):
