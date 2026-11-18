@@ -1,12 +1,14 @@
-name: Diagnostic wowhead
+name: Diagnostic monstres
 on: { workflow_dispatch: {} }
 jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          for ua in "hdv-forever personal site" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"; do
-            curl -s -A "$ua" -o p.html -w "%{http_code} %{size_download}\n" "https://www.wowhead.com/forever/npc=1418"
-            grep -o 'webthumbs/npc/[0-9]*/[0-9]*.webp' p.html | head -2; grep -o 'displayId = [0-9]*' p.html | head -2
-          done
-          curl -s -o /dev/null -w "thumb %{http_code}\n" "https://wow.zamimg.com/modelviewer/classicplus/webthumbs/npc/135/391.webp"
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: { ref: gh-pages, path: public }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install requests cryptography
+      - env: { SITE_PASSWORD: "${{ secrets.SITE_PASSWORD }}" }
+        run: python tools/probe/npccheck.py
