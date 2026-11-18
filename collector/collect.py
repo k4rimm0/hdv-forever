@@ -423,6 +423,48 @@ class Collector:
                 got += 1
         log(f"icônes : {len(missing)} manquantes, {got} complétées")
 
+    def gear_fr(self, g1, budget=600):
+        """Noms français officiels (API Blizzard) des objets d'équipement que metabot ne traduit pas
+        (nouveaux objets de Forever surtout). Recherche par nom anglais, résultat gardé en cache."""
+        cache = self.v.read("state/gearfr", {}) or {}
+        rows = g1.get("items", [])
+        todo = []
+        for r in rows:
+            if len(r) > 14 and r[14]:
+                continue
+            c = cache.get(r[0])
+            if c and (c[0] or self.t - c[1] < 14 * 86400):
+                continue
+            todo.append(r)
+        log("noms français d'équipement à chercher :", len(todo))
+
+        def one(r):
+            en = r[1]
+            for ns in ("static-forever", "static-classic1x", "static-classic"):
+                st, d, _ = self.api.get("/data/wow/search/item", ns, params={"name.en_US": en, "orderby": "id", "_pageSize": 20})
+                if st != 200 or not d:
+                    continue
+                for res in d.get("results", []):
+                    nm = (res.get("data") or {}).get("name") or {}
+                    if nm.get("en_US") == en and nm.get("fr_FR"):
+                        return r[0], nm["fr_FR"]
+            return r[0], ""
+
+        found = 0
+        with ThreadPoolExecutor(8) as ex:
+            for slug, fr in ex.map(one, todo[:budget]):
+                cache[slug] = [fr, self.t]
+                found += bool(fr)
+        log("noms français trouvés :", found, "/", min(len(todo), budget))
+        self.v.write("state/gearfr", cache)
+        for r in rows:
+            c = cache.get(r[0])
+            if c and c[0]:
+                while len(r) < 15:
+                    r.append("")
+                if not r[14]:
+                    r[14] = c[0]
+
     def update_items(self, items, ids):
         miss = items.setdefault("_missing", {})
         retry = self.cfg["item_retry_days"] * 86400
@@ -745,6 +787,8 @@ class Collector:
             gst = self.v.read("state/gear", None) or GEAR
         self.v.write("state/gear", gst)
         g1, g2 = gear_publish(gst)
+        if not os.environ.get("MOCK_API"):
+            self.gear_fr(g1, budget=int(os.environ.get("GEAR_FR_BUDGET", "600")))
         self.v.write("d/gear", g1)
         self.v.write("d/geardet", g2)
         npcs = self.v.read("state/npcs", None) or {}
