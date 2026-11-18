@@ -1,5 +1,5 @@
 name: Diagnostic equipement
-on: { workflow_dispatch: {} }
+on: { workflow_dispatch: { inputs: { script: { default: dataprobe.py } } } }
 permissions: { contents: write }
 jobs:
   probe:
@@ -12,7 +12,7 @@ jobs:
         with: { python-version: "3.12" }
       - run: pip install requests cryptography
       - env: { SITE_PASSWORD: "${{ secrets.SITE_PASSWORD }}" }
-        run: python tools/probe/gearprobe.py
+        run: python tools/probe/${{ inputs.script || 'dataprobe.py' }}
       - run: |
           mkdir pb && mv probe.enc pb/ && cd pb && git init -q && git checkout -q -b probe
           git config user.name bot && git config user.email bot@users.noreply.github.com
