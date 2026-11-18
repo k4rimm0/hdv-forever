@@ -97,12 +97,22 @@ def collect_gear(prev, requests_mod, log, now, budget=500, delay=0.35):
     st.setdefault("qu", {})
     s = requests_mod.Session()
     s.headers["User-Agent"] = UA
-    if not st.get("items") or now - st.get("t", 0) > 86400:
+    if not st.get("items") or now - st.get("t", 0) > 86400 or len(st["items"][0]) < 15:
         try:
             r = s.get(f"{BASE}/items/items.json", timeout=60)
             if r.status_code == 200:
                 st["items"] = parse_items(r.json())
                 st["t"] = now
+                # Noms français : même fichier dans la version française de metabot.
+                try:
+                    rf = s.get("https://metabot.gg/fr_FR/wow-forever/items/items.json", timeout=60)
+                    fr = {row[0]: row[1] for row in rf.json()["rows"]} if rf.status_code == 200 else {}
+                    for it in st["items"]:
+                        n = fr.get(it[0])
+                        it.append(n if n and n != it[1] else "")
+                    log("équipement : noms français", sum(1 for it in st["items"] if it[-1]))
+                except Exception as e:
+                    log("équipement : noms français", type(e).__name__)
                 log("équipement : base d'objets", len(st["items"]))
             else:
                 log("équipement : items.json statut", r.status_code)
@@ -131,13 +141,17 @@ def collect_gear(prev, requests_mod, log, now, budget=500, delay=0.35):
                 continue
             det = parse_detail(r.text)
             for q in det.get("q", []):
-                if q[0] in st["qu"] and now - st["qu"][q[0]][0] < 30 * 86400:
+                if q[0] in st["qu"] and now - st["qu"][q[0]][0] < 30 * 86400 and len(st["qu"][q[0]][1]) > 7:
                     continue
                 time.sleep(delay)
                 try:
                     rq = s.get(f"{BASE}/quests/{q[0]}", timeout=30)
                     if rq.status_code == 200:
-                        st["qu"][q[0]] = [now, parse_quest(rq.text)]
+                        info = parse_quest(rq.text)
+                        rf = s.get(f"https://metabot.gg/fr_FR/wow-forever/quests/{q[0]}", timeout=30)
+                        mf = re.search(r'_titleMain">(.*?)</span>', rf.text) if rf.status_code == 200 else None
+                        info.append(_text(mf.group(1)) if mf else "")
+                        st["qu"][q[0]] = [now, info]
                         qn += 1
                 except Exception as e:
                     log("équipement : quête", q[0], type(e).__name__)
@@ -147,6 +161,23 @@ def collect_gear(prev, requests_mod, log, now, budget=500, delay=0.35):
             fails += 1
             log("équipement", slug_, type(e).__name__)
         time.sleep(delay)
+    # Noms français des quêtes déjà connues (rattrapage, 400 par passage).
+    fq = 0
+    for slug_, v in list(st["qu"].items()):
+        if fq >= 400:
+            break
+        if len(v[1]) > 7:
+            continue
+        try:
+            rf = s.get(f"https://metabot.gg/fr_FR/wow-forever/quests/{slug_}", timeout=30)
+            mf = re.search(r'_titleMain">(.*?)</span>', rf.text) if rf.status_code == 200 else None
+            v[1].append(_text(mf.group(1)) if mf else "")
+            fq += 1
+        except Exception:
+            pass
+        time.sleep(delay)
+    if fq:
+        log("équipement : noms français de quêtes", fq)
     known = sum(1 for it in items if it[0] in st["det"])
     log("équipement : détails lus", done, "quêtes", qn, "échecs", fails, "· connus", known, "/", len(items))
     return st

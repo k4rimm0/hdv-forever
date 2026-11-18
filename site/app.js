@@ -2138,7 +2138,7 @@ function gearPrep(raw) {
     // Niveau réel : certains objets n'ont pas de niveau requis (craft, quête, et même des objets de raid comme
     // Quick Strike Ring). Sans niveau requis on prend niveau d'objet − 9 (les nouvelles récompenses de quête Forever sont souvent 9 à 11 niveaux sous leur niveau d'objet), sinon au moins niveau d'objet − 10.
     const rl = r[5] > 1 ? Math.max(r[5], r[4] - 10) : Math.max(1, r[4] - 9);
-    return { slug: r[0], n: r[1], ic: r[2], q: r[3], il: r[4], rl, rl0: rl !== (r[5] || 1), slot: r[6], cat: r[7], dps: r[8], armor: r[9], st, cls: r[11] || [], src: r[12], f: r[13] };
+    return { slug: r[0], n: r[1], fr: r[14] || '', ic: r[2], q: r[3], il: r[4], rl, rl0: rl !== (r[5] || 1), slot: r[6], cat: r[7], dps: r[8], armor: r[9], st, cls: r[11] || [], src: r[12], f: r[13] };
   }).filter(it => !G_JUNK.test(it.n) && !G_PVP.test(it.n));
 }
 function gearWeights(cls, spec, L) {
@@ -2418,7 +2418,7 @@ function gearSetsHtml(slots) {
   const list = gearSetsIn(slots).filter(g => g.its.length >= 1);
   if (!list.length) return `<h3>${t('ge_sets')}</h3><p class="small muted">${t('ge_sets_none')}</p>`;
   return `<h3>${t('ge_sets')}</h3>` + list.map(g => `<div class="gset"><b>${esc(g.set[0])}</b> <span class="dim">(${g.its.length}/${g.set[1].length})</span>
-    <div class="small dim">${g.set[1].map(p => { const has = g.its.some(i => i.slug === p); const it = S.gear.find(x => x.slug === p); return `<span class="${has ? 'q-2' : ''}">${esc(it ? it.n : p)}</span>`; }).join(' · ')}</div>
+    <div class="small dim">${g.set[1].map(p => { const has = g.its.some(i => i.slug === p); const it = S.gear.find(x => x.slug === p); return `<span class="${has ? 'q-2' : ''}">${esc(it ? gName(it) : p)}</span>`; }).join(' · ')}</div>
     ${g.set[2].map(([c, txt]) => `<div class="small ${c <= g.its.length ? 'gset-on' : 'dim'}">(${c}) ${gearBonusLbl(txt)}</div>`).join('')}</div>`).join('')
     + `<p class="note">${t('ge_sets_note')}</p>`;
 }
@@ -2446,8 +2446,8 @@ function gearHowShort(av) {
 const QFAC = (f, z) => { const x = f || G_QZONE_SIDE[z] || (['h', 'a'].includes(zoneSide(z)) ? zoneSide(z) : ''); return x === 'h' ? 'Horde' : x === 'a' ? 'Alliance' : t('ge_both'); };
 function gearHowLong(it, av, ctx) {
   const d = ctx.det[it.slug]; const L = [];
-  if (av.quests) for (const [q, info] of av.quests) L.push(`📜 ${t('ge_quest')} <b>${esc(q[1])}</b>${info ? `${info[3] && info[3] !== 'Dungeon' ? ' · ' + zoneName(info[3]) : ''} · ${QFAC(info[0], info[3])}${info[1] ? ` · ${t('ge_req')} ${info[1]}` : ''}${info[4] ? ` · ${t('ge_start')} ${esc(info[4])}${info[5] != null ? ` (${info[5]}, ${info[6]})` : ''}` : ''}` : ''}`);
-  if (d && d.b) for (const b of d.b.slice(0, 3)) L.push(`⚔️ ${esc(b[0])}${b[4] ? ` (${t('lvl_s')} ${b[4]}${b[5] && b[5] !== b[4] ? '–' + b[5] : ''})` : ''} · ${zoneName(b[2].split('/')[0])}${b[1] != null ? ` · <b>${b[1] < 0.1 ? '< 0,1 %' : pctTxt(b[1])}</b>` : ''}`);
+  if (av.quests) for (const [q, info] of av.quests) L.push(`📜 ${t('ge_quest')} <b>${esc(S.lang === 'fr' && info && info[7] ? info[7] : q[1])}</b>${info ? `${info[3] && info[3] !== 'Dungeon' ? ' · ' + zoneName(info[3]) : ''} · ${QFAC(info[0], info[3])}${info[1] ? ` · ${t('ge_req')} ${info[1]}` : ''}${info[4] ? ` · ${t('ge_start')} ${esc(info[4])}${info[5] != null ? ` (${info[5]}, ${info[6]})` : ''}` : ''}` : ''}`);
+  if (d && d.b) for (const b of d.b.slice(0, 3)) L.push(`⚔️ ${esc((() => { const n = S.lang === 'fr' && mobNpc(b[0]); return n && n.fr ? n.fr : b[0]; })())}${b[4] ? ` (${t('lvl_s')} ${b[4]}${b[5] && b[5] !== b[4] ? '–' + b[5] : ''})` : ''} · ${zoneName(b[2].split('/')[0])}${b[1] != null ? ` · <b>${b[1] < 0.1 ? '< 0,1 %' : pctTxt(b[1])}</b>` : ''}`);
   if (d && d.bn > 3) L.push(`<span class="dim">${t('ge_more_mobs', { n: d.bn - 3 })}</span>`);
   if (av.vendor) for (const v of av.vendor.slice(0, 3)) L.push(`🛒 ${esc(v[0])} · ${zoneName(v[3])}${v[4] != null ? ` (${v[4]}, ${v[5]})` : ''}${v[6] != null ? ` · ${money(v[6])}` : ''}`);
   if (d && d.c) L.push(`🔨 ${profName(d.c[0])} ${d.c[1]}`);
@@ -2462,8 +2462,9 @@ function gearCostCell(av) {
   if (av.cost) return money(av.cost) + (av.cost === av.craft ? `<div class="small dim">${t('ge_mats')}</div>` : '') + (av.ah && av.ah !== av.cost ? ahLine : '');
   return `<span class="dim">?</span>${ahLine}`;
 }
+const gName = it => (S.lang === 'fr' && it.fr ? it.fr : it.n);
 function gearItemLink(it, av) {
-  const name = `<span class="q-${it.q}">${esc(av && av.id ? itemName(av.id) : it.n)}</span>`;
+  const name = `<span class="q-${it.q}">${esc(av && av.id ? itemName(av.id) : gName(it))}</span>`;
   return av && av.id ? `<a href="#/item/${av.id}">${name}</a>` : `<a href="https://metabot.gg/en/wow-forever/items/${esc(it.slug)}" target="_blank" rel="noopener">${name} ↗</a>`;
 }
 function gearSpecName(cls, spec) { const s = G_SPECS[cls][spec]; return S.lang === 'fr' ? s.fr : s.en; }
@@ -2473,7 +2474,7 @@ const G_DOLL_R = ['hands', 'waist', 'legs', 'feet', 'finger1', 'finger2', 'trink
 const G_DOLL_B = ['mh', 'oh', 'ranged'];
 function gearSlotBox(s, e) {
   if (!e) return `<div class="gs empty" title="${esc(slotLbl(s))}"><span>${esc(slotLbl(s)).slice(0, 3)}</span></div>`;
-  const it = e.it; const tip = `${it.n} (${t('lvl_s')} ${it.rl})\n${gearStatLine(it, 6).replace(/<[^>]+>/g, '')}\n${gearHowShort(e.av)}${e.av.cost ? ' · ' + (e.av.cost / 10000).toFixed(2) + ' po' : e.av.ah ? ' · HDV ' + (e.av.ah / 10000).toFixed(2) + ' po' : ''}`;
+  const it = e.it; const tip = `${gName(it)} (${t('lvl_s')} ${it.rl})\n${gearStatLine(it, 6).replace(/<[^>]+>/g, '')}\n${gearHowShort(e.av)}${e.av.cost ? ' · ' + (e.av.cost / 10000).toFixed(2) + ' po' : e.av.ah ? ' · HDV ' + (e.av.ah / 10000).toFixed(2) + ' po' : ''}`;
   return `<div class="gs" title="${esc(tip)}">${gearIcon(it)}</div>`;
 }
 function gearKeyStats(cls, spec, tot) {
