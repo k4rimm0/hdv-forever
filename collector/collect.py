@@ -432,6 +432,32 @@ class Collector:
                 got += 1
         log(f"icônes : {len(missing)} manquantes, {got} complétées")
 
+    def drop_ids(self, items, budget=500):
+        """Numéros des objets lâchés par les monstres (objets gris surtout) qu'on ne connaît pas encore,
+        pour avoir leur prix de vente au PNJ. Recherche par nom anglais dans l'API Blizzard, résultat en cache."""
+        cache = self.v.read("state/dropids", {}) or {}
+        npcs = self.v.read("state/npcs", None) or {}
+        known = {(m.get("n") or {}).get("en") for k, m in items.items() if not k.startswith("_")}
+        names = sorted({d[0] for v in npcs.values() for d in (v.get("dr") or [])} - known)
+        todo = [n for n in names if n not in cache or (not cache[n][0] and self.t - cache[n][1] > 14 * 86400)][:budget]
+        log("objets lâchés à identifier :", len(todo), "sur", len(names), "inconnus")
+
+        def one(en):
+            for ns in ("static-classic1x", "static"):
+                st, d, _ = self.api.get("/data/wow/search/item", ns, params={"name.en_US": en, "_pageSize": 1000})
+                if st != 200 or not d:
+                    continue
+                ids = [r["data"]["id"] for r in d.get("results", []) if ((r.get("data") or {}).get("name") or {}).get("en_US") == en]
+                if ids:
+                    return en, min(ids)
+            return en, 0
+
+        with ThreadPoolExecutor(8) as ex:
+            for en, iid in ex.map(one, todo):
+                cache[en] = [iid, self.t]
+        self.v.write("state/dropids", cache)
+        return {v[0] for v in cache.values() if v[0]}
+
     def gear_fr(self, g1, budget=600):
         """Noms français officiels (API Blizzard) des objets d'équipement que metabot ne traduit pas
         (nouveaux objets de Forever surtout). Recherche par nom anglais, résultat gardé en cache."""
@@ -731,6 +757,8 @@ class Collector:
         for rc in ((self.v.read("state/recipes", None) or {}).get("list") or []):
             all_ids.add(int(rc["o"]))
             all_ids.update(int(r[0]) for r in rc.get("r") or [])
+        if not os.environ.get("MOCK_API"):
+            all_ids.update(self.drop_ids(items, budget=int(os.environ.get("DROP_ID_BUDGET", "500"))))
         self.update_items(items, sorted(all_ids))
         self.fill_icons(items)
         tt = self.update_tooltips(items, self.v.read("state/tt", None) or {})
@@ -829,6 +857,10 @@ class Collector:
         except (OSError, ValueError):
             pass
         self.v.write("d/npcs", pub_npcs)
+        try:  # butin complet des monstres (objets gris compris), relevé sur Wowhead : {"id": {...}, "n": {nom: id}}
+            self.v.write("d/mobloot", json.load(open(os.path.join(os.path.dirname(__file__), "..", "data", "mob_loot.json"), encoding="utf-8")))
+        except (OSError, ValueError):
+            pass
         self.v.write("d/checks", {"t": self.t, "problems": problems[:200], "n": len(problems)})
         self.v.write("state/craft", craft)
         self.v.write("d/craft", {"o": {k: v.get("c", []) for k, v in craft["o"].items()},

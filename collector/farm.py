@@ -427,13 +427,18 @@ def parse_npc(html):
         if "drops" not in tbl[:400]:
             continue
         for tr in re.findall(r"<tr>(.*?)</tr>", tbl, flags=re.S):
+            # Les objets gris n'ont pas de page chez metabot (pas de lien) : on les garde quand même.
+            # Les objets qui ne tombent que pendant une quête sont ignorés.
+            if 'data-kind="quest"' in tr:
+                continue
             it = re.search(r'/items/([\w-]+)"', tr)
             nm = re.search(r'_nameText">(.*?)</bdi>', tr, flags=re.S)
             q = re.search(r"--q:(#[0-9A-Fa-f]{6})", tr)
+            pw = re.search(r"--w:([\d.]+)%", tr)
             pc = re.search(r"<b>([\d.]+)%</b>", tr)
             qty = re.search(r'<bdi dir="ltr">([\d–]+)</bdi>', tr)
-            if it and nm and pc:
-                drops.append([_text(nm.group(1)), it.group(1), float(pc.group(1)), qty.group(1) if qty else "1", q.group(1) if q else ""])
+            if nm and (pw or pc):
+                drops.append([_text(nm.group(1)), it.group(1) if it else "", float((pw or pc).group(1)), qty.group(1) if qty else "1", q.group(1) if q else ""])
     if drops:
         out["dr"] = drops[:40]
     return out
@@ -443,7 +448,9 @@ def collect_npcs(prev, farm_items, requests_mod, log, now, budget=400, delay=0.5
     """Fiches monstres, mises à jour petit à petit (au plus `budget` pages par passage, revues tous les 21 jours)."""
     prev = dict(prev or {})
     slugs = {m[6] for f in farm_items.values() for m in f.get("m", []) if len(m) > 6 and m[6]}
-    todo = sorted((s for s in slugs if now - prev.get(s, {}).get("t", 0) > 21 * 86400), key=lambda s: prev.get(s, {}).get("t", 0))
+    # v2 : objets gris gardés, objets de quête ignorés -> on relit toutes les fiches une fois.
+    todo = sorted((s for s in slugs if now - prev.get(s, {}).get("t", 0) > 21 * 86400 or prev.get(s, {}).get("v", 1) < 2),
+                  key=lambda s: (prev.get(s, {}).get("v", 1) >= 2, prev.get(s, {}).get("t", 0)))
     sess = requests_mod.Session()
     sess.headers["User-Agent"] = UA
     done = fails = 0
@@ -453,6 +460,7 @@ def collect_npcs(prev, farm_items, requests_mod, log, now, budget=400, delay=0.5
             if r.status_code == 200:
                 d = parse_npc(r.text)
                 d["t"] = now
+                d["v"] = 2
                 prev[sl] = d
                 done += 1
             else:
