@@ -185,19 +185,21 @@ def collect_gear(prev, requests_mod, log, now, budget=500, delay=0.35):
 
 def parse_set(html):
     """Page de panoplie metabot -> [nom, [objets (slugs)], [[nombre de pièces, texte du bonus], ...]]."""
-    name = re.search(r'<title>(.*?) – WoW Forever', html)
+    name = re.search(r'<title>([^<]*?) (?:–|\(|\|) ?WoW Forever', html) or re.search(r'<title>([^<(|–]*)', html)
     pieces = []
     for slug_ in re.findall(r'_pieceHead"><a [^>]*href="/en/wow-forever/items/([\w-]+)"', html):
         if slug_ not in pieces:
             pieces.append(slug_)
     bonus = [[int(n), _text(txt)] for n, txt in
              re.findall(r'_bonusCount">\((\d)\) Set</span><span class="[^"]*_bonusText">(.*?)</span>', html, flags=re.S)]
-    return [_text(name.group(1)) if name else "", pieces, bonus]
+    nm = _text(name.group(1)).strip() if name else ""
+    return [re.sub(r"\s*\((?:WoW )?Forever\)\s*$", "", nm), pieces, bonus]
 
 
 def collect_sets(st, s, log, now, delay=0.3):
     """Panoplies (170 environ), rafraîchies une fois par semaine."""
-    if st.get("sets") and now - st.get("sets_t", 0) < 7 * 86400:
+    bad = any("<" in (v[0] or "") or "WoW Forever" in (v[0] or "") for v in (st.get("sets") or {}).values())
+    if st.get("sets") and now - st.get("sets_t", 0) < 7 * 86400 and not bad:
         return
     try:
         r = s.get(f"{BASE}/item-sets", timeout=30)

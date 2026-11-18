@@ -2459,7 +2459,7 @@ function gearSetsHtml(slots) {
   const list = gearSetsIn(slots).filter(g => g.its.length >= 1);
   if (!list.length) return `<h3>${t('ge_sets')}</h3><p class="small muted">${t('ge_sets_none')}</p>`;
   const frOn = S.lang === 'fr';
-  return `<h3>${t('ge_sets')}</h3>` + list.map(g => `<div class="gset"><b>${esc(frOn && g.set[3] ? g.set[3] : g.set[0])}</b> <span class="dim">(${g.its.length}/${g.set[1].length})</span>
+  return `<h3>${t('ge_sets')}</h3>` + list.map(g => `<div class="gset"><b>${esc(frOn && g.set[3] ? g.set[3] : String(g.set[0]).replace(/\s*\(WoW Forever\)[\s\S]*$/, ''))}</b> <span class="dim">(${g.its.length}/${g.set[1].length})</span>
     <div class="small dim">${g.set[1].map(p => { const has = g.its.some(i => i.slug === p); const it = S.gear.find(x => x.slug === p); return `<span class="${has ? 'q-2' : ''}">${esc(it ? gName(it) : p)}</span>`; }).join(' · ')}</div>
     ${g.set[2].map(([c, txt], i) => `<div class="small ${c <= g.its.length ? 'gset-on' : 'dim'}">(${c}) ${frOn && g.set[4] && g.set[4][i] && g.set[4][i][1] ? esc(g.set[4][i][1]) : gearBonusLbl(txt)}</div>`).join('')}</div>`).join('')
     + `<p class="note">${t('ge_sets_note')}</p>`;
