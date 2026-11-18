@@ -1671,7 +1671,7 @@ function mobNpc(name, slug) { return (slug && S.npcs && S.npcs[slug]) || (S.npcs
   });
   document.addEventListener('mouseout', e => { if (tip && e.target.closest && e.target.closest('.moblink')) tip.style.display = 'none'; });
 })();
-const mobLink = (name, slug) => `<a href="#" class="moblink" data-mob="${esc(JSON.stringify([name, slug || '']))}" title="${t('mob_open')}">${esc(name)}</a>`;
+const mobLink = (name, slug) => { const n = mobNpc(name, slug); return `${n && n.img ? `<img class="mobthumb" src="${esc(n.img)}" alt="" loading="lazy" onerror="this.remove()">` : ''}<a href="#" class="moblink" data-mob="${esc(JSON.stringify([name, slug || '']))}" title="${t('mob_open')}">${esc(name)}</a>`; };
 function itemByEn(en) {
   if (!S._byEn) { S._byEn = {}; for (const [k, m] of Object.entries(S.items)) if (m.n && m.n.en && !S._byEn[m.n.en]) S._byEn[m.n.en] = Number(k); }
   return S._byEn[en] || null;
@@ -1962,7 +1962,7 @@ function renderHousebar() {
 function renderChrome() {
   $('#q').placeholder = t('search_ph');
   $('#langBtn').textContent = S.lang === 'fr' ? 'EN' : 'FR';
-  $('#foot').textContent = (S.lang === 'fr' ? 'Données : API Blizzard (WoW Forever), relevées toutes les heures. Site personnel.' : 'Data: Blizzard API (WoW Forever), read hourly. Personal site.');
+  $('#foot').textContent = (S.lang === 'fr' ? 'Données : API Blizzard (WoW Forever), relevées toutes les heures ; objets et monstres : metabot.gg ; images de monstres : Blizzard et Wowhead. Site personnel.' : 'Data: Blizzard API (WoW Forever), read hourly; items and mobs: metabot.gg; mob images: Blizzard and Wowhead. Personal site.');
   if (S.meta) { renderNav(); renderHousebar(); }
 }
 // Toutes les 10 min : si les prix ont été mis à jour, on recharge les marchés et on revérifie les alertes (notification).

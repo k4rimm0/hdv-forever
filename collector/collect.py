@@ -299,24 +299,41 @@ class Collector:
     def npc_images(self, npcs, budget=500):
         """Image officielle du monstre (rendu Blizzard) et son nom français, via l'API (créature -> affichage -> média)."""
         import re as _re
-        todo = [k for k, v in npcs.items() if "img" not in v and _re.search(r"-(\d+)$", k)][:budget]
+        todo = [k for k, v in npcs.items() if (not v.get("img") and not v.get("imgw")) and _re.search(r"-(\d+)$", k)][:budget]
+
+        def wowhead(cid):
+            # Pas d'image chez Blizzard (souvent les humanoïdes, murlocs, boss) : miniature du modèle 3D de Wowhead.
+            try:
+                r = self.api.requests.get(f"https://www.wowhead.com/forever/npc={cid}", timeout=30,
+                                          headers={"User-Agent": "hdv-forever personal site"})
+                m = _re.search(r"modelviewer/(\w+)/webthumbs/npc/(\d+)/(\d+)\.webp", r.text)
+                if m:
+                    return f"https://wow.zamimg.com/modelviewer/{m.group(1)}/webthumbs/npc/{m.group(2)}/{m.group(3)}.webp"
+                m = _re.search(r"displayId\s*[:=]\s*(\d+)", r.text)
+                if m:
+                    d = int(m.group(1))
+                    return f"https://wow.zamimg.com/modelviewer/classicplus/webthumbs/npc/{d % 256}/{d}.webp"
+            except Exception:
+                pass
+            return ""
 
         def one(k):
             cid = _re.search(r"-(\d+)$", k).group(1)
             st, d, _ = self.api.get(f"/data/wow/creature/{cid}", "static-forever")
             if st != 200 or not d:
-                return k, "", ""
+                return k, wowhead(cid), ""
             fr = d.get("name", {}).get("fr_FR", "") if isinstance(d.get("name"), dict) else ""
             disp = (d.get("creature_displays") or [{}])[0].get("id")
             if not disp:
                 return k, "", fr
             st2, m, _ = self.api.get(f"/data/wow/media/creature-display/{disp}", "static-forever")
             url = next((a.get("value") for a in (m or {}).get("assets", []) if a.get("key") == "zoom"), "") if st2 == 200 else ""
-            return k, url, fr
+            return k, url or wowhead(cid), fr
         from concurrent.futures import ThreadPoolExecutor
         with ThreadPoolExecutor(6) as ex:
             for k, url, fr in ex.map(one, todo):
                 npcs[k]["img"] = url
+                npcs[k]["imgw"] = 1
                 if fr:
                     npcs[k]["fr"] = fr
         log("images de monstres :", len(todo), "lues,", sum(1 for v in npcs.values() if v.get("img")), "connues")
