@@ -1654,6 +1654,23 @@ new MutationObserver(() => document.querySelectorAll('.wmap').forEach(enhanceMap
 function mapPct(w, e) { const r = (w.querySelector('.wz') || w).getBoundingClientRect(); return [Math.round((e.clientX - r.left) / r.width * 1000) / 10, Math.round((e.clientY - r.top) / r.height * 1000) / 10]; }
 
 // ------------------------------------------------------------------ encyclopédie des monstres
+// Image du monstre (rendu officiel Blizzard) : aperçu au survol des liens de monstres.
+function mobNpc(name, slug) { return (slug && S.npcs && S.npcs[slug]) || (S.npcs && Object.values(S.npcs).find(n => n.nm === name)) || null; }
+(function () {
+  let tip = null;
+  document.addEventListener('mouseover', e => {
+    const a = e.target.closest && e.target.closest('.moblink'); if (!a) return;
+    let nm, sl; try { [nm, sl] = JSON.parse(a.dataset.mob); } catch (x) { return; }
+    const n = mobNpc(nm, sl); if (!n || !n.img) return;
+    if (!tip) { tip = document.createElement('div'); tip.className = 'mobtip'; document.body.appendChild(tip); }
+    tip.innerHTML = `<img src="${esc(n.img)}" alt=""><div>${esc(S.lang === 'fr' && n.fr ? n.fr : nm)}${n.lv ? ` <span class="dim">· ${t('lvl_s')} ${n.lv[0]}${n.lv[1] && n.lv[1] !== n.lv[0] ? '–' + n.lv[1] : ''}</span>` : ''}</div>`;
+    const r = a.getBoundingClientRect();
+    tip.style.left = Math.min(window.innerWidth - 240, r.left) + 'px';
+    tip.style.top = (r.bottom + 6 + 240 > window.innerHeight ? r.top - 250 : r.bottom + 6) + 'px';
+    tip.style.display = 'block';
+  });
+  document.addEventListener('mouseout', e => { if (tip && e.target.closest && e.target.closest('.moblink')) tip.style.display = 'none'; });
+})();
 const mobLink = (name, slug) => `<a href="#" class="moblink" data-mob="${esc(JSON.stringify([name, slug || '']))}" title="${t('mob_open')}">${esc(name)}</a>`;
 function itemByEn(en) {
   if (!S._byEn) { S._byEn = {}; for (const [k, m] of Object.entries(S.items)) if (m.n && m.n.en && !S._byEn[m.n.en]) S._byEn[m.n.en] = Number(k); }
@@ -1719,6 +1736,7 @@ async function openMob(name, slug) {
         <button class="act big" id="mobClose">✕</button></div>
       <div class="gps-body"><div class="gps-route rt-mapcol" style="padding:12px">${mapHtml}</div>
       <div class="gps-side">
+        ${(() => { const n = mobNpc(name, d.slug); return n && n.img ? `<img class="mobimg" src="${esc(n.img)}" alt="${esc(name)}">${S.lang === 'fr' && n.fr && n.fr !== name ? `<p class="small muted" style="margin:4px 0 0">${esc(n.fr)}</p>` : ''}` : ''; })()}
         <h3>${t('mob_card')}</h3>
         <table class="t mobfacts"><tbody>
           <tr><td>${t('mob_level')}</td><td>${d.lv ? d.lv[0] + (d.lv[1] !== d.lv[0] ? '–' + d.lv[1] : '') : '?'}</td></tr>

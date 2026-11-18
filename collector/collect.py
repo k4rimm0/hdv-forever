@@ -296,6 +296,31 @@ class Collector:
         return {"lm": lm, "listing": listing}
 
     # ----- objets
+    def npc_images(self, npcs, budget=500):
+        """Image officielle du monstre (rendu Blizzard) et son nom français, via l'API (créature -> affichage -> média)."""
+        import re as _re
+        todo = [k for k, v in npcs.items() if "img" not in v and _re.search(r"-(\d+)$", k)][:budget]
+
+        def one(k):
+            cid = _re.search(r"-(\d+)$", k).group(1)
+            st, d, _ = self.api.get(f"/data/wow/creature/{cid}", "static-forever")
+            if st != 200 or not d:
+                return k, "", ""
+            fr = d.get("name", {}).get("fr_FR", "") if isinstance(d.get("name"), dict) else ""
+            disp = (d.get("creature_displays") or [{}])[0].get("id")
+            if not disp:
+                return k, "", fr
+            st2, m, _ = self.api.get(f"/data/wow/media/creature-display/{disp}", "static-forever")
+            url = next((a.get("value") for a in (m or {}).get("assets", []) if a.get("key") == "zoom"), "") if st2 == 200 else ""
+            return k, url, fr
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(6) as ex:
+            for k, url, fr in ex.map(one, todo):
+                npcs[k]["img"] = url
+                if fr:
+                    npcs[k]["fr"] = fr
+        log("images de monstres :", len(todo), "lues,", sum(1 for v in npcs.values() if v.get("img")), "connues")
+
     def update_tooltips(self, items, tt, budget=4000):
         """Infobulle façon jeu (effets « Utiliser : », stats, niveau requis…) depuis preview_item."""
         todo = [k for k in items if not k.startswith("_") and k not in tt][:budget]
@@ -713,6 +738,8 @@ class Collector:
         else:
             from mockapi import NPCS
             npcs = npcs or NPCS
+        if not os.environ.get("MOCK_API"):
+            self.npc_images(npcs, budget=int(os.environ.get("NPC_IMG_BUDGET", "500")))
         self.v.write("state/npcs", npcs)
         self.v.write("d/npcs", {k: {k2: v2 for k2, v2 in v.items() if k2 != "t"} for k, v in npcs.items() if v.get("nm")})
         self.v.write("d/checks", {"t": self.t, "problems": problems[:200], "n": len(problems)})
