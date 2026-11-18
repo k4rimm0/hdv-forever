@@ -301,21 +301,20 @@ class Collector:
         import re as _re
         todo = [k for k, v in npcs.items() if (not v.get("img") and not v.get("imgw")) and _re.search(r"-(\d+)$", k)][:budget]
 
+        # Monstres sans image chez Blizzard (murlocs, humanoïdes, boss) : numéro de modèle relevé sur Wowhead
+        # (data/npc_display.json), image = miniature du modèle 3D de Wowhead.
+        try:
+            disp = json.load(open(os.path.join(os.path.dirname(__file__), "..", "data", "npc_display.json")))
+        except Exception:
+            disp = {}
+
         def wowhead(cid):
-            # Pas d'image chez Blizzard (souvent les humanoïdes, murlocs, boss) : miniature du modèle 3D de Wowhead.
-            try:
-                r = self.api.requests.get(f"https://www.wowhead.com/forever/npc={cid}", timeout=30,
-                                          headers={"User-Agent": "hdv-forever personal site"})
-                m = _re.search(r"modelviewer/(\w+)/webthumbs/npc/(\d+)/(\d+)\.webp", r.text)
-                if m:
-                    return f"https://wow.zamimg.com/modelviewer/{m.group(1)}/webthumbs/npc/{m.group(2)}/{m.group(3)}.webp"
-                m = _re.search(r"displayId\s*[:=]\s*(\d+)", r.text)
-                if m:
-                    d = int(m.group(1))
-                    return f"https://wow.zamimg.com/modelviewer/classicplus/webthumbs/npc/{d % 256}/{d}.webp"
-            except Exception:
-                pass
-            return ""
+            d = disp.get(str(cid))
+            return f"https://wow.zamimg.com/modelviewer/classicplus/webthumbs/npc/{d % 256}/{d}.webp" if d else ""
+        for k, v in npcs.items():
+            m = _re.search(r"-(\d+)$", k)
+            if m and not v.get("img") and m.group(1) in disp:
+                v["img"] = wowhead(m.group(1))
 
         def one(k):
             cid = _re.search(r"-(\d+)$", k).group(1)
