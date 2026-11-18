@@ -2693,6 +2693,8 @@ async function viewGearMine() {
   const fut = {};
   const futAll = LH > L ? upsFrom(gearBuild(items, ctx, cls, spec, LH, -1), it => it.rl > L) : [];
   for (const u of futAll) if (!fut[u.s] || u.gain > fut[u.s].gain) fut[u.s] = u;
+  // Stuff pas encore rempli : pas de comparaison (tout serait une amélioration énorme).
+  if (!Object.keys(mine).length) { ups.length = 0; futAll.length = 0; for (const k in fut) delete fut[k]; }
   // Meilleure amélioration par emplacement, et pour chaque emplacement la moins chère qui fait au moins la moitié du gain.
   const bySlot = {};
   for (const u of ups) (bySlot[u.s] = bySlot[u.s] || []).push(u);

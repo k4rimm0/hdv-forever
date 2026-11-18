@@ -68,7 +68,7 @@ tr:hover td{background:#1f160d}
 .badge.good{border-color:#3f7a3f;color:var(--up)} .badge.warn{border-color:#8a6a2a;color:var(--gold2)} .badge.bad{border-color:#7a3a33;color:var(--down)}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .spread{justify-content:space-between}
-input[type=number],input[type=text],select{background:#0c0805;color:var(--text);border:1px solid var(--line2);border-radius:8px;padding:6px 8px;font:14px Inter,sans-serif}
+input[type=number],input[type=text],input:not([type]),input[type=search],select,textarea{background:#0c0805;color:var(--text);border:1px solid var(--line2);border-radius:8px;padding:6px 8px;font:14px Inter,sans-serif}
 input[type=number]{width:80px}
 button.act{background:#3a2a15;border:1px solid var(--gold);color:var(--gold2);border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:600}
 .note{color:var(--muted);font-size:13px}
@@ -238,3 +238,4 @@ button.cpy{background:none;border:1px solid var(--line);border-radius:5px;paddin
 #mpaste{width:100%;font-size:13px}
 .gwrap.gmine{grid-template-columns:360px minmax(0,1fr)}@media(max-width:900px){.gwrap.gmine{grid-template-columns:1fr}}
 .gtabs{display:flex;gap:6px;margin:0 0 12px}.gtab{padding:9px 16px;border:1px solid var(--line);border-radius:10px;background:#140e09;color:var(--muted);font-weight:600;text-decoration:none}.gtab.on{color:#f3d38a;border-color:#c9a14a;background:#2a1d10}.gtab:hover{color:#f3d38a}
+input:not([type])::placeholder,textarea::placeholder{color:#7d6c55}input:focus,textarea:focus,select:focus{outline:none;border-color:#c9a14a}#mpaste{resize:vertical;font:13px Inter,sans-serif}
