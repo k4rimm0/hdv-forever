@@ -23,6 +23,7 @@ import gzip
 import json
 import os
 import random
+import re
 import statistics
 import sys
 import threading
@@ -458,6 +459,47 @@ class Collector:
         self.v.write("state/dropids", cache)
         return {v[0] for v in cache.values() if v[0]}
 
+    def set_fr(self, g1, g2, budget=200):
+        """Noms et bonus des panoplies en français (API Blizzard : la fiche d'une pièce donne sa panoplie dans toutes les langues)."""
+        cache = self.v.read("state/setfr", {}) or {}
+        names = {r[0]: r[1] for r in g1.get("items", [])}
+        sets = g2.get("sets") or {}
+        todo = [k for k, v in sets.items() if k not in cache or (not cache[k][0] and self.t - cache[k][2] > 14 * 86400)][:budget]
+        log("panoplies à traduire :", len(todo))
+
+        def one(k):
+            for slug in sets[k][1][:3]:
+                en = names.get(slug)
+                if not en:
+                    continue
+                for ns in ("static-classic1x", "static"):
+                    st, d, _ = self.api.get("/data/wow/search/item", ns, params={"name.en_US": en, "_pageSize": 1000})
+                    ids = [r["data"]["id"] for r in (d or {}).get("results", []) if ((r.get("data") or {}).get("name") or {}).get("en_US") == en] if st == 200 else []
+                    for iid in ids[:2]:
+                        st2, it, _ = self.api.get(f"/data/wow/item/{iid}", ns)
+                        ps = ((it or {}).get("preview_item") or {}).get("set") if st2 == 200 else None
+                        if not ps:
+                            continue
+                        nm = loc(((ps.get("item_set") or {}).get("name")) or {}) if isinstance((ps.get("item_set") or {}).get("name"), dict) else {}
+                        fr_name = nm.get("fr", "") if nm else ""
+                        eff = [[e.get("required_count"), (e.get("display_string") or {}).get("fr_FR", "") if isinstance(e.get("display_string"), dict) else ""] for e in ps.get("effects", [])]
+                        if fr_name or any(x[1] for x in eff):
+                            return k, fr_name, eff
+            return k, "", []
+
+        with ThreadPoolExecutor(6) as ex:
+            for k, fr_name, eff in ex.map(one, todo):
+                cache[k] = [fr_name, eff, self.t]
+        self.v.write("state/setfr", cache)
+        for k, v in sets.items():
+            c = cache.get(k)
+            if c and (c[0] or c[1]):
+                fx = {n: re.sub(r"^\(\d+\)\s*Ensemble\s*:\s*", "", t or "") for n, t in c[1]}
+                while len(v) < 5:
+                    v.append(None)
+                v[3] = c[0]
+                v[4] = [[n, fx.get(n, "")] for n, _ in v[2]]
+
     def gear_fr(self, g1, budget=600):
         """Noms français officiels (API Blizzard) des objets d'équipement que metabot ne traduit pas
         (nouveaux objets de Forever surtout). Recherche par nom anglais, résultat gardé en cache."""
@@ -839,6 +881,7 @@ class Collector:
         g1, g2 = gear_publish(gst)
         if not os.environ.get("MOCK_API"):
             self.gear_fr(g1, budget=int(os.environ.get("GEAR_FR_BUDGET", "600")))
+            self.set_fr(g1, g2, budget=int(os.environ.get("SET_FR_BUDGET", "200")))
         self.v.write("d/gear", g1)
         self.v.write("d/geardet", g2)
         npcs = self.v.read("state/npcs", None) or {}
