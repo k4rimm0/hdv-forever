@@ -2858,7 +2858,10 @@ const avgQty = s => { const a = String(s || '1').split(/[-–]/).map(Number).fil
 // Noms français des filons et gisements (les herbes portent le nom de la plante).
 const NODE_FR = { 'Copper Vein': 'Filon de cuivre', 'Tin Vein': "Filon d'étain", 'Silver Vein': "Filon d'argent", 'Iron Deposit': 'Gisement de fer', 'Gold Vein': "Filon d'or",
   'Mithril Deposit': 'Gisement de mithril', 'Truesilver Deposit': 'Gisement de vrai-argent', 'Small Thorium Vein': 'Petit filon de thorium', 'Rich Thorium Vein': 'Riche filon de thorium',
-  'Dark Iron Deposit': 'Gisement de sombrefer', 'Incendicite Mineral Vein': "Filon d'incendicite", 'Lesser Bloodstone Deposit': 'Gisement de pierre de sang inférieure', 'Indurium Mineral Vein': "Filon d'indurium", 'Thorium Vein': 'Filon de thorium' };
+  'Dark Iron Deposit': 'Gisement de sombrefer', 'Incendicite Mineral Vein': "Filon d'incendicite", 'Lesser Bloodstone Deposit': 'Gisement de pierre de sang inférieure', 'Indurium Mineral Vein': "Filon d'indurium", 'Thorium Vein': 'Filon de thorium',
+  'Firefin Snapper School': 'Banc de lutjans de nagefeu', 'Floating Debris': 'Débris flottants', 'Floating Wreckage': 'Débris flottants', 'Giant Clam': 'Palourde géante',
+  'Greater Sagefish School': 'Banc de grandes sagerelles', 'Ogre Tannin Basket': 'Panier de tanin ogre', 'Oil Spill': 'Nappe de pétrole', 'Oily Blackmouth School': 'Banc de bouches-noires huileux',
+  'Patch of Elemental Water': "Remous d'eau élémentaire", 'Sagefish School': 'Banc de sagerelles', 'School of Fish': 'Banc de poisson', 'Stonescale Eel Swarm': "Banc d'anguilles pierre-écaille", 'Water Barrel': "Tonneau d'eau" };
 // Nom d'un PNJ ou d'un monstre en français quand on le connaît.
 const npcName = n => mobName(n, mobNpc(n));
 const pinName = p => p[1] === 'o' ? nodeName(p[0]) : npcName(p[0]);
