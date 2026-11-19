@@ -2296,7 +2296,7 @@ function gearBuild(items, ctx, cls, spec, L, budget) {
   const sp = G_SPECS[cls][spec]; const c = G_CLASSES[cls];
   let w = gearWeights(cls, spec, L);
   const avail = new Map();
-  const pool = items.filter(it => gearUsable(it, cls, L)).filter(it => {
+  const pool = items.filter(it => gearUsable(it, cls, L) && !gearProfReq(it)).filter(it => {
     if (sp.cats && it.cat <= 9 && !sp.cats.includes(it.cat)) return false;
     // Types d'armes que le joueur veut utiliser (compétence d'arme déjà montée).
     if (it.cat <= 14 && ctx.wsk && ctx.wsk[cls] && !ctx.wsk[cls].includes(it.cat)) return false;
@@ -2590,6 +2590,15 @@ function gearCard(cls, spec, L, r, opts) {
     <div class="gc-wep">${G_DOLL_B.map(s => s === 'oh' && r.slots.mh && r.slots.mh.two ? '<div class="gs empty two"><span>2M</span></div>' : gearSlotBox(s, r.slots[s])).join('')}</div>
     <div class="gc-foot"><span>${r.cost ? money(r.cost) : t('ge_free')}</span><span class="dim">${t('ge_see')}</span></div></a>`;
 }
+// Objets qu'on ne peut porter qu'avec un métier (« Ingénierie (150) requis » : lunettes d'ingénieur…) : exclus des stuffs.
+function gearProfReq(it) {
+  if (it._pr !== undefined) return it._pr;
+  const id = itemByEn(it.n); const lines = (id && S.tt && S.tt[id]) || [];
+  let r = null;
+  for (const [txt] of lines) { const m = String((txt && txt.en) || '').match(/^Requires (Engineering|Tailoring|Leatherworking|Blacksmithing|Alchemy|Enchanting|First Aid|Fishing|Mining|Herbalism|Skinning|Cooking|Gnome Engineering|Goblin Engineering|Dragonscale Leatherworking|Elemental Leatherworking|Tribal Leatherworking|Armorsmith|Weaponsmith|Swordsmith|Hammersmith|Axesmith)( \((\d+)\))?/); if (m) { r = [m[1], Number(m[3] || 0)]; break; } }
+  if (!r && /Goggles$/.test(it.n) && it.slot === 'head') { const d = S.gearDet && S.gearDet.det && S.gearDet.det[it.slug]; if (d && d.c && d.c[0] === 'Engineering') r = ['Engineering', d.c[1]]; }
+  it._pr = r; return r;
+}
 async function gearData() {
   if (!S.gear) {
     const g = await load('gear').catch(() => null);
@@ -2597,6 +2606,7 @@ async function gearData() {
     S.gear = gearPrep(g.items); S.gearT = g.t;
   }
   if (!S.gearDet) { const d = await load('geardet').catch(() => null); S.gearDet = d || { det: {}, qu: {} }; }
+  if (!S.tt) S.tt = await load('tt').catch(() => null) || {};
   return S.gear;
 }
 async function gearCtx(o) {
