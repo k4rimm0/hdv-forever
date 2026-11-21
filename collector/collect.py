@@ -500,6 +500,43 @@ class Collector:
                 v[3] = c[0]
                 v[4] = [[n, fx.get(n, "")] for n, _ in v[2]]
 
+    def gear_wowhead(self, g1, g2):
+        """Seconde source : objets relevés sur Wowhead (section WoW Forever) que metabot n'a pas
+        (nouveaux donjons de Forever, quelques objets classiques), et source / niveau requis
+        des objets que metabot connaît sans dire d'où ils viennent. Fichier data/gear_wh.json."""
+        try:
+            wh = json.load(open(os.path.join(os.path.dirname(__file__), "..", "data", "gear_wh.json"), encoding="utf-8"))
+        except (OSError, ValueError):
+            return
+        rows = g1.setdefault("items", [])
+        det = g2.setdefault("det", {})
+        qu = g2.setdefault("qu", {})
+        names = {r[1] for r in rows}
+        add = [r for r in wh.get("items", []) if r[1] not in names]
+        rows.extend(add)
+        for r in add:
+            if r[0] in wh.get("det", {}):
+                det.setdefault(r[0], wh["det"][r[0]])
+        for k, v in wh.get("qu", {}).items():
+            qu.setdefault(k, v)
+        fixed = 0
+        patch = wh.get("patch", {})
+        for r in rows:
+            p = patch.get(r[1])
+            if not p or r[12]:
+                continue
+            d = det.setdefault(r[0], {})
+            if d.get("b") or d.get("q") or d.get("v"):
+                continue
+            if not r[5] and p[0]:
+                r[5] = p[0]
+            r[12] = p[1]
+            for k, v in p[2].items():
+                if k != "t" or not d.get("t"):
+                    d[k] = v
+            fixed += 1
+        log("objets Wowhead ajoutés :", len(add), "· sources complétées :", fixed)
+
     def gear_fr(self, g1, budget=600):
         """Noms français officiels (API Blizzard) des objets d'équipement que metabot ne traduit pas
         (nouveaux objets de Forever surtout). Recherche par nom anglais, résultat gardé en cache."""
@@ -879,6 +916,7 @@ class Collector:
             gst = self.v.read("state/gear", None) or GEAR
         self.v.write("state/gear", gst)
         g1, g2 = gear_publish(gst)
+        self.gear_wowhead(g1, g2)
         if not os.environ.get("MOCK_API"):
             self.gear_fr(g1, budget=int(os.environ.get("GEAR_FR_BUDGET", "600")))
             self.set_fr(g1, g2, budget=int(os.environ.get("SET_FR_BUDGET", "200")))

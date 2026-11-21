@@ -481,6 +481,9 @@ const ZONE_FR = {
   "Ruins of Ahn'Qiraj": "Ruines d'Ahn'Qiraj", 'Scarlet Monastery': 'Monastère Écarlate', 'Scholomance': 'Scholomance', 'Shadowfang Keep': "Donjon d'Ombrecroc",
   'Stormwind Stockade': 'La Prison', 'Stratholme': 'Stratholme', 'Wailing Caverns': 'Cavernes des lamentations', "Zul'Farrak": "Zul'Farrak", "Zul'Gurub": "Zul'Gurub",
   'Razorfen Downs': 'Souilles de Tranchebauge', 'Uldaman': 'Uldaman', "Onyxia's Lair": "Repaire d'Onyxia", 'The Temple of Atal\'Hakkar': "Le temple d'Atal'Hakkar",
+  'City of Dalaran': 'Cité de Dalaran', 'Ruins of Lordaeron': 'Ruines de Lordaeron', 'Excavation Site - Bael Modan': 'Excavations : Bael Modan', 'Excavation Site: Wetlands': 'Excavations : les Paluns',
+  'Alcaz Prison': "Prison d'Alcaz", "Krol'dok Stronghold": "Bastion Krol'dok", 'The Hall of Thanes': 'La salle des Thanes', 'The Drowned City': 'La cité Submergée', 'Blackmaw Hold': 'Repaire des Noiregueules',
+  'Riverglades': 'Rives Claires', 'Zephras Isle': 'Île de Zéphras', 'Mount Hyjal': 'Mont Hyjal',
   'Dungeon': 'Donjon', 'Group': 'Groupe', 'Raid': 'Raid', 'PvP': 'JcJ',
   'Tanaris': 'Tanaris', 'Silithus': 'Silithus', 'Orgrimmar': 'Orgrimmar', 'Booty Bay': 'Baie-du-Butin', 'Ratchet': 'Cabestan', 'Gadgetzan': 'Gadgetzan',
 };
