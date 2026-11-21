@@ -2741,7 +2741,18 @@ function gearFindByName(items, name) {
   const hit = S._gByName.get(k); if (hit) return hit;
   // Nom français officiel du jeu inconnu de metabot : on passe par les noms des objets de l'HDV (API Blizzard).
   if (!S._aByName) { S._aByName = new Map(); for (const m of Object.values(S.items || {})) if (m.n && m.n.en) for (const n of [m.n.fr, m.n.en]) if (n) S._aByName.set(gNorm(n), gNorm(m.n.en)); }
-  const en = S._aByName.get(k); return en ? S._gByName.get(en) || null : null;
+  const en = S._aByName.get(k); if (en && S._gByName.get(en)) return S._gByName.get(en);
+  // Objets à suffixe aléatoire : « Crispins de gardien d’intelligence » = « Crispins de gardien » + « d’intelligence »,
+  // « Watcher's Cuffs of Intellect » = « Watcher's Cuffs » + « of Intellect ». On coupe avant le mot de liaison et on recommence.
+  if (!gearFindByName._deep) {
+    const w = name.trim().split(/\s+/);
+    for (let i = w.length - 1; i >= 1; i--) {
+      if (!/^(de|du|des|d['’].*|l['’].*|of|la)$/i.test(w[i])) continue;
+      gearFindByName._deep = true; const r = gearFindByName(items, w.slice(0, i).join(' ')); gearFindByName._deep = false;
+      if (r) return r;
+    }
+  }
+  return null;
 }
 // Score d'un objet dans un emplacement donné, avec les poids de la spé (même formule que le builder).
 function mineScore(it, slot, w) {
@@ -2869,6 +2880,10 @@ async function viewGearMine() {
       ${paid.length ? `<div class="tablewrap"><table class="t gtab"><thead><tr><th class="l">${t('ge_slot')}</th><th class="l">${t('ge_item')}</th><th class="r">${t('mi_gain')}</th><th class="l">${t('ge_how')}</th><th class="r">${t('ge_cost')}</th></tr></thead><tbody>${paid.map(upRow).join('')}</tbody></table></div>` : `<p class="small muted">${t('mi_none')}</p>`}
       <p class="note">${t('mi_method')}</p></div></div>`;
   const setSlot = (s, it) => { if (it) mine[s] = it.slug; else delete mine[s]; mineSave(all); viewGearMine(); };
+  app().querySelectorAll('input.minp').forEach(inp => inp.onpaste = e => {
+    const txt = (e.clipboardData || window.clipboardData).getData('text') || '';
+    if ((txt.match(/\[/g) || []).length > 1 || /\n/.test(txt.trim())) { e.preventDefault(); $m('#mpaste').value = txt; $m('#mimport').click(); }
+  });
   app().querySelectorAll('input.minp').forEach(inp => inp.onchange = () => {
     const v = inp.value.trim(); if (!v) return setSlot(inp.dataset.ms, null);
     if ((v.match(/\[/g) || []).length > 1) { $m('#mpaste').value = v; return $m('#mimport').click(); }
@@ -2892,7 +2907,7 @@ async function viewGearMine() {
     if (!names.length) names.push(...txt.split(/\n|;/).map(x => x.replace(/^[-•*\d.)\s]+/, '').trim()).filter(Boolean));
     let ok = 0; const miss = [];
     for (const n of names) {
-      const it = gearFindByName(items, n); if (!it) { miss.push(n); continue; }
+      const it = gearFindByName(items, n); if (!it) { if (!/^(chemise|tabard|shirt)\b/i.test(n.trim())) miss.push(n); continue; }  // chemises et tabards : pas d'emplacement ici, ignorés
       const slots = G_SLOT_OF[it.slot] || []; const free = slots.find(s => !mine[s] || bySlug.get(mine[s]) === undefined) || slots[0];
       if (!free) { miss.push(n); continue; }
       // Pour les anneaux / bijoux : le 1er collé va dans le 1er emplacement, le suivant dans le 2e.
